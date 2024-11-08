@@ -1,0 +1,1 @@
+packages/astro-loader-obsidian/README.md

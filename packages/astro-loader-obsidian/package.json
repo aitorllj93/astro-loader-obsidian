@@ -1,0 +1,41 @@
+{
+	"name": "astro-loader-obsidian",
+	"description": "Use your Obsidian Vault in Astro projects",
+	"keywords": [
+		"withastro",
+		"astro-loader",
+		"obsidian"
+	],
+	"version": "0.0.6",
+	"author": "Aitor Llamas Jiménez <aitorllj93@gmail.com>",
+	"homepage": "https://github.com/aitorllj93/astro-loader-obsidian",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/aitorllj93/astro-loader-obsidian",
+		"directory": "packages/astro-loader-obsidian"
+	},
+	"bugs": "https://github.com/aitorllj93/astro-loader-obsidian/issues",
+	"license": "MIT",
+	"type": "module",
+	"exports": {
+		".": "./index.ts",
+		"./loaders": "./loaders.ts",
+		"./schemas": "./schemas.ts"
+	},
+	"devDependencies": {
+		"@types/js-yaml": "^4.0.9",
+		"@types/micromatch": "^4.0.9",
+		"astro": "^5.0.0-beta"
+	},
+	"peerDependencies": {
+		"astro": "^5.0.0-beta"
+	},
+	"dependencies": {
+		"fast-glob": "^3.3.2",
+		"github-slugger": "^2.0.0",
+		"gray-matter": "^4.0.3",
+		"js-yaml": "^4.1.0",
+		"micromatch": "^4.0.8",
+		"p-limit": "^6.1.0"
+	}
+}

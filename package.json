@@ -1,0 +1,18 @@
+{
+	"name": "@astro-loader-obsidian/root",
+	"version": "0.0.0",
+	"private": true,
+	"author": "aitorllj93",
+	"license": "MIT",
+	"packageManager": "pnpm@9.8.0",
+	"devDependencies": {
+		"astro": "^5.0.0-beta"
+	},
+	"dependencies": {
+		"@changesets/changelog-github": "^0.5.0",
+		"@changesets/cli": "^2.27.9"
+	},
+	"scripts": {
+		"version": "pnpm changeset version && pnpm i --no-frozen-lockfile"
+	}
+}
