@@ -1,9 +1,9 @@
 import {
   createMarkdownProcessor,
   type MarkdownHeading,
-} from '@astrojs/markdown-remark';
-import type { AstroConfig } from 'node_modules/astro/dist/types/public/config';
-import { pathToFileURL } from 'node:url';
+} from "@astrojs/markdown-remark";
+import type { AstroConfig } from "node_modules/astro/dist/types/public/config";
+import { pathToFileURL } from "node:url";
 
 export interface RenderedContent {
   /** Rendered HTML string. If present then `render(entry)` will return a component that renders this HTML. */
@@ -47,7 +47,7 @@ export const getRenderFunction = async (config: AstroConfig) => {
   return async function renderToString(entry: DataEntry) {
     if (!entry.body) {
       return {
-        html: '',
+        html: "",
       };
     }
     const result = await processor.render(entry.body, {

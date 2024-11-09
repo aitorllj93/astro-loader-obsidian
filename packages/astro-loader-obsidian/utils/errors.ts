@@ -1,4 +1,4 @@
-import type { YAMLException } from 'js-yaml';
+import type { YAMLException } from "js-yaml";
 
 interface ErrorProperties {
   title?: string;
@@ -17,26 +17,26 @@ export interface ErrorLocation {
 }
 
 type ErrorTypes =
-  | 'AstroError'
-  | 'AstroUserError'
-  | 'CompilerError'
-  | 'CSSError'
-  | 'MarkdownError'
-  | 'InternalError'
-  | 'AggregateError';
+  | "AstroError"
+  | "AstroUserError"
+  | "CompilerError"
+  | "CSSError"
+  | "MarkdownError"
+  | "InternalError"
+  | "AggregateError";
 
 function normalizeLF(code: string) {
-  return code.replace(/\r\n|\r(?!\n)|\n/g, '\n');
+  return code.replace(/\r\n|\r(?!\n)|\n/g, "\n");
 }
 
 /** Generate a code frame from string and an error location */
 function codeFrame(src: string, loc: ErrorLocation): string {
   if (!loc || loc.line === undefined || loc.column === undefined) {
-    return '';
+    return "";
   }
   const lines = normalizeLF(src)
-    .split('\n')
-    .map((ln) => ln.replace(/\t/g, '  '));
+    .split("\n")
+    .map((ln) => ln.replace(/\t/g, "  "));
   // grab 2 lines before, and 3 lines after focused line
   const visibleLines = [];
   for (let n = -2; n <= 2; n++) {
@@ -49,17 +49,17 @@ function codeFrame(src: string, loc: ErrorLocation): string {
     if (w.length > gutterWidth) gutterWidth = w.length;
   }
   // print lines
-  let output = '';
+  let output = "";
   for (const lineNo of visibleLines) {
     const isFocusedLine = lineNo === loc.line - 1;
-    output += isFocusedLine ? '> ' : '  ';
+    output += isFocusedLine ? "> " : "  ";
     output += `${lineNo + 1} | ${lines[lineNo]}\n`;
     if (isFocusedLine)
       output += `${Array.from({ length: gutterWidth }).join(
-        ' '
+        " "
       )}  | ${Array.from({
         length: loc.column,
-      }).join(' ')}^\n`;
+      }).join(" ")}^\n`;
   }
   return output;
 }
@@ -70,7 +70,7 @@ export class AstroError extends Error {
   public hint: string | undefined;
   public frame: string | undefined;
 
-  type: ErrorTypes = 'AstroError';
+  type: ErrorTypes = "AstroError";
 
   constructor(props: ErrorProperties, options?: unknown) {
     const { name, title, message, stack, location, hint, frame } = props;
@@ -81,7 +81,7 @@ export class AstroError extends Error {
 
     if (message) this.message = message;
     // Only set this if we actually have a stack passed, otherwise uses Error's
-    this.stack = stack ? stack : this.stack;
+    this.stack = stack ? stack : (this.stack as string);
     this.loc = location;
     this.hint = hint;
     this.frame = frame;
@@ -108,18 +108,18 @@ export class AstroError extends Error {
   }
 
   static is(err: unknown): err is AstroError {
-    return (err as AstroError).type === 'AstroError';
+    return (err as AstroError).type === "AstroError";
   }
 }
 
 export class MarkdownError extends AstroError {
-  type: ErrorTypes = 'MarkdownError';
+  override type: ErrorTypes = "MarkdownError";
 
-  static is(err: unknown): err is MarkdownError {
-    return (err as MarkdownError).type === 'MarkdownError';
+  static override is(err: unknown): err is MarkdownError {
+    return (err as MarkdownError).type === "MarkdownError";
   }
 }
 
 export function isYAMLException(err: unknown): err is YAMLException {
-  return err instanceof Error && err.name === 'YAMLException';
+  return err instanceof Error && err.name === "YAMLException";
 }

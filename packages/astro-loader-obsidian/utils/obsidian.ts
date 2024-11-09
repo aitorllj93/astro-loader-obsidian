@@ -1,5 +1,5 @@
-import { slugify } from './slugify';
-import path from 'node:path';
+import { slugify } from "./slugify";
+import path from "node:path";
 
 export type ObsidianContext = {
   author?: string;
@@ -20,7 +20,7 @@ export const entryToLink = (
   if (context.i18n) {
     const [entryLanguage, ...entryPath] = entry.split(path.sep);
     language = entryLanguage;
-    entrySlug = slugify(entryPath.join('/'));
+    entrySlug = slugify(entryPath.join("/"));
   }
 
   const slug = permalink ?? entrySlug;
@@ -37,11 +37,11 @@ export const resolveDocumentIdByLink = (
   // return the most precise match
   const matches = context.files.filter((id) => id.includes(link));
   return matches.sort((a, b) => {
-    const aMismatch = link.replace(a, '').length;
-    const bMismatch = link.replace(b, '').length;
+    const aMismatch = link.replace(a, "").length;
+    const bMismatch = link.replace(b, "").length;
 
     return bMismatch - aMismatch;
-  })[0];
+  })[0] as string;
 };
 
 export const parseObsidianLink = (
@@ -49,12 +49,12 @@ export const parseObsidianLink = (
   context: ObsidianContext
 ): { title: string; href: string } => {
   let idHref = linkText;
-  let title = linkText.split('/').slice(-1)[0];
+  let title = linkText.split("/").slice(-1)[0] as string;
 
-  if (linkText.includes('|')) {
-    const [aliasHref, aliasTitle] = linkText.split('|');
-    idHref = aliasHref;
-    title = aliasTitle;
+  if (linkText.includes("|")) {
+    const [aliasHref, aliasTitle] = linkText.split("|");
+    idHref = aliasHref as string;
+    title = aliasTitle as string;
   }
 
   const documentId = resolveDocumentIdByLink(idHref, context);
@@ -84,7 +84,7 @@ export const parseObsidianText = (
   for (const match of matches) {
     const [link, obsidianId] = match;
 
-    const obsidianLink = parseObsidianLink(obsidianId, context);
+    const obsidianLink = parseObsidianLink(obsidianId as string, context);
 
     links.push(obsidianLink);
 

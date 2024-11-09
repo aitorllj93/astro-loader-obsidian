@@ -2,7 +2,7 @@ import matter from "gray-matter";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { isYAMLException, MarkdownError } from "./errors";
+import { isYAMLException, MarkdownError, type ErrorLocation } from "./errors";
 import {
   entryToLink,
   parseObsidianText,
@@ -18,11 +18,11 @@ function safeParseFrontmatter(source: string, id?: string) {
       name: "MarkdownError",
       message: err.message,
       stack: err.stack,
-      location: id
+      location: (id
         ? {
             file: id,
           }
-        : undefined,
+        : undefined) as ErrorLocation,
     });
 
     if (isYAMLException(err)) {
@@ -30,7 +30,7 @@ function safeParseFrontmatter(source: string, id?: string) {
         file: id,
         line: err.mark.line,
         column: err.mark.column,
-      });
+      } as ErrorLocation);
 
       markdownError.setMessage(err.reason);
     }
@@ -58,6 +58,18 @@ export function getEntryInfo(
 
   data.title = data.title ?? path.basename(entry, path.extname(entry));
   data.permalink = entryToLink(entry, context, data.permalink ?? data.slug);
+
+  // TODO: Figure out a better way to resolve Astro paths for assets
+  data.image = data.image
+    ? data.image.startsWith("..")
+      ? data.image
+      : `../${data.image}`
+    : undefined;
+  data.cover = data.cover
+    ? data.cover.startsWith("..")
+      ? data.cover
+      : `../${data.cover}`
+    : undefined;
 
   data.author = data.author ?? context.author;
   data.created = data.created ?? stats.ctime;

@@ -6,7 +6,7 @@
 		"astro-loader",
 		"obsidian"
 	],
-	"version": "0.0.6",
+	"version": "0.0.7",
 	"author": "Aitor Llamas Jiménez <aitorllj93@gmail.com>",
 	"homepage": "https://github.com/aitorllj93/astro-loader-obsidian",
 	"repository": {
@@ -25,6 +25,7 @@
 	"devDependencies": {
 		"@types/js-yaml": "^4.0.9",
 		"@types/micromatch": "^4.0.9",
+		"@types/node": "18.16.9",
 		"astro": "^5.0.0-beta"
 	},
 	"peerDependencies": {
@@ -35,6 +36,7 @@
 		"github-slugger": "^2.0.0",
 		"gray-matter": "^4.0.3",
 		"js-yaml": "^4.1.0",
+		"kleur": "^4.1.5",
 		"micromatch": "^4.0.8",
 		"p-limit": "^6.1.0"
 	}

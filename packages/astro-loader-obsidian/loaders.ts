@@ -14,8 +14,10 @@ import {
   getRenderFunction,
   isConfigFile,
   posixRelative,
+  type DataEntry,
   type RenderedContent,
 } from "./utils";
+import type { ObsidianContext } from "./utils/obsidian";
 
 const DEFAULT_PATTERN = "**/*.md";
 
@@ -82,7 +84,7 @@ export const ObsidianMdLoader: (opts: ObsidianMdLoaderOptions) => Loader = (
             files,
             i18n: opts.i18n,
             defaultLocale: config.i18n?.defaultLocale,
-          }
+          } as ObsidianContext
         );
         const id = generateId({ entry, base, data });
 
@@ -138,7 +140,7 @@ export const ObsidianMdLoader: (opts: ObsidianMdLoaderOptions) => Loader = (
           digest,
           rendered,
           assetImports: rendered?.metadata?.imagePaths,
-        });
+        } as DataEntry);
 
         fileToIdMap.set(filePath, id);
       }
@@ -187,7 +189,7 @@ export const ObsidianMdLoader: (opts: ObsidianMdLoaderOptions) => Loader = (
           return;
         }
         const baseUrl = pathToFileURL(basePath);
-        await syncData(entry, baseUrl, files);
+        await syncData(entry, baseUrl as URL, files);
         logger.info(`Reloaded data from ${green(entry)}`);
       }
 

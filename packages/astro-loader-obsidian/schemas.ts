@@ -1,4 +1,4 @@
-import { z } from 'astro:content';
+import { z } from "astro:content";
 
 export const ObsidianCoreSchema = z.object({
   tags: z.array(z.string()).optional(),
@@ -19,7 +19,7 @@ export const AstroSchema = z.object({
 });
 
 export const PublishSchema = z.object({
-  author: z.string(),
+  author: z.string().optional(),
   created: z.date(),
   updated: z.date(),
 });

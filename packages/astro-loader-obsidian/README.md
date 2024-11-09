@@ -1,6 +1,6 @@
 # astro-loader-obsidian
 
-Use your Obsidian vault in Astro projects. Supports i18n.
+Use your Obsidian vault in Astro projects.
 
 ## Usage
 
@@ -14,27 +14,13 @@ import { ObsidianMdLoader } from "astro-loader-obsidian";
 
 const articles = defineCollection({
   loader: ObsidianMdLoader({
-    // Optional: Default author for articles without "author" field
-    author: "aitor",
     // Base Obsidian Folder
     base: "src/content/articles",
-    // Optional: Support language named folders (en, es, fr, it...)
-    i18n: true,
-  }),
-});
-
-const authors = defineCollection({
-  loader: glob({ pattern: "**/[^_]*.yaml", base: "src/content/authors" }),
-  schema: z.object({
-    name: z.string(),
-    portfolio: z.string().url().optional(),
-    avatar: z.string().url(),
   }),
 });
 
 export const collections = {
   articles,
-  authors,
 };
 ```
 
@@ -67,12 +53,40 @@ const ObsidianDocumentSchema = z.object({
 
 Obsidian Links are automatically replaced with standard markdown links. By default, they will use `collection` name as base url, but you can override it with the `url` setting from the options.
 
+### Image/Covers
+
+You can reference your images in the frontmatter `image` or `cover` fields by writing them in the same way it's done with [Obsidian Publish](https://help.obsidian.md/Obsidian+Publish/Social+media+link+previews#Image)
+
+To enable images loading, you need to extend them schema with the Astro helper as can be seen in the following example:
+
+```ts
+const articles = defineCollection({
+  loader: ObsidianMdLoader({
+    ...
+  }),
+  schema: ({ image }) =>
+    ObsidianDocumentSchema.extend({
+      image: image(),
+      // or
+      cover: image(),
+    }),
+});
+
+```
+
+### Authoring
+
+If you want all your notes to have a default `author` in case they don't have one, use the `author` property on the config.
+
+### I18n
+
+If you want your notes to support i18n, place them in separated language folders (en, es, pt, fr, it...) and enable the `i18n` property in the config. Remember to enable the i18n Astro settings as well.
+
 ### TO DO
 
 - [ ] Replace Obsidian Links in Frontmatter
 - [ ] Expose Links and Backlinks interface
 - [ ] Render Inline Images
-- [ ] Render Image/Cover from Frontmatter
 
 ## License
 

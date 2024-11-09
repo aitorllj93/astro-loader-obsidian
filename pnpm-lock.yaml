@@ -17,7 +17,7 @@ importers:
     devDependencies:
       astro:
         specifier: ^5.0.0-beta
-        version: 5.0.0-beta.7(typescript@5.6.3)
+        version: 5.0.0-beta.7(@types/node@18.16.9)(typescript@5.6.3)
 
   packages/astro-loader-obsidian:
     dependencies:
@@ -33,6 +33,9 @@ importers:
       js-yaml:
         specifier: ^4.1.0
         version: 4.1.0
+      kleur:
+        specifier: ^4.1.5
+        version: 4.1.5
       micromatch:
         specifier: ^4.0.8
         version: 4.0.8
@@ -46,9 +49,12 @@ importers:
       '@types/micromatch':
         specifier: ^4.0.9
         version: 4.0.9
+      '@types/node':
+        specifier: 18.16.9
+        version: 18.16.9
       astro:
         specifier: ^5.0.0-beta
-        version: 5.0.0-beta.7(typescript@5.6.3)
+        version: 5.0.0-beta.7(@types/node@18.16.9)(typescript@5.6.3)
 
 packages:
 
@@ -1245,6 +1251,10 @@ packages:
     resolution: {integrity: sha512-J8xLz7q2OFulZ2cyGTLE1TbbZcjpno7FaN6zdJNrgAdrJ+DZzh/uFR6YrTb4C+nXakvud8Q4+rbhoIWlYQbUFQ==}
     dev: false
 
+  /@types/node@18.16.9:
+    resolution: {integrity: sha512-IeB32oIV4oGArLrd7znD2rkHQ6EDCM+2Sr76dJnrHwv9OHBTTM6nuDLK9bmikXzPa0ZlWMWtRGo/Uw4mrzQedA==}
+    dev: true
+
   /@types/unist@3.0.3:
     resolution: {integrity: sha512-ko/gIFJRv177XgZsZcBwnqJN5x/Gien8qNOn0D5bQU/zAzVf9Zt3BlcUiLqhV9y4ARk0GbT3tnUiPNgnTXzc/Q==}
     dev: true
@@ -1306,7 +1316,7 @@ packages:
     engines: {node: '>=8'}
     dev: false
 
-  /astro@5.0.0-beta.7(typescript@5.6.3):
+  /astro@5.0.0-beta.7(@types/node@18.16.9)(typescript@5.6.3):
     resolution: {integrity: sha512-0gwb80vd78srzP1PATCOEJQDxQjZswD8tL/2bfrryM4FaSHXJ847oV4uj5eomRD9G0zZPv2UOWJKNksuyG3X2w==}
     engines: {node: ^18.17.1 || ^20.3.0 || >=21.0.0, npm: '>=9.6.5', pnpm: '>=7.1.0'}
     hasBin: true
@@ -1359,7 +1369,7 @@ packages:
       tsconfck: 3.1.4(typescript@5.6.3)
       unist-util-visit: 5.0.0
       vfile: 6.0.3
-      vite: 6.0.0-beta.6
+      vite: 6.0.0-beta.6(@types/node@18.16.9)
       vitefu: 1.0.3(vite@6.0.0-beta.6)
       which-pm: 3.0.0
       xxhash-wasm: 1.0.2
@@ -2109,7 +2119,6 @@ packages:
   /kleur@4.1.5:
     resolution: {integrity: sha512-o+NO+8WrRiQEE4/7nwRJhN1HWpVmJm511pBHUxPLtp0BUISzlBplORYSmTclCnJvQq2tKu/sgl3xVpkc7ZWuQQ==}
     engines: {node: '>=6'}
-    dev: true
 
   /load-yaml-file@0.2.0:
     resolution: {integrity: sha512-OfCBkGEw4nN6JLtgRidPX6QxjBQGQf72q3si2uvqyFEMbycSFFHwAZeXx6cJgFM9wmLrf9zBwCP3Ivqa+LLZPw==}
@@ -3268,7 +3277,7 @@ packages:
       vfile-message: 4.0.2
     dev: true
 
-  /vite@6.0.0-beta.6:
+  /vite@6.0.0-beta.6(@types/node@18.16.9):
     resolution: {integrity: sha512-XbMzqwx2CDrOOKDDRvenHMQx+JwUTSm/1a/GgjTL6oC5XwpAk+PgoxmB6vGh2UQi0t9EIVS5d2GZXMWd4P5ahA==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
@@ -3308,6 +3317,7 @@ packages:
       yaml:
         optional: true
     dependencies:
+      '@types/node': 18.16.9
       esbuild: 0.24.0
       postcss: 8.4.47
       rollup: 4.24.4
@@ -3323,7 +3333,7 @@ packages:
       vite:
         optional: true
     dependencies:
-      vite: 6.0.0-beta.6
+      vite: 6.0.0-beta.6(@types/node@18.16.9)
     dev: true
 
   /web-namespaces@2.0.1:
