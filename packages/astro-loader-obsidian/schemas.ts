@@ -7,7 +7,13 @@ export const ObsidianCoreSchema = z.object({
 });
 
 export const ObsidianPublishSchema = z.object({
-  publish: z.boolean().optional(),
+  publish: z.preprocess((val) => {
+    if (typeof val === "string") {
+        if (val.toLowerCase() === "true") return true;
+        if (val.toLowerCase() === "false") return false;
+    }
+    return val;
+  }, z.boolean().optional()),
   permalink: z.string(),
   description: z.string().optional(),
   image: z.string().optional(),
