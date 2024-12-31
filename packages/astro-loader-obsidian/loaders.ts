@@ -130,6 +130,7 @@ export const ObsidianMdLoader: (opts: ObsidianMdLoaderOptions) => Loader = (
           });
         } catch (error: any) {
           logger.error(`Error rendering ${entry}: ${error.message}`);
+          return;
         }
 
         store.set({
