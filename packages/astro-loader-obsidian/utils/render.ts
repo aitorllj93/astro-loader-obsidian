@@ -2,8 +2,8 @@ import {
   createMarkdownProcessor,
   type MarkdownHeading,
 } from "@astrojs/markdown-remark";
-import type { AstroConfig } from "node_modules/astro/dist/types/public/config";
 import { pathToFileURL } from "node:url";
+import type { AstroConfig } from "node_modules/astro/dist/types/public/config";
 
 export interface RenderedContent {
   /** Rendered HTML string. If present then `render(entry)` will return a component that renders this HTML. */
@@ -59,7 +59,8 @@ export const getRenderFunction = async (config: AstroConfig) => {
       html: result.code,
       metadata: {
         ...result.metadata,
-        imagePaths: Array.from(result.metadata.imagePaths),
+        localImagePaths: Array.from(result.metadata.localImagePaths),
+        remoteImagePaths: Array.from(result.metadata.remoteImagePaths),
       },
     };
   };

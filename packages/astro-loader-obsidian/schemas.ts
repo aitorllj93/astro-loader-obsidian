@@ -44,8 +44,10 @@ export const ObsidianDocumentSchema = ObsidianCoreSchema.merge(
   ObsidianPublishSchema
 )
   .merge(PublishSchema)
-  .merge(AstroSchema)
-  .merge(I18nSchema);
+  .merge(AstroSchema);
+
+export const ObsidianDocumentI18nSchema =
+  ObsidianDocumentSchema.merge(I18nSchema);
 
 export type ObsidianDocument = z.infer<typeof ObsidianDocumentSchema>;
 

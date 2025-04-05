@@ -2,13 +2,13 @@ import matter from "gray-matter";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import type { Stats } from "node:fs";
 import { isYAMLException, MarkdownError, type ErrorLocation } from "./errors";
 import {
   entryToLink,
   parseObsidianText,
   type ObsidianContext,
 } from "./obsidian";
-import type { Stats } from "node:fs";
 
 function safeParseFrontmatter(source: string, id?: string) {
   try {
@@ -44,7 +44,8 @@ export function getEntryInfo(
   fileUrl: URL,
   entry: string,
   stats: Stats,
-  context: ObsidianContext
+  context: ObsidianContext,
+  logger: Console,
 ) {
   const { content, data, matter } = safeParseFrontmatter(
     contents,
@@ -56,7 +57,10 @@ export function getEntryInfo(
   //   }
   // });
 
-  data.title = data.title ?? path.basename(entry, path.extname(entry));
+  // find h1 in content
+  const h1InContent = content.match(/^# (.+)$/m)?.[0].replace('#', '').trim();
+
+  data.title = data.title ?? h1InContent ?? path.basename(entry, path.extname(entry));
   data.permalink = entryToLink(entry, context, data.permalink ?? data.slug);
 
   // TODO: Figure out a better way to resolve Astro paths for assets
@@ -79,7 +83,7 @@ export function getEntryInfo(
     data.language = entry.split(path.sep)?.[0] ?? context.defaultLocale;
   }
 
-  const { content: body } = parseObsidianText(content, context);
+  const { content: body } = parseObsidianText(content, context, logger);
 
   return {
     data,

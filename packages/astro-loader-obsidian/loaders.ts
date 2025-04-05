@@ -84,7 +84,8 @@ export const ObsidianMdLoader: (opts: ObsidianMdLoaderOptions) => Loader = (
             files,
             i18n: opts.i18n,
             defaultLocale: config.i18n?.defaultLocale,
-          } as ObsidianContext
+          } as ObsidianContext,
+          logger as unknown as Console,
         );
         const id = generateId({ entry, base, data });
 

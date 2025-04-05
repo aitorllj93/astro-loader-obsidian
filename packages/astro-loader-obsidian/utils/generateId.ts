@@ -1,7 +1,7 @@
-import path from 'node:path';
 import { slash } from '@astrojs/internal-helpers/path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
 import { slug as githubSlug } from 'github-slugger';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const isWindows =
   typeof process !== 'undefined' && process.platform === 'win32';

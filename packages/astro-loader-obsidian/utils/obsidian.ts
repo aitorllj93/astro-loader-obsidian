@@ -1,5 +1,5 @@
-import { slugify } from "./slugify";
 import path from "node:path";
+import { slugify } from "./slugify";
 
 export type ObsidianContext = {
   author?: string;
@@ -25,9 +25,13 @@ export const entryToLink = (
 
   const slug = permalink ?? entrySlug;
 
-  return context.i18n && language !== context.defaultLocale
-    ? `/${language}/${context.baseUrl}/${slug}`
-    : `/${context.baseUrl}/${slug}`;
+  const urlParts = [context.baseUrl, slug].filter(Boolean);
+
+  if (context.i18n && language !== context.defaultLocale) {
+    urlParts.unshift(language as string);
+  }
+
+  return `/${urlParts.join('/')}`;
 };
 
 export const resolveDocumentIdByLink = (
@@ -46,7 +50,8 @@ export const resolveDocumentIdByLink = (
 
 export const parseObsidianLink = (
   linkText: string,
-  context: ObsidianContext
+  context: ObsidianContext,
+  logger: Console,
 ): { title: string; href: string } => {
   let idHref = linkText;
   let title = linkText.split("/").slice(-1)[0] as string;
@@ -60,7 +65,7 @@ export const parseObsidianLink = (
   const documentId = resolveDocumentIdByLink(idHref, context);
 
   if (!documentId) {
-    console.warn(`Could not find document from Obsidian link "${idHref}"`);
+    logger.warn(`Could not find document from Obsidian link "${idHref}"`);
     return {
       title,
       href: `/404?entry=${slugify(idHref)}&collection=${context.baseUrl}`,
@@ -74,7 +79,8 @@ export const parseObsidianLink = (
 
 export const parseObsidianText = (
   content: string,
-  context: ObsidianContext
+  context: ObsidianContext,
+  logger: Console
 ): { content: string; links: { title: string; href: string }[] } => {
   const regex = /\[\[([^\]]+)\]\]/g;
   const links: { title: string; href: string }[] = [];
@@ -84,7 +90,7 @@ export const parseObsidianText = (
   for (const match of matches) {
     const [link, obsidianId] = match;
 
-    const obsidianLink = parseObsidianLink(obsidianId as string, context);
+    const obsidianLink = parseObsidianLink(obsidianId as string, context, logger);
 
     links.push(obsidianLink);
 
@@ -94,6 +100,9 @@ export const parseObsidianText = (
       `[${obsidianLink.title}](${obsidianLink.href})`
     );
   }
+
+  // remove h1 from content
+  content = content.replace(/^# .+$/m, "");
 
   return { content, links };
 };
