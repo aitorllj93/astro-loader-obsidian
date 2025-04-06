@@ -116,7 +116,7 @@ export const parseObsidianImage = (
     };
   }
 
-  const href = `__ASTRO_IMAGE_${assetId}`;
+  const href = `__ASTRO_IMAGE_/src/content/vault/${assetId}`;
 
   return { title, href };
 };

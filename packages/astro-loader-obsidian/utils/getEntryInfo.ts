@@ -7,7 +7,8 @@ import { isYAMLException, MarkdownError, type ErrorLocation } from "./errors";
 import {
   entryToLink,
   parseObsidianText,
-  type ObsidianContext,
+  resolveAssetIdByLink,
+  type ObsidianContext
 } from "./obsidian";
 
 function safeParseFrontmatter(source: string, id?: string) {
@@ -65,16 +66,16 @@ export function getEntryInfo(
   data.description = data.description ?? data.excerpt;
 
   // TODO: Figure out a better way to resolve Astro paths for assets
-  data.image = data.image
-    ? data.image.startsWith("..")
-      ? data.image
-      : `../${data.image}`
-    : undefined;
-  data.cover = data.cover
-    ? data.cover.startsWith("..")
-      ? data.cover
-      : `../${data.cover}`
-    : undefined;
+
+  if (data.image) {
+    const assetId = resolveAssetIdByLink(data.image, context);
+    data.image = `/src/content/vault/${assetId}`;
+  }
+
+  if (data.cover) {
+    const assetId = resolveAssetIdByLink(data.cover, context);
+    data.cover = `/src/content/vault/${assetId}`;
+  }
 
   data.author = data.author ?? context.author;
   data.created = data.created ?? stats.ctime;

@@ -150,7 +150,11 @@ export const ObsidianMdLoader: (opts: ObsidianMdLoaderOptions) => Loader = (
           filePath: relativePath,
           digest,
           rendered,
-          assetImports: rendered?.metadata?.imagePaths,
+          assetImports: [
+            ...(rendered?.metadata?.imagePaths ?? []),
+            parsedData.cover,
+            parsedData.image,
+          ].filter(Boolean),
         } as DataEntry);
 
         fileToIdMap.set(filePath, id);
