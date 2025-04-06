@@ -32,7 +32,11 @@ export const entryToLink = (
     urlParts.unshift(language as string);
   }
 
-  return `/${urlParts.join('/')}`;
+  const pathname = urlParts.join("/");
+
+  return pathname.startsWith("/")
+    ? pathname
+    : `/${pathname}`;
 };
 
 export const resolveDocumentIdByLink = (
