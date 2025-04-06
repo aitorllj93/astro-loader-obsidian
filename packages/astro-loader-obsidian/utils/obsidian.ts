@@ -77,32 +77,74 @@ export const parseObsidianLink = (
   return { title, href };
 };
 
+export const parseObsidianImage = (
+  linkText: string,
+  context: ObsidianContext,
+  logger: Console,
+): { title: string; href: string } => {
+  let idHref = linkText;
+  let title = linkText.split("/").slice(-1)[0] as string;
+
+  if (linkText.includes("|")) {
+    const [aliasHref, aliasTitle] = linkText.split("|");
+    idHref = aliasHref as string;
+    title = aliasTitle as string;
+  }
+
+  const documentId = resolveDocumentIdByLink(idHref, context);
+
+  if (!documentId) {
+    logger.warn(`Could not find image from Obsidian image "${idHref}"`);
+    return {
+      title,
+      href: `/404?entry=${slugify(idHref)}&collection=${context.baseUrl}`,
+    };
+  }
+
+  const href = entryToLink(documentId, context);
+
+  return { title, href };
+};
+
 export const parseObsidianText = (
   content: string,
   context: ObsidianContext,
   logger: Console
-): { content: string; links: { title: string; href: string }[] } => {
-  const regex = /\[\[([^\]]+)\]\]/g;
+): { content: string;  images: { title: string; href: string }[]; links: { title: string; href: string }[] } => {
+  const regex = /(!)?\[\[([^\]]+?)\]\]/g // /\[\[(!)?([\w/]+)\]\]/g;
   const links: { title: string; href: string }[] = [];
+  const images: { title: string; href: string }[] = [];
 
   const matches = content.matchAll(regex);
 
   for (const match of matches) {
-    const [link, obsidianId] = match;
+    const [link, isImage, obsidianId] = match;
 
-    const obsidianLink = parseObsidianLink(obsidianId as string, context, logger);
+    if (!isImage) {
+      const obsidianLink = parseObsidianLink(obsidianId as string, context, logger);
 
-    links.push(obsidianLink);
+      links.push(obsidianLink);
 
-    // replace with link to the corresponding markdown file
-    content = content.replace(
-      link,
-      `[${obsidianLink.title}](${obsidianLink.href})`
-    );
+      // replace with link to the corresponding markdown file
+      content = content.replace(
+        link,
+        `[${obsidianLink.title}](${obsidianLink.href})`
+      );
+    } else {
+      const obsidianImage = parseObsidianImage(obsidianId as string, context, logger);
+
+      images.push(obsidianImage);
+
+      // replace with link to the corresponding markdown file
+      content = content.replace(
+        link,
+        `[${obsidianImage.title}](${obsidianImage.href})`
+      );
+    }
   }
 
   // remove h1 from content
   content = content.replace(/^# .+$/m, "");
 
-  return { content, links };
+  return { content, images, links };
 };

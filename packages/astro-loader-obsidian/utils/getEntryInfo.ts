@@ -62,6 +62,7 @@ export function getEntryInfo(
 
   data.title = data.title ?? h1InContent ?? path.basename(entry, path.extname(entry));
   data.permalink = entryToLink(entry, context, data.permalink ?? data.slug);
+  data.description = data.description ?? data.excerpt;
 
   // TODO: Figure out a better way to resolve Astro paths for assets
   data.image = data.image
@@ -83,7 +84,10 @@ export function getEntryInfo(
     data.language = entry.split(path.sep)?.[0] ?? context.defaultLocale;
   }
 
-  const { content: body } = parseObsidianText(content, context, logger);
+  const { content: body, links, images } = parseObsidianText(content, context, logger);
+
+  data.links = links;
+  data.images = images;
 
   return {
     data,

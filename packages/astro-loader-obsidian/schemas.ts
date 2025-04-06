@@ -4,6 +4,14 @@ export const ObsidianCoreSchema = z.object({
   tags: z.array(z.string()).optional(),
   aliases: z.array(z.string()).optional(),
   cssclasses: z.array(z.string()).optional(),
+  links: z.array(z.object({
+    title: z.string(),
+    href: z.string(),
+  })).optional(),
+  images: z.array(z.object({
+    title: z.string(),
+    href: z.string(),
+  })).optional(),
 });
 
 export const ObsidianPublishSchema = z.object({
