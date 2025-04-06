@@ -24,7 +24,7 @@ const DEFAULT_ASSETS_PATTERN = "**/*.{svg,png,jpg,jpeg,avif,webp,gif,tiff,ico}";
 export type ObsidianMdLoaderOptions = {
   /** The glob pattern to match files, relative to the base directory. Defaults to **\/*.md  */
   pattern?: string | Array<string>;
-  /** The glob pattern to match assets, relative to the base directory. Defaults to **\/*.{png|jpg|svg}  */
+  /** The glob pattern to match assets, relative to the base directory. Defaults to **\/*.{svg,png,jpg,jpeg,avif,webp,gif,tiff,ico}  */
   assetsPattern?: string | Array<string>;
   /** The base directory to resolve the glob pattern from. Relative to the root directory, or an absolute file URL. Defaults to `.` */
   base?: string | URL;
@@ -141,6 +141,7 @@ export const ObsidianMdLoader: (opts: ObsidianMdLoaderOptions) => Loader = (
           });
         } catch (error: any) {
           logger.error(`Error rendering ${entry}: ${error.message}`);
+          throw error;
         }
 
         store.set({
