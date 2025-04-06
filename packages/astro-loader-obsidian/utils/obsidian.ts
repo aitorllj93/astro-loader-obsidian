@@ -26,7 +26,7 @@ export const entryToLink = (
 
   const slug = permalink ?? entrySlug;
 
-  const urlParts = [context.baseUrl, slug].filter(Boolean);
+  const urlParts = [context.baseUrl, slug].filter(p => p.length > 0 && p !== '/');
 
   if (context.i18n && language !== context.defaultLocale) {
     urlParts.unshift(language as string);
