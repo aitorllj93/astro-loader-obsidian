@@ -11,19 +11,21 @@ import { ObsidianDocumentSchema } from "./schemas";
 import {
   generateId,
   getEntryInfo,
-  getRenderFunction,
   isConfigFile,
   posixRelative,
   type DataEntry,
-  type RenderedContent,
+  type RenderedContent
 } from "./utils";
 import type { ObsidianContext } from "./utils/obsidian";
 
 const DEFAULT_PATTERN = "**/*.md";
+const DEFAULT_ASSETS_PATTERN = "**/*.{svg,png,jpg,jpeg,avif,webp,gif,tiff,ico}";
 
 export type ObsidianMdLoaderOptions = {
   /** The glob pattern to match files, relative to the base directory. Defaults to **\/*.md  */
   pattern?: string | Array<string>;
+  /** The glob pattern to match assets, relative to the base directory. Defaults to **\/*.{png|jpg|svg}  */
+  assetsPattern?: string | Array<string>;
   /** The base directory to resolve the glob pattern from. Relative to the root directory, or an absolute file URL. Defaults to `.` */
   base?: string | URL;
   /** Enables i18n routing */
@@ -42,6 +44,7 @@ export const ObsidianMdLoader: (opts: ObsidianMdLoaderOptions) => Loader = (
 
   const fileToIdMap = new Map<string, string>();
   const pattern = opts.pattern ?? DEFAULT_PATTERN;
+  const assetsPattern = opts.assetsPattern ?? DEFAULT_ASSETS_PATTERN;
 
   // Return a loader object
   return {
@@ -50,16 +53,21 @@ export const ObsidianMdLoader: (opts: ObsidianMdLoaderOptions) => Loader = (
     load: async ({
       collection,
       config,
+      entryTypes,
       generateDigest,
       logger,
       parseData,
       store,
       watcher,
-    }: LoaderContext): Promise<void> => {
+    }: LoaderContext & { entryTypes: WeakMap<any, any> }): Promise<void> => {
       const untouchedEntries = new Set(store.keys());
-      const render = await getRenderFunction(config);
 
-      async function syncData(entry: string, base: URL, files: string[]) {
+      async function syncData(
+        entry: string,
+        base: URL,
+        files: string[],
+        assets: string[]
+      ) {
         const fileUrl = new URL(encodeURI(entry), base);
         const contents = await readFile(fileUrl, "utf-8").catch((err) => {
           logger.error(`Error reading ${entry}: ${err.message}`);
@@ -79,13 +87,14 @@ export const ObsidianMdLoader: (opts: ObsidianMdLoaderOptions) => Loader = (
           entry,
           stats,
           {
+            assets,
             author: opts.author,
             baseUrl,
             files,
             i18n: opts.i18n,
             defaultLocale: config.i18n?.defaultLocale,
           } as ObsidianContext,
-          logger as unknown as Console,
+          logger as unknown as Console
         );
         const id = generateId({ entry, base, data });
 
@@ -122,7 +131,8 @@ export const ObsidianMdLoader: (opts: ObsidianMdLoaderOptions) => Loader = (
         let rendered: RenderedContent | undefined = undefined;
 
         try {
-          rendered = await render({
+          const renderFn = await entryTypes.get('.md').getRenderFunction(config);
+          rendered = await renderFn?.({
             id,
             data: parsedData,
             body,
@@ -155,6 +165,9 @@ export const ObsidianMdLoader: (opts: ObsidianMdLoaderOptions) => Loader = (
         baseDir.pathname = `${baseDir.pathname}/`;
       }
 
+      const assets = await fastGlob(assetsPattern, {
+        cwd: fileURLToPath(baseDir),
+      });
       const files = await fastGlob(pattern, {
         cwd: fileURLToPath(baseDir),
       });
@@ -167,7 +180,7 @@ export const ObsidianMdLoader: (opts: ObsidianMdLoaderOptions) => Loader = (
           }
 
           return limit(async () => {
-            await syncData(entry, baseDir, files);
+            await syncData(entry, baseDir, files, assets);
           });
         })
       );
@@ -190,7 +203,7 @@ export const ObsidianMdLoader: (opts: ObsidianMdLoaderOptions) => Loader = (
           return;
         }
         const baseUrl = pathToFileURL(basePath);
-        await syncData(entry, baseUrl as URL, files);
+        await syncData(entry, baseUrl as URL, files, assets);
         logger.info(`Reloaded data from ${green(entry)}`);
       }
 
@@ -213,5 +226,5 @@ export const ObsidianMdLoader: (opts: ObsidianMdLoaderOptions) => Loader = (
     // Optionally, define the schema of an entry.
     // It will be overridden by user-defined schema.
     schema: async () => ObsidianDocumentSchema,
-  };
+  } as unknown as Loader;
 };

@@ -3,6 +3,7 @@ import { slugify } from "./slugify";
 
 export type ObsidianContext = {
   author?: string;
+  assets: string[];
   files: string[];
   baseUrl: string;
   i18n?: boolean;
@@ -40,6 +41,20 @@ export const resolveDocumentIdByLink = (
 ): string => {
   // return the most precise match
   const matches = context.files.filter((id) => id.includes(link));
+  return matches.sort((a, b) => {
+    const aMismatch = link.replace(a, "").length;
+    const bMismatch = link.replace(b, "").length;
+
+    return bMismatch - aMismatch;
+  })[0] as string;
+};
+
+export const resolveAssetIdByLink = (
+  link: string,
+  context: ObsidianContext
+): string => {
+  // return the most precise match
+  const matches = context.assets.filter((id) => id.includes(link));
   return matches.sort((a, b) => {
     const aMismatch = link.replace(a, "").length;
     const bMismatch = link.replace(b, "").length;
@@ -91,9 +106,9 @@ export const parseObsidianImage = (
     title = aliasTitle as string;
   }
 
-  const documentId = resolveDocumentIdByLink(idHref, context);
+  const assetId = resolveAssetIdByLink(idHref, context);
 
-  if (!documentId) {
+  if (!assetId) {
     logger.warn(`Could not find image from Obsidian image "${idHref}"`);
     return {
       title,
@@ -101,7 +116,7 @@ export const parseObsidianImage = (
     };
   }
 
-  const href = entryToLink(documentId, context);
+  const href = `__ASTRO_IMAGE_${assetId}`;
 
   return { title, href };
 };
@@ -138,7 +153,7 @@ export const parseObsidianText = (
       // replace with link to the corresponding markdown file
       content = content.replace(
         link,
-        `[${obsidianImage.title}](${obsidianImage.href})`
+        `![${obsidianImage.title}](${obsidianImage.href})`
       );
     }
   }
