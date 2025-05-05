@@ -69,12 +69,12 @@ export function getEntryInfo(
 
   if (data.image) {
     const assetId = resolveAssetIdByLink(data.image, context);
-    data.image = `/src/content/vault/${assetId}`;
+    data.image = `/${context.base}/${assetId}`;
   }
 
   if (data.cover) {
     const assetId = resolveAssetIdByLink(data.cover, context);
-    data.cover = `/src/content/vault/${assetId}`;
+    data.cover = `/${context.base}/${assetId}`;
   }
 
   data.author = data.author ?? context.author;

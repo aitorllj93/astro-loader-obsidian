@@ -89,6 +89,7 @@ export const ObsidianMdLoader: (opts: ObsidianMdLoaderOptions) => Loader = (
           {
             assets,
             author: opts.author,
+            base: opts.base,
             baseUrl: `${config.base}${baseUrl}`,
             files,
             i18n: opts.i18n,

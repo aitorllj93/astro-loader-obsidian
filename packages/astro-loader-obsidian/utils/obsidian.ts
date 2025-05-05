@@ -1,10 +1,24 @@
 import path from "node:path";
 import { slugify } from "./slugify";
 
+const ALLOWED_IMAGE_EXTENSIONS = [
+  ".jpg",
+  ".jpeg",
+  ".png",
+  ".gif",
+  ".svg",
+  ".webp",
+  ".avif",
+  ".tiff",
+  ".bmp",
+  ".ico",
+]
+
 export type ObsidianContext = {
   author?: string;
   assets: string[];
   files: string[];
+  base: string;
   baseUrl: string;
   i18n?: boolean;
   defaultLocale?: string;
@@ -57,6 +71,14 @@ export const resolveAssetIdByLink = (
   link: string,
   context: ObsidianContext
 ): string => {
+  const regex = /(!)?\[\[([^\]]+?)\]\]/g // /\[\[(!)?([\w/]+)\]\]/g;
+
+  const match = link.matchAll(regex).next();
+
+  if (match.value) {
+    link = match.value[2] as string;
+  }
+
   // return the most precise match
   const matches = context.assets.filter((id) => id.includes(link));
   return matches.sort((a, b) => {
@@ -120,7 +142,7 @@ export const parseObsidianImage = (
     };
   }
 
-  const href = `__ASTRO_IMAGE_/src/content/vault/${assetId}`;
+  const href = `__ASTRO_IMAGE_/${context.base}/${assetId}`;
 
   return { title, href };
 };
@@ -137,7 +159,9 @@ export const parseObsidianText = (
   const matches = content.matchAll(regex);
 
   for (const match of matches) {
-    const [link, isImage, obsidianId] = match;
+    const [link, isImageMatch, obsidianId] = match;
+
+    const isImage = isImageMatch && obsidianId && ALLOWED_IMAGE_EXTENSIONS.some(ext => obsidianId.endsWith(ext));
 
     if (!isImage) {
       const obsidianLink = parseObsidianLink(obsidianId as string, context, logger);
