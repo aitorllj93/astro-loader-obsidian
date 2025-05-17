@@ -15,6 +15,16 @@ const ALLOWED_IMAGE_EXTENSIONS = [
   ".ico",
 ];
 
+const localeContains = function(str: string, sub: string) {
+  if(sub==="") return true;
+  if(!sub || !str.length) return false;
+  sub = ""+sub;
+  if(sub.length>str.length) return false;
+  let ascii = (s: string) => s.normalize("NFKD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  return ascii(str).includes(ascii(sub));
+}
+
+
 export { type ObsidianContext };
 
 export const entryToLink = (
@@ -51,7 +61,7 @@ export const resolveDocumentIdByLink = (
   context: ObsidianContext
 ): string => {
   // return the most precise match
-  const matches = context.files.filter((id) => id.includes(link));
+  const matches = context.files.filter((id) => localeContains(id, link));
   return matches.sort((a, b) => {
     const aMismatch = link.replace(a, "").length;
     const bMismatch = link.replace(b, "").length;
@@ -103,7 +113,7 @@ export const parseObsidianLink = (
 
     const strategy = context.options.brokenLinksStrategy;
 
-    let href = null;
+    let href: string|null = null;
 
     if (strategy === 'warn') {
       href = idHref;
