@@ -1,4 +1,5 @@
 import path from "node:path";
+import type { ObsidianContext } from "../types";
 import { slugify } from "./slugify";
 
 const ALLOWED_IMAGE_EXTENSIONS = [
@@ -12,17 +13,9 @@ const ALLOWED_IMAGE_EXTENSIONS = [
   ".tiff",
   ".bmp",
   ".ico",
-]
+];
 
-export type ObsidianContext = {
-  author?: string;
-  assets: string[];
-  files: string[];
-  base: string;
-  baseUrl: string;
-  i18n?: boolean;
-  defaultLocale?: string;
-};
+export { type ObsidianContext };
 
 export const entryToLink = (
   entry: string,
@@ -93,7 +86,7 @@ export const parseObsidianLink = (
   linkText: string,
   context: ObsidianContext,
   logger: Console,
-): { title: string; href: string } => {
+): { title: string; href: string|null } => {
   let idHref = linkText;
   let title = linkText.split("/").slice(-1)[0] as string;
 
@@ -106,10 +99,21 @@ export const parseObsidianLink = (
   const documentId = resolveDocumentIdByLink(idHref, context);
 
   if (!documentId) {
-    logger.warn(`Could not find document from Obsidian link "${idHref}"`);
+    logger.warn(`Could not find document from Obsidian link "${idHref}" at "${context.entry}"`);
+
+    const strategy = context.options.brokenLinksStrategy;
+
+    let href = null;
+
+    if (strategy === 'warn') {
+      href = idHref;
+    } else if (strategy === '404') {
+      href = `/404?entry=${slugify(idHref)}&collection=${context.baseUrl}`
+    }
+
     return {
       title,
-      href: `/404?entry=${slugify(idHref)}&collection=${context.baseUrl}`,
+      href,
     };
   }
 
@@ -166,12 +170,16 @@ export const parseObsidianText = (
     if (!isImage) {
       const obsidianLink = parseObsidianLink(obsidianId as string, context, logger);
 
-      links.push(obsidianLink);
+      if (typeof obsidianLink.href === 'string') {
+        links.push(obsidianLink as any);
+      }
 
       // replace with link to the corresponding markdown file
       content = content.replace(
         link,
-        `[${obsidianLink.title}](${obsidianLink.href})`
+        typeof obsidianLink.href ==='string'
+            ? `[${obsidianLink.title}](${obsidianLink.href})`
+            : obsidianLink.title
       );
     } else {
       const obsidianImage = parseObsidianImage(obsidianId as string, context, logger);
@@ -187,7 +195,9 @@ export const parseObsidianText = (
   }
 
   // remove h1 from content
-  content = content.replace(/^# .+$/m, "");
+  if (!('removeH1' in context.options) || context.options.removeH1 === true) {
+    content = content.replace(/^# .+$/m, "");
+  }
 
   return { content, images, links };
 };
