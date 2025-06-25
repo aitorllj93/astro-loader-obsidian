@@ -21,6 +21,8 @@ export type ObsidianMdLoaderOptions = {
   brokenLinksStrategy?: 'warn' | 'label' | '404';
   /** Remove h1 from document. Useful if your h1 is the same as the document title. Default true */
   removeH1?: boolean;
+  /** Additional fields to be parsed as wikilinks */
+  wikilinkFields?: string[];
 };
 
 export type ObsidianContext = {

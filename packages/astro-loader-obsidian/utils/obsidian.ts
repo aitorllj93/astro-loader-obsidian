@@ -1,6 +1,11 @@
+import { type z } from "astro:content";
 import path from "node:path";
+
+import type { ObsidianWikiLinkSchema } from "../schemas";
 import type { ObsidianContext } from "../types";
 import { slugify } from "./slugify";
+
+type Link = z.infer<typeof ObsidianWikiLinkSchema>;
 
 const ALLOWED_IMAGE_EXTENSIONS = [
   ".jpg",
@@ -27,11 +32,11 @@ const localeContains = function(str: string, sub: string) {
 
 export { type ObsidianContext };
 
-export const entryToLink = (
+export const entryToSlug = (
   entry: string,
   context: ObsidianContext,
   permalink?: string
-): string => {
+): [string, string|undefined] => {
   let entrySlug = slugify(entry);
   let language: string | undefined;
 
@@ -41,7 +46,17 @@ export const entryToLink = (
     entrySlug = slugify(entryPath.join("/"));
   }
 
-  const slug = permalink ?? entrySlug;
+  const slug = entrySlug;
+  
+  return [slug, language];
+};
+
+export const entryToLink = (
+  entry: string,
+  context: ObsidianContext,
+  permalink?: string
+): string => {
+  const [slug, language] = entryToSlug(entry, context, permalink);
 
   const urlParts = [context.baseUrl, slug].filter(p => p.length > 0 && p !== '/');
 
@@ -62,12 +77,21 @@ export const resolveDocumentIdByLink = (
 ): string => {
   // return the most precise match
   const matches = context.files.filter((id) => localeContains(id, link));
-  return matches.sort((a, b) => {
-    const aMismatch = link.replace(a, "").length;
-    const bMismatch = link.replace(b, "").length;
+  // sort results by the length of the mismatch. The closest the match, the first
+  const sortedMatches = matches.sort((a, b) => {
+    const aMismatch = link.replace(a.replace('.md', ''), "").length;
+    const bMismatch = link.replace(b.replace('.md', ''), "").length;
+
+    if (aMismatch === 0) {
+      return -1;
+    } else if (bMismatch === 0) {
+      return 1;
+    }
 
     return bMismatch - aMismatch;
-  })[0] as string;
+  });
+
+  return sortedMatches?.[0] as string;
 };
 
 export const resolveAssetIdByLink = (
@@ -96,7 +120,8 @@ export const parseObsidianLink = (
   linkText: string,
   context: ObsidianContext,
   logger: Console,
-): { title: string; href: string|null } => {
+  source?: string,
+): Link => {
   let idHref = linkText;
   let title = linkText.split("/").slice(-1)[0] as string;
 
@@ -122,21 +147,24 @@ export const parseObsidianLink = (
     }
 
     return {
+      id: slugify(idHref),
       title,
       href,
+      source,
     };
   }
 
   const href = entryToLink(documentId, context);
 
-  return { title, href };
+  return { id: slugify(idHref), title, href, source };
 };
 
 export const parseObsidianImage = (
   linkText: string,
   context: ObsidianContext,
   logger: Console,
-): { title: string; href: string } => {
+  source?: string,
+): Link  => {
   let idHref = linkText;
   let title = linkText.split("/").slice(-1)[0] as string;
 
@@ -151,24 +179,51 @@ export const parseObsidianImage = (
   if (!assetId) {
     logger.warn(`Could not find image from Obsidian image "${idHref}"`);
     return {
+      id: slugify(idHref),
       title,
-      href: `/404?entry=${slugify(idHref)}&collection=${context.baseUrl}`,
+      href: null,
+      source,
     };
   }
 
   const href = `__ASTRO_IMAGE_/${context.base}/${assetId}`;
 
-  return { title, href };
+  return { id: slugify(idHref), title, href, source, };
 };
+
+export const parseObsidianLinkField = (
+  text: string,
+  context: ObsidianContext,
+  logger: Console,
+  source?: string,
+): Link => {
+  const regex = /(!)?\[\[([^\]]+?)\]\]/g // /\[\[(!)?([\w/]+)\]\]/g;
+
+  const match = text.matchAll(regex).next();
+  if (match.value) {
+    const [link, isImageMatch, obsidianId] = match.value;
+    const isImage = isImageMatch && obsidianId && ALLOWED_IMAGE_EXTENSIONS.some(ext => obsidianId.endsWith(ext));
+    if (!isImage) {
+      return parseObsidianLink(obsidianId as string, context, logger, source);
+    } else {
+      return parseObsidianImage(obsidianId as string, context, logger, source);
+    }
+  }
+
+  return {
+    title: text,
+    href: null,
+  };
+}
 
 export const parseObsidianText = (
   content: string,
   context: ObsidianContext,
   logger: Console
-): { content: string;  images: { title: string; href: string }[]; links: { title: string; href: string }[] } => {
+): { content: string;  images: Link[]; links: Link[] } => {
   const regex = /(!)?\[\[([^\]]+?)\]\]/g // /\[\[(!)?([\w/]+)\]\]/g;
-  const links: { title: string; href: string }[] = [];
-  const images: { title: string; href: string }[] = [];
+  const links: Link[] = [];
+  const images: Link[] = [];
 
   const matches = content.matchAll(regex);
 
@@ -178,7 +233,7 @@ export const parseObsidianText = (
     const isImage = isImageMatch && obsidianId && ALLOWED_IMAGE_EXTENSIONS.some(ext => obsidianId.endsWith(ext));
 
     if (!isImage) {
-      const obsidianLink = parseObsidianLink(obsidianId as string, context, logger);
+      const obsidianLink = parseObsidianLink(obsidianId as string, context, logger, 'body');
 
       if (typeof obsidianLink.href === 'string') {
         links.push(obsidianLink as any);
@@ -192,15 +247,19 @@ export const parseObsidianText = (
             : obsidianLink.title
       );
     } else {
-      const obsidianImage = parseObsidianImage(obsidianId as string, context, logger);
+      const obsidianImage = parseObsidianImage(obsidianId as string, context, logger, 'body');
 
-      images.push(obsidianImage);
+      if (obsidianImage.href !== null) {
+        images.push(obsidianImage as any);
+        // replace with link to the corresponding markdown file
+        content = content.replace(
+          link,
+          `![${obsidianImage.title}](${obsidianImage.href})`
+        );
+      } else {
+        content = content.replace(link, obsidianImage.title);
+      }
 
-      // replace with link to the corresponding markdown file
-      content = content.replace(
-        link,
-        `![${obsidianImage.title}](${obsidianImage.href})`
-      );
     }
   }
 

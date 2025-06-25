@@ -1,13 +1,18 @@
 import { z } from "astro:content";
 
+
+export const ObsidianWikiLinkSchema = z.object({
+	title: z.string(),
+	href: z.string().nullable(),
+	id: z.string().optional(),
+  source: z.string().optional(),
+})
+
 export const ObsidianCoreSchema = z.object({
   tags: z.array(z.string()).optional(),
   aliases: z.array(z.string()).optional(),
   cssclasses: z.array(z.string()).optional(),
-  links: z.array(z.object({
-    title: z.string(),
-    href: z.string(),
-  })).optional(),
+  links: ObsidianWikiLinkSchema.array().optional(),
   images: z.array(z.object({
     title: z.string(),
     href: z.string(),
@@ -30,6 +35,7 @@ export const ObsidianPublishSchema = z.object({
 
 export const AstroSchema = z.object({
   title: z.string(),
+  slug: z.string(),
 });
 
 export const PublishSchema = z.object({

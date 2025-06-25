@@ -1,15 +1,21 @@
+import { type z } from "astro:content";
 import matter from "gray-matter";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import type { Stats } from "node:fs";
+import type { ObsidianWikiLinkSchema } from "../schemas";
 import { isYAMLException, MarkdownError, type ErrorLocation } from "./errors";
 import {
   entryToLink,
+  entryToSlug,
+  parseObsidianLinkField,
   parseObsidianText,
   resolveAssetIdByLink,
   type ObsidianContext
 } from "./obsidian";
+
+type Link = z.infer<typeof ObsidianWikiLinkSchema>;
 
 function safeParseFrontmatter(source: string, id?: string) {
   try {
@@ -65,6 +71,9 @@ export function getEntryInfo(
   data.permalink = entryToLink(entry, context, data.permalink ?? data.slug);
   data.description = data.description ?? data.excerpt;
 
+  const [slug, language] = entryToSlug(entry, context, data.permalink ?? data.slug);
+  data.slug = slug;
+
   // TODO: Figure out a better way to resolve Astro paths for assets
 
   if (data.image) {
@@ -85,14 +94,43 @@ export function getEntryInfo(
     data.language = entry.split(path.sep)?.[0] ?? context.defaultLocale;
   }
 
-  const { content: body, links, images } = parseObsidianText(content, context, logger);
+  const documentLinks: Link[] = [];
 
-  data.links = links;
-  data.images = images;
+  if (context.options.wikilinkFields) {
+    context.options.wikilinkFields.forEach((field) => {
+      if (data[field]) {
+        if (Array.isArray(data[field])) {
+          data[field] = data[field].map((link: string) => {
+            const fieldLink = parseObsidianLinkField(link, context, logger, field);
+
+            if (fieldLink) {
+              documentLinks.push(fieldLink);
+            }
+
+            return fieldLink;
+          }).filter(e => e !== null);
+        } else {
+          data[field] = parseObsidianLinkField(data[field], context, logger, field);
+
+          if (data[field]) {
+            documentLinks.push(data[field]);
+          }
+        }
+      }
+    });
+  }
+
+  const parsedBody= parseObsidianText(content, context, logger);
+  
+  const links = documentLinks.concat(parsedBody.links);
+  data.links = links.filter(
+    (l, i) => links?.findIndex((dl) => dl.href === l.href) === i
+  );
+  data.images = parsedBody.images;
 
   return {
     data,
-    body,
+    body: parsedBody.content,
     // slug: parsed.data.permalink ?? parsed.data.slug,
     rawData: matter,
   };
