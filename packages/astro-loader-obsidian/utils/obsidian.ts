@@ -1,4 +1,4 @@
-import { type z } from "astro:content";
+import type { z } from "astro:content";
 import path from "node:path";
 
 import type { ObsidianWikiLinkSchema } from "../schemas";
@@ -20,17 +20,17 @@ const ALLOWED_IMAGE_EXTENSIONS = [
   ".ico",
 ];
 
-const localeContains = function(str: string, sub: string) {
+const localeContains = (str: string, sub: string) => {
   if(sub==="") return true;
   if(!sub || !str.length) return false;
-  sub = ""+sub;
+  sub = `${sub}`;
   if(sub.length>str.length) return false;
-  let ascii = (s: string) => s.normalize("NFKD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  const ascii = (s: string) => s.normalize("NFKD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
   return ascii(str).includes(ascii(sub));
 }
 
 
-export { type ObsidianContext };
+export type { ObsidianContext };
 
 export const entryToSlug = (
   entry: string,
@@ -76,7 +76,9 @@ export const resolveDocumentIdByLink = (
   context: ObsidianContext
 ): string => {
   // return the most precise match
-  const matches = context.files.filter((id) => localeContains(id, link));
+  const matches = context.files.filter((id) => localeContains(id, link) && 
+    path.basename(id, path.extname(id)) === path.basename(link, path.extname(link))
+  );
   // sort results by the length of the mismatch. The closest the match, the first
   const sortedMatches = matches.sort((a, b) => {
     const aMismatch = link.replace(a.replace('.md', ''), "").length;
@@ -84,7 +86,9 @@ export const resolveDocumentIdByLink = (
 
     if (aMismatch === 0) {
       return -1;
-    } else if (bMismatch === 0) {
+    } 
+    
+    if (bMismatch === 0) {
       return 1;
     }
 
@@ -199,15 +203,14 @@ export const parseObsidianLinkField = (
 ): Link => {
   const regex = /(!)?\[\[([^\]]+?)\]\]/g // /\[\[(!)?([\w/]+)\]\]/g;
 
-  const match = text.matchAll(regex).next();
+  const match = text?.matchAll(regex).next();
   if (match.value) {
     const [link, isImageMatch, obsidianId] = match.value;
     const isImage = isImageMatch && obsidianId && ALLOWED_IMAGE_EXTENSIONS.some(ext => obsidianId.endsWith(ext));
     if (!isImage) {
       return parseObsidianLink(obsidianId as string, context, logger, source);
-    } else {
-      return parseObsidianImage(obsidianId as string, context, logger, source);
     }
+    return parseObsidianImage(obsidianId as string, context, logger, source);
   }
 
   return {
@@ -236,7 +239,7 @@ export const parseObsidianText = (
       const obsidianLink = parseObsidianLink(obsidianId as string, context, logger, 'body');
 
       if (typeof obsidianLink.href === 'string') {
-        links.push(obsidianLink as any);
+        links.push(obsidianLink);
       }
 
       // replace with link to the corresponding markdown file
@@ -250,7 +253,7 @@ export const parseObsidianText = (
       const obsidianImage = parseObsidianImage(obsidianId as string, context, logger, 'body');
 
       if (obsidianImage.href !== null) {
-        images.push(obsidianImage as any);
+        images.push(obsidianImage);
         // replace with link to the corresponding markdown file
         content = content.replace(
           link,

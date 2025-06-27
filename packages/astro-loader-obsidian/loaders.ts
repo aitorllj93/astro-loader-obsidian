@@ -22,7 +22,7 @@ import type { ObsidianContext } from "./utils/obsidian";
 const DEFAULT_PATTERN = "**/*.md";
 const DEFAULT_ASSETS_PATTERN = "**/*.{svg,png,jpg,jpeg,avif,webp,gif,tiff,ico}";
 
-export { type ObsidianMdLoaderOptions };
+export type { ObsidianMdLoaderOptions };
 
 // Define any options that the loader needs
 export const ObsidianMdLoader: (opts: ObsidianMdLoaderOptions) => Loader = (
@@ -95,6 +95,10 @@ export const ObsidianMdLoader: (opts: ObsidianMdLoaderOptions) => Loader = (
 
         const digest = generateDigest(contents);
 
+        if (existingEntry && existingEntry.data.title !== data.title) {
+          logger.error(`Duplicate id ${id} on entries: [${existingEntry.data.title}, ${data.title}]`)
+        }
+
         if (
           existingEntry &&
           existingEntry.digest === digest &&
@@ -130,8 +134,8 @@ export const ObsidianMdLoader: (opts: ObsidianMdLoaderOptions) => Loader = (
             filePath,
             digest,
           });
-        } catch (error: any) {
-          logger.error(`Error rendering ${entry}: ${error.message}`);
+        } catch (error) {
+          logger.error(`Error rendering ${entry}: ${(error as Error).message}`);
           throw error;
         }
 
@@ -182,7 +186,9 @@ export const ObsidianMdLoader: (opts: ObsidianMdLoaderOptions) => Loader = (
       );
 
       // Remove entries that were not found this time
-      untouchedEntries.forEach((id) => store.delete(id));
+      for (const untouchedEntry of untouchedEntries) {
+        store.delete(untouchedEntry)
+      }
 
       if (!watcher) {
         return;
