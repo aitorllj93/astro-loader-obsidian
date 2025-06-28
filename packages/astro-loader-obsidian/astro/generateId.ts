@@ -41,7 +41,7 @@ function normalizePath(id: string) {
 }
 
 export function slugify(str: string) {
-  const withoutFileExt = str.replace(new RegExp(path.extname(str) + '$'), '');
+  const withoutFileExt = str.replace(new RegExp(`${path.extname(str)}$`), '');
   const rawSlugSegments = withoutFileExt.split(path.sep);
 
   const slug = rawSlugSegments

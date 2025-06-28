@@ -10,6 +10,6 @@ function posixifyPath(filePath: string) {
 /**
  * Unlike `path.posix.relative`, this function will accept a platform path and return a posix path.
  */
-export function posixRelative(from: string, to: string) {
+export function toRelativePath(from: string, to: string) {
   return posixifyPath(path.relative(from, to));
 }

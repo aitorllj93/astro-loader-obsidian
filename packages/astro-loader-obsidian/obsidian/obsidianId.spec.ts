@@ -1,4 +1,4 @@
-import { resolveDocumentIdByLink } from "./obsidian";
+import { getDocumentFromLink } from "./obsidianId";
 
 const DOCUMENT_IDS = [
   "Bienvenido.md",
@@ -8,7 +8,7 @@ const DOCUMENT_IDS = [
   "es/Carpeta 2/Ejemplos/Documentos.md",
 ];
 
-describe("resolveDocumentIdByLink", () => {
+describe("getFileFromLink", () => {
   it.each([
     ["Página 1", "es/Carpeta 2/Página 1.md"],
     ["Enlaces", "es/Carpeta 2/Ejemplos/Enlaces.md"],
@@ -19,10 +19,7 @@ describe("resolveDocumentIdByLink", () => {
   ])(
     'Given a link with "%s", it should return "%s"',
     (link, expectedDocumentId) => {
-      const resolved = resolveDocumentIdByLink(link, {
-        baseUrl: "",
-        files: DOCUMENT_IDS,
-      });
+      const resolved = getDocumentFromLink(link, DOCUMENT_IDS);
 
       expect(resolved).toBe(expectedDocumentId);
     }

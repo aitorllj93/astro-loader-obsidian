@@ -1,5 +1,3 @@
-
-
 export type ObsidianMdLoaderOptions = {
   /** The glob pattern to match files, relative to the base directory. Defaults to **\/*.md  */
   pattern?: string | Array<string>;
@@ -18,7 +16,7 @@ export type ObsidianMdLoaderOptions = {
    * plaintext: removes the link but keeps the label
    * 404: replaces the link with a parametrised link to 404 page
    **/
-  brokenLinksStrategy?: 'warn' | 'label' | '404';
+  brokenLinksStrategy?: "warn" | "label" | "404";
   /** Remove h1 from document. Useful if your h1 is the same as the document title. Default true */
   removeH1?: boolean;
   /** Additional fields to be parsed as wikilinks */
@@ -26,13 +24,13 @@ export type ObsidianMdLoaderOptions = {
 };
 
 export type ObsidianContext = {
-  author?: string;
+  author: string | undefined;
   assets: string[];
   entry: string;
   files: string[];
-  base: string;
+  base: string | URL | undefined;
   baseUrl: string;
-  i18n?: boolean;
-  defaultLocale?: string;
+  i18n: boolean | undefined;
+  defaultLocale: string | undefined;
   options: ObsidianMdLoaderOptions;
 };

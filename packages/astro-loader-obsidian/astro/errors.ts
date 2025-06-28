@@ -45,7 +45,7 @@ function codeFrame(src: string, loc: ErrorLocation): string {
   // figure out gutter width
   let gutterWidth = 0;
   for (const lineNo of visibleLines) {
-    let w = `> ${lineNo}`;
+    const w = `> ${lineNo}`;
     if (w.length > gutterWidth) gutterWidth = w.length;
   }
   // print lines
@@ -72,7 +72,7 @@ export class AstroError extends Error {
 
   type: ErrorTypes = "AstroError";
 
-  constructor(props: ErrorProperties, options?: unknown) {
+  constructor(props: ErrorProperties) {
     const { name, title, message, stack, location, hint, frame } = props;
     super(message);
 
