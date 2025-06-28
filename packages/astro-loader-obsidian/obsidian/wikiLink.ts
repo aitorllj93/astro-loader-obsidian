@@ -28,7 +28,7 @@ export const parseWikilinks = (
     const isImage = !!(
       isImageMatch &&
       obsidianId &&
-      ALLOWED_IMAGE_EXTENSIONS.some((ext) => obsidianId.endsWith(ext))
+      ALLOWED_IMAGE_EXTENSIONS.some((ext) => obsidianId.includes(ext))
     );
 
     if (!obsidianId) {
@@ -65,6 +65,9 @@ export const parseWikilinks = (
         baseUrl: context.base?.toString(),
         logger,
       });
+
+      console.log(link);
+
       link.source = source;
 
       links.push({
