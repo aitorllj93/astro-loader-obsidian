@@ -22,7 +22,7 @@
 
 Check out [`astro-theme-spaceship`](https://github.com/aitorllj93/astro-theme-spaceship) — a ready-to-use theme built specifically for publishing Obsidian vaults with Astro. It includes:
 
-- Preconfigured `astro-obsidian-loader` integration
+- Preconfigured `astro-loader-obsidian` integration
 - Clean, responsive layout
 - Built-in support for tags, backlinks, and note metadata
 - Dark mode, tree view, and more
@@ -30,7 +30,7 @@ Check out [`astro-theme-spaceship`](https://github.com/aitorllj93/astro-theme-sp
 ## 📦 Installation
 
 ```sh
-npm install astro-obsidian-loader
+npm i astro-loader-obsidian
 ```
 
 ## 🔧 Usage

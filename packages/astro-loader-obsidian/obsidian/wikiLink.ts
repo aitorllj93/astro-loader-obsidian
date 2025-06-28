@@ -66,8 +66,6 @@ export const parseWikilinks = (
         logger,
       });
 
-      console.log(link);
-
       link.source = source;
 
       links.push({
