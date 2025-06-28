@@ -61,6 +61,7 @@ export const parseWikilinks = (
       });
     } else {
       const link = parseImage(obsidianId, context.assets, {
+        entry: context.entry,
         baseUrl: context.base?.toString(),
         logger,
       });

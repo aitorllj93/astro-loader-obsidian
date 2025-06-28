@@ -3,9 +3,11 @@ import type { AstroIntegrationLogger } from "astro";
 import type { ObsidianLink } from "../schemas";
 import { getAssetFromLink } from "./obsidianId";
 import { slugify } from "./utils/slugify";
+import { dirname, relative } from "node:path";
 
 
 type ParseImageOptions = {
+  entry: string;
   baseUrl: string | undefined;
   logger: AstroIntegrationLogger;
 }
@@ -34,8 +36,9 @@ export const parseImage = (
       href: null,
     };
   }
+  const relativePath = relative(dirname(`/${options.entry}`), `/${assetId}`);
 
-  const href = ['__ASTRO_IMAGE_', options.baseUrl, assetId].filter(Boolean).join('/');
+  const href = relativePath.startsWith('.') ? relativePath : `./${relativePath}`;
 
   return { id: slugify(idHref), title, href };
 };
