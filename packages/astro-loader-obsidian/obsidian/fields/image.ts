@@ -7,6 +7,10 @@ import { getAssetFromLink } from "../obsidianId";
 export const image = (image: string, context: ObsidianContext) => {
   const assetId = getAssetFromLink(image, context.assets);
 
+  if (!assetId) {
+    return undefined;
+  }
+
   const relativePath = relative(dirname(`/${context.entry}`), `/${assetId}`);
 
   return relativePath.startsWith('.') ? relativePath : `./${relativePath}`;
