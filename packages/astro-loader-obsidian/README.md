@@ -1,5 +1,9 @@
 # Astro Loader for Obsidian Vaults 🪐🔗
 
+<center>
+	<img src="logo.png" alt="Description" height="200">
+</center>
+
 **astro-loader-obsidian** is a content loader for [Astro](https://astro.build/) that lets you treat your [Obsidian](https://obsidian.md/) vault as a native content collection. Easily integrate your markdown notes, assets, and internal links into your Astro site with minimal setup.
 
 ## ✨ Features
