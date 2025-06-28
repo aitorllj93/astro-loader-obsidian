@@ -9,13 +9,20 @@ import type { LoaderContext } from "astro/loaders";
 
 import type { ObsidianMdLoaderOptions } from "../types";
 
-import type { DataEntry, RenderedContent } from "../astro";
 import { generateId, toRelativePath } from "../astro";
 
 import { isConfigFile, getEntryInfo } from "../obsidian";
-import { ALLOWED_DOCUMENT_EXTENSIONS, ALLOWED_IMAGE_EXTENSIONS } from "../obsidian/constants";
+import {
+  ALLOWED_DOCUMENT_EXTENSIONS,
+  ALLOWED_IMAGE_EXTENSIONS,
+} from "../obsidian/constants";
+import type { ContentEntryType } from "astro";
 
 export type { ObsidianMdLoaderOptions };
+
+type ExtendedLoaderContext = LoaderContext & {
+  entryTypes: Map<string, ContentEntryType>;
+};
 
 export const ObsidianMdLoaderFn =
   (opts: ObsidianMdLoaderOptions) =>
@@ -28,27 +35,36 @@ export const ObsidianMdLoaderFn =
     parseData,
     store,
     watcher,
-  }: // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-  LoaderContext & { entryTypes: WeakMap<any, any> }): Promise<void> => {
+  }: ExtendedLoaderContext): Promise<void> => {
     // Configure the loader
     const fileToIdMap = new Map<string, string>();
-    const pattern = opts.pattern ?? `**/*.${ALLOWED_DOCUMENT_EXTENSIONS[0].replace('.', '')}`;
-    const assetsPattern = opts.assetsPattern ?? `**/*.{${ALLOWED_IMAGE_EXTENSIONS.map(ext => ext.replace('.', '')).join(',')}}`;
+    const pattern =
+      opts.pattern ?? `**/*.${ALLOWED_DOCUMENT_EXTENSIONS[0].replace(".", "")}`;
+    const assetsPattern =
+      opts.assetsPattern ??
+      `**/*.{${ALLOWED_IMAGE_EXTENSIONS.map((ext) => ext.replace(".", "")).join(
+        ","
+      )}}`;
     const baseUrl = opts.url ?? collection;
     const baseDir = opts.base ? new URL(opts.base, config.root) : config.root;
     if (!baseDir.pathname.endsWith("/")) {
       baseDir.pathname = `${baseDir.pathname}/`;
     }
+    const filePath = fileURLToPath(baseDir);
+    
+    const render = await entryTypes
+      .get(ALLOWED_DOCUMENT_EXTENSIONS[0])
+      ?.getRenderFunction?.(config);
 
     const untouchedEntries = new Set(store.keys());
 
     const getAssets = () =>
       fastGlob(assetsPattern, {
-        cwd: fileURLToPath(baseDir),
+        cwd: filePath,
       });
     const getFiles = () =>
       fastGlob(pattern, {
-        cwd: fileURLToPath(baseDir),
+        cwd: filePath,
       }).then((files) =>
         files.filter((f) => !isConfigFile(f, baseDir.toString()))
       );
@@ -125,11 +141,10 @@ export const ObsidianMdLoaderFn =
         filePath,
       });
 
-      let rendered: RenderedContent | undefined = undefined;
+      let rendered = undefined;
 
       try {
-        const renderFn = await entryTypes.get(".md").getRenderFunction(config);
-        rendered = await renderFn?.({
+        rendered = await render?.({
           id,
           data: parsedData,
           body,
@@ -141,19 +156,32 @@ export const ObsidianMdLoaderFn =
         throw error;
       }
 
-      store.set({
-        id,
-        data: parsedData,
-        body,
-        filePath: relativePath,
-        digest,
-        rendered,
-        assetImports: [
-          ...(rendered?.metadata?.imagePaths ?? []),
-          parsedData.cover,
-          parsedData.image,
-        ].filter(Boolean),
-      } as DataEntry);
+      const assetImports = [
+        ...(rendered?.metadata?.imagePaths ?? []),
+        parsedData.cover,
+        parsedData.image,
+      ].filter(Boolean)
+
+      if (rendered) {
+        store.set({
+          id,
+          data: parsedData,
+          body,
+          filePath: relativePath,
+          digest,
+          rendered,
+          assetImports,
+        });
+      } else {
+        store.set({
+          id,
+          data: parsedData,
+          body,
+          filePath: relativePath,
+          digest,
+          assetImports,
+        });
+      }
 
       fileToIdMap.set(filePath, id);
     }
@@ -182,27 +210,22 @@ export const ObsidianMdLoaderFn =
       return;
     }
 
+    watcher.add(filePath);
     const matchesGlob = (entry: string) =>
       !entry.startsWith("../") && micromatch.isMatch(entry, pattern);
 
-    const basePath = fileURLToPath(baseDir);
-
     async function onChange(changedPath: string) {
-      const entry = toRelativePath(basePath, changedPath);
+      const entry = toRelativePath(filePath, changedPath);
       if (!matchesGlob(entry)) {
         return;
       }
-      const baseUrl = pathToFileURL(basePath);
+      const baseUrl = pathToFileURL(filePath);
       await syncData(entry, baseUrl as URL, files, assets);
       logger.info(`Reloaded data from ${green(entry)}`);
     }
 
-    watcher.on("change", onChange);
-
-    watcher.on("add", onChange);
-
-    watcher.on("unlink", async (deletedPath) => {
-      const entry = toRelativePath(basePath, deletedPath);
+    async function onDelete(deletedPath: string) {
+      const entry = toRelativePath(filePath, deletedPath);
       if (!matchesGlob(entry)) {
         return;
       }
@@ -211,5 +234,9 @@ export const ObsidianMdLoaderFn =
         store.delete(id);
         fileToIdMap.delete(deletedPath);
       }
-    });
+    }
+
+    watcher.on("change", onChange);
+    watcher.on("add", onChange);
+    watcher.on("unlink", onDelete);
   };

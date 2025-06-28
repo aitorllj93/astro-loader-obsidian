@@ -48,7 +48,7 @@ export function getEntryInfo(
     data.image = image(data.image, context);
   }
   if (data.cover) {
-    data.image = image(data.cover, context);
+    data.cover = image(data.cover, context);
   }
 
 
