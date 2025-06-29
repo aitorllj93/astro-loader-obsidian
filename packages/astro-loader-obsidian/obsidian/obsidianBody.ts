@@ -2,6 +2,7 @@ import type { AstroIntegrationLogger } from "astro";
 import type { ObsidianContext } from "../types";
 import type { ObsidianLink } from "../schemas";
 import { parseWikilinks } from "./wikiLink";
+import { parseWikitags } from "./wikiTag";
 
 export const parseBody = (
   body: string,
@@ -40,6 +41,20 @@ export const parseBody = (
             ? `![${wikilink.link.title}](${wikilink.link.href})` :
             wikilink.link.title
         );
+    }
+  }
+
+  if (context.options.parseTagsIntoLinks !== false) {
+    const wikitags = parseWikitags(body, 'body', context, logger);
+
+    for (const tag of wikitags) {
+      links.push(tag.link);
+
+      // replace with link to the corresponding markdown file
+      content = content.replace(
+        tag.text,
+        `[${tag.link.title}](${tag.link.href})`
+      );
     }
   }
 
