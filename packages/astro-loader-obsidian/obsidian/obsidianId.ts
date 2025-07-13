@@ -113,8 +113,9 @@ export const toUrl = (
   permalink?: string
 ): string => {
   const [slug, language] = toSlug(entry, i18n, permalink);
+  const base = baseUrl.replace(/^\/+|\/+$/g, '');
 
-  const urlParts = [baseUrl, slug].filter(p => p.length > 0 && p !== '/');
+  const urlParts = [base, slug].filter(p => p.length > 0 && p !== '/');
 
   if (i18n && language !== defaultLocale) {
     urlParts.unshift(language as string);
