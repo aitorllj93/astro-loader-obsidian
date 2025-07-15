@@ -11,7 +11,7 @@
 - 📁 **Load entire Obsidian vaults** as Astro content collections.
 - 🔗 **Resolves Obsidian-style links** (`[[Note Title]]`) into proper Astro/HTML links.
 - 🖼️ **Image path resolution** for local media files (including support for `![[image.png]]` embeds).
-- 📝 **Reads frontmatter** from your notes and exposes publishing metadata (like `published`, `tags`, `date`, etc).
+- 📝 **Reads frontmatter** from your notes and exposes publishing metadata (like `publish`, `tags`, `date`, etc).
 - ⚡ **Supports Astro's Content Collections API**, including types and schema validation.
 - 💡 Lightweight and fast — ideal for digital gardens, knowledge bases, blogs, and more.
 
@@ -85,7 +85,7 @@ Astro Loader respects frontmatter metadata in your Obsidian notes. You can use:
 title: "My Note"
 date: 2025-04-06
 tags: [astro, obsidian]
-published: true
+publish: true
 ---
 ```
 

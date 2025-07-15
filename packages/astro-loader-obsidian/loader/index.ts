@@ -111,6 +111,11 @@ export const ObsidianMdLoaderFn =
       );
       const id = generateId({ entry, base, data });
 
+      if (opts.skipUnpublishedEntries !== false && data.publish?.toString() === 'false') {
+        logger.debug(`Entry ${id} has publish: false, skipping...`)
+        return;
+      }
+
       untouchedEntries.delete(id);
 
       const existingEntry = store.get(id);
