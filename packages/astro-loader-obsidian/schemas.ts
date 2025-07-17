@@ -57,15 +57,38 @@ export const AuthorSchema = z.object({
   avatar: z.string().url(),
 });
 
+export const ZettelkastenDateIdMetaSchema = z.object({
+  date: z.date().optional(),
+})
+export const ZettelkastenLuhmannIdMetaSchema = z.object({
+  breadcrumbs: z.object({
+    id: z.string(),
+    path: z.string(),
+  }).array().optional(),
+});
+
+export const ZettelkastenIdMetaSchema = z.union([
+  ZettelkastenDateIdMetaSchema, ZettelkastenLuhmannIdMetaSchema,
+]);
+
+export const ZettelkastenSchema = z.object({
+  zettelkasten: z.object({
+    id: z.string(),
+    meta: ZettelkastenIdMetaSchema.nullable(),
+  }).optional(),
+})
+
 export const ObsidianDocumentSchema = ObsidianCoreSchema.merge(
   ObsidianPublishSchema
 )
   .merge(PublishSchema)
-  .merge(AstroSchema);
+  .merge(AstroSchema)
+  .merge(ZettelkastenSchema);
 
 export const ObsidianDocumentI18nSchema =
   ObsidianDocumentSchema.merge(I18nSchema);
 
 export type ObsidianDocument = z.infer<typeof ObsidianDocumentSchema>;
 export type ObsidianLink = z.infer<typeof ObsidianWikiLinkSchema>;
+export type Zettelkasten = z.infer<typeof ZettelkastenSchema>;
 export type Author = z.infer<typeof AuthorSchema>;

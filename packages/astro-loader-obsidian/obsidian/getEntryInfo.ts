@@ -3,7 +3,7 @@ import type { Stats } from "node:fs";
 import type { AstroIntegrationLogger } from "astro";
 
 import type { ObsidianContext } from "../types";
-import type { ObsidianLink } from "../schemas";
+import type { ObsidianLink, ObsidianDocument } from "../schemas";
 
 import { safeParseFrontmatter } from "./utils/frontmatter";
 
@@ -20,6 +20,7 @@ import {
   title,
   updated,
 } from "./fields";
+import { zettel } from "./fields/zettel";
 
 export function getEntryInfo(
   contents: string,
@@ -28,12 +29,31 @@ export function getEntryInfo(
   stats: Stats,
   context: ObsidianContext,
   logger: AstroIntegrationLogger
-) {
-  const { content, data, matter } = safeParseFrontmatter(
+): {
+  body: string;
+  data: Partial<ObsidianDocument>;
+  rawData: string;
+} {
+  const parsed = safeParseFrontmatter(
     contents,
     fileURLToPath(fileUrl)
   );
 
+  const { matter, content } = parsed;
+  const data = parsed.data as Partial<ObsidianDocument> & Record<string, unknown>;
+
+  if (context.options.zettelkasten && context.options.zettelkasten?.enabled !== false) {
+    const { zettelId, zettelIdMeta, title } = zettel(entry, context, data);
+
+    if (zettelId) {
+      data.zettelkasten = {
+        id: zettelId,
+        meta: zettelIdMeta,
+      }
+      data.title = data.title ?? title;
+    }
+  }
+ 
   data.title = title(entry, content, data);
   data.permalink = permalink(entry, context, data);
   data.description = description(data);
@@ -58,11 +78,13 @@ export function getEntryInfo(
     for (const field of context.options.wikilinkFields) {
       if (data[field]) {
         if (Array.isArray(data[field])) {
-          data[field] = parseFieldArr(data[field], field, context, logger);
-          documentLinks.push(...data[field]);
+          const link = parseFieldArr(data[field], field, context, logger);
+          data[field] = link;
+          documentLinks.push(...link);
         } else {
-          data[field] = parseFieldStr(data[field], field, context, logger);
-          documentLinks.push(data[field]);
+          const link = parseFieldStr(data[field] as string, field, context, logger);
+          data[field] = link;
+          documentLinks.push(link);
         }
       }
     }
@@ -74,7 +96,7 @@ export function getEntryInfo(
   data.links = links.filter(
     (l, i) => links?.findIndex((dl) => dl.href === l.href) === i
   );
-  data.images = parsedBody.images;
+  data.images = parsedBody.images as { title: string; href: string }[];
 
   return {
     data,
