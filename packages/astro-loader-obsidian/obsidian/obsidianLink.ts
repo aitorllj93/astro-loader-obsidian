@@ -58,5 +58,5 @@ export const parseLink = (
     options.defaultLocale
   );
 
-  return { id: slugify(idHref), title, href };
+  return { id: slugify(documentId), title, href };
 };

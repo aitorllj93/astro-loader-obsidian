@@ -40,5 +40,5 @@ export const parseImage = (
 
   const href = relativePath.startsWith('.') ? relativePath : `./${relativePath}`;
 
-  return { id: slugify(idHref), title, href };
+  return { id: slugify(assetId), title, href };
 };
