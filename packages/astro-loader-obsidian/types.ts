@@ -48,3 +48,21 @@ export type ObsidianContext = {
   defaultLocale: string | undefined;
   options: ObsidianMdLoaderOptions;
 };
+
+export type StoreDocument<T = unknown> = {
+  id: string;
+  data: T;
+  body: string;
+  filePath: string;
+  digest: string;
+  rendered: {
+    html: string;
+    metadata: {
+      headings: [];
+      localImagePaths: [];
+      remoteImagePaths: [];
+      frontmatter: unknown;
+      imagePaths: [];
+    }
+  }
+}

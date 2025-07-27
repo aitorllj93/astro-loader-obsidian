@@ -1,6 +1,6 @@
 import type { AstroIntegrationLogger } from "astro";
-import type { ObsidianContext } from "../types";
-import type { ObsidianLink } from "../schemas";
+import type { ObsidianContext, StoreDocument } from "../types";
+import type { ObsidianDocument, ObsidianLink } from "../schemas";
 import { parseWikilinks } from "./wikiLink";
 import { parseWikitags } from "./wikiTag";
 
@@ -36,13 +36,21 @@ export const parseBody = (
         links.push(wikilink.link);
       }
 
-      // replace with link to the corresponding markdown file
-      content = content.replace(
-        wikilink.text,
-        hasTarget
-          ? `[${wikilink.link.title}](${wikilink.link.href})`
-          : wikilink.link.title
-      );
+      if (hasTarget && wikilink.link.isEmbedded) {
+        // replace with embedding placeholder
+        content = content.replace(
+          wikilink.text,
+          `$doc_emb::${wikilink.link.id}`
+        );
+      } else {
+        // replace with link to the corresponding markdown file
+        content = content.replace(
+          wikilink.text,
+          hasTarget
+            ? `[${wikilink.link.title}](${wikilink.link.href})`
+            : wikilink.link.title
+        );
+      }
     }
   }
 
@@ -67,3 +75,37 @@ export const parseBody = (
 
   return { content, images, links };
 };
+
+export const injectEmbeds = (body: string, documents: StoreDocument<ObsidianDocument>[]) => {
+  const regex = /\$doc_emb::([a-zA-Z0-9/_-]+)/g;
+
+  const matches = body.matchAll(regex);
+
+  let result = body;
+
+  for (const match of matches) {
+    const fullMatch = match[0]; 
+    const id = match[1];
+    const document = documents.find(d => d.id === id);
+
+    if (!document) {
+      continue;
+    }
+
+    const replacement = `
+\`\`\`$doc_emb
+---
+id: ${document.id}
+title: ${document.data.title}
+href: ${document.data.permalink}
+---
+
+${document.rendered.html}
+\`\`\`\
+`;
+
+    result = result.split(fullMatch).join(replacement);
+  }
+
+  return result;
+}
