@@ -142,6 +142,10 @@ export const zettel = (
     return result;
   }
 
+  if (fields.title) {
+    result.title = fields.title;
+  }
+
   const pattern = getPattern(context);
 
   const match = fields.zettelId.match(pattern);

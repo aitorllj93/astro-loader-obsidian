@@ -17,8 +17,21 @@ export const parseBody = (
 
   for (const wikilink of wikilinks) {
     const hasTarget = typeof wikilink.link.href === "string";
-    
-    if (!wikilink.isImage) {
+
+    if (wikilink.link.type === 'image') {
+      if (hasTarget) {
+        images.push(wikilink.link); 
+      }
+
+      content = content.replace(
+        wikilink.text,
+        hasTarget
+          ? `![${wikilink.link.caption ?? wikilink.link.title}](${wikilink.link.href})` :
+          wikilink.link.title
+      );
+    }
+
+    if (wikilink.link.type === 'document') {
       if (hasTarget) {
         links.push(wikilink.link);
       }
@@ -30,17 +43,6 @@ export const parseBody = (
           ? `[${wikilink.link.title}](${wikilink.link.href})`
           : wikilink.link.title
       );
-    } else {
-      if (hasTarget) {
-        images.push(wikilink.link); 
-      }
-
-      content = content.replace(
-          wikilink.text,
-          hasTarget
-            ? `![${wikilink.link.title}](${wikilink.link.href})` :
-            wikilink.link.title
-        );
     }
   }
 

@@ -1,16 +1,49 @@
 import type { AstroIntegrationLogger } from "astro";
+import { dirname, relative } from "node:path";
 
+import { ALLOWED_IMAGE_EXTENSIONS } from "./constants";
 import type { ObsidianContext } from "../types";
 import type { ObsidianLink } from "../schemas";
-import { ALLOWED_IMAGE_EXTENSIONS } from "./constants";
-import { parseLink } from "./obsidianLink";
-import { parseImage } from "./obsidianImage";
+import { getAssetFromLink, getDocumentFromLink, toUrl } from "./obsidianId";
+import { slugify } from "./utils/slugify";
 
 type Wikilink = {
+  /** @deprecated use Link.type instead */
   isImage: boolean;
   text: string;
   link: ObsidianLink;
 };
+
+const imageDisplayClassNames: Record<string, string> = {
+  'float-left': 'float-left',
+  'float-right': 'float-right',
+  'left': 'float-left',
+  'right': 'float-right',
+};
+
+const imageSizing = (text: string): {
+  width: number;
+  height?: number;
+} | null => {
+  if (!Number.isNaN(+text)) {
+    return { width: Number.parseInt(text) };
+  }
+
+  const [w, h] = text.split('x') as [string, string];
+
+  if (!w || !h) {
+    return null;
+  }
+
+  if (!Number.isNaN(+w) && !Number.isNaN(+h)) {
+    return { width: Number.parseInt(w as string), height: Number.parseInt(h as string) };
+  }
+
+  return null;
+}
+
+const getLinkType = (text: string): ObsidianLink['type'] => ALLOWED_IMAGE_EXTENSIONS.some(i => text.includes(i)) ?
+  'image' : 'document';
 
 export const parseWikilinks = (
   content: string,
@@ -23,18 +56,14 @@ export const parseWikilinks = (
   const matches = content.matchAll(regex);
 
   for (const match of matches) {
-    const [text, isImageMatch, obsidianId] = match;
+    const [text, isEmbedded, linkText] = match;
 
-    const isImage = !!(
-      isImageMatch &&
-      obsidianId &&
-      ALLOWED_IMAGE_EXTENSIONS.some((ext) => obsidianId.includes(ext))
-    );
-
-    if (!obsidianId) {
+    if (!linkText) {
       links.push({
         text,
         link: {
+          isEmbedded: !!isEmbedded,
+          type: getLinkType(text),
           title: text,
           href: null,
         },
@@ -43,37 +72,98 @@ export const parseWikilinks = (
       continue;
     }
 
-    if (!isImage) {
-      const link = parseLink(obsidianId, context.files, {
-        baseUrl: context.baseUrl,
-        brokenLinksStrategy: context.options.brokenLinksStrategy,
-        defaultLocale: context.defaultLocale,
-        entry: context.entry,
-        i18n: context.i18n,
-        logger,
-      });
-      link.source = source;
+    const [hrefFragment, ...fragments] = linkText.split('|');
+    const idHref = hrefFragment ?? linkText;
+    let title = idHref.split("/").slice(-1)[0] as string;
+    const type = getLinkType(idHref);
+    let className = '';
+    const caption = fragments.length > 0 ? fragments.join('|') : title;
 
-      links.push({
-        link,
-        isImage,
-        text,
-      });
-    } else {
-      const link = parseImage(obsidianId, context.assets, {
-        entry: context.entry,
-        baseUrl: context.base?.toString(),
-        logger,
-      });
+    for (const fragment of fragments) {
+      if (type === 'image') {
+        const size = imageSizing(fragment);
 
-      link.source = source;
+        if (size) {
+          if (size.width) {
+            className += ` w-[${size.width}px]`;
+          }
+          if (size.height) {
+            className += ` h-[${size.height}px]`;
+          }
+          continue;
+        }
 
-      links.push({
-        link,
-        isImage,
-        text,
-      });
+        const layoutClassName = imageDisplayClassNames[fragment];
+
+        if (layoutClassName) {
+          className += ` ${layoutClassName}`;
+          continue;
+        }
+      }
+
+      title = fragment;
     }
+
+    let href: string | null = null;
+    let id: string | undefined;
+
+    if (type === 'document') {
+      const documentId = getDocumentFromLink(idHref, context.files);
+
+      if (documentId) {
+        href = toUrl(
+          documentId,
+          context.baseUrl,
+          context.i18n,
+          context.defaultLocale
+        );
+      } else {
+        const fallbackStrategy = context.options.brokenLinksStrategy;
+        const errorMessage = `Could not find document from Obsidian link "${idHref}" at "${context.entry}"`;
+
+        if (fallbackStrategy === "warn") {
+          logger.warn(errorMessage);
+          href = idHref;
+        } else if (fallbackStrategy === "404") {
+          href = `/404?entry=${slugify(idHref)}&collection=${context.baseUrl}`;
+        } else {
+          logger.debug(errorMessage);
+          href = null;
+        }
+      }
+
+      id = slugify(documentId ?? idHref);
+    }
+
+    if (type === 'image') {
+      const assetId = getAssetFromLink(idHref, context.assets);
+
+      if (assetId) {
+        const relativePath = relative(dirname(`/${context.entry}`), `/${assetId}`);
+        href = relativePath.startsWith('.') ? relativePath : `./${relativePath}`;
+        id = slugify(assetId);
+      } else {
+        logger.warn(`Could not find image from Obsidian image "${idHref}"`);
+      }
+    }
+
+    const link: ObsidianLink = {
+      caption,
+      className: className.trim().length > 0 ? className.trim() : undefined,
+      id,
+      isEmbedded: !!isEmbedded,
+      type,
+      source,
+      title,
+      href
+    }
+
+
+    links.push({
+      text,
+      link,
+      isImage: link.type === 'image',
+    });
   }
 
   return links;

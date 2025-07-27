@@ -14,6 +14,8 @@ export const parseFieldStr = (
     return {
       title: text,
       href: null,
+      isEmbedded: false,
+      type: 'document',
     };
   }
 
@@ -24,6 +26,8 @@ export const parseFieldStr = (
   return fieldLink?.link ?? {
     title: text,
     href: null,
+    isEmbedded: false,
+    type: 'document',
   };
 };
 

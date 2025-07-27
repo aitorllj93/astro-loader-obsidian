@@ -27,6 +27,8 @@ export const parseWikitags = (
       tags.push({
         text,
         link: {
+          isEmbedded: false,
+          type: 'tag',
           title: text,
           href: null,
         },
@@ -38,6 +40,8 @@ export const parseWikitags = (
 
     const link: Wikitag = {
       link: {
+        isEmbedded: false,
+        type: 'tag',
         title: name ?? tagId,
         href: `/${baseUrl}/${tagId}`,
         source,

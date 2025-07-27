@@ -1,9 +1,13 @@
 import { z } from "astro:content";
 
 export const ObsidianWikiLinkSchema = z.object({
-  title: z.string(),
+  caption: z.string().nullish(),
+  className: z.string().nullish(),
   href: z.string().nullable(),
   id: z.string().optional(),
+  isEmbedded: z.boolean(),
+  title: z.string(),
+  type: z.enum(['image', 'document', 'tag']),
   source: z.string().optional(),
 });
 
