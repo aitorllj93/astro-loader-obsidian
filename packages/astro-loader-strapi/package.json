@@ -6,7 +6,7 @@
 		"astro-loader",
 		"strapi"
 	],
-	"version": "0.0.1",
+	"version": "0.0.3",
 	"author": "Aitor Llamas Jiménez <aitorllj93@gmail.com>",
 	"homepage": "https://github.com/aitorllj93/astro-loader-obsidian",
 	"repository": {
@@ -25,10 +25,10 @@
 		"@types/micromatch": "^4.0.9",
 		"@types/node": "18.16.9",
 		"@types/qs": "^6.14.0",
-		"astro": "^5.7.4"
+		"astro": "^5.12.5"
 	},
 	"peerDependencies": {
-		"astro": "^5.7.4"
+		"astro": "^5.12.5"
 	},
 	"dependencies": {
 		"@astrojs/internal-helpers": "^0.6.1",
