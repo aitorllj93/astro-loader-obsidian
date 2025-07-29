@@ -108,7 +108,8 @@ export const parseWikilinks = (
     let id: string | undefined;
 
     if (type === 'document') {
-      const documentId = getDocumentFromLink(idHref, context.files);
+      const [idWithoutAnchor, anchorTag] = idHref.split('#');
+      const documentId = getDocumentFromLink(idWithoutAnchor ?? idHref, context.files);
 
       if (documentId) {
         href = toUrl(
@@ -117,6 +118,9 @@ export const parseWikilinks = (
           context.i18n,
           context.defaultLocale
         );
+        if (anchorTag) {
+          href = `${href}#${slugify(anchorTag)}`
+        }
       } else {
         const fallbackStrategy = context.options.brokenLinksStrategy;
         const errorMessage = `Could not find document from Obsidian link "${idHref}" at "${context.entry}"`;

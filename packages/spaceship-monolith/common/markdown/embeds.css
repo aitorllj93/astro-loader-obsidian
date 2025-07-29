@@ -40,3 +40,7 @@ iframe {
     @apply no-underline opacity-100;
   }
 }
+
+@utility file-embed-link {
+  @apply float-right;
+}

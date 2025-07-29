@@ -40,7 +40,7 @@ export const parseBody = (
         // replace with embedding placeholder
         content = content.replace(
           wikilink.text,
-          `$doc_emb::${wikilink.link.id}`
+          `$doc_emb::${wikilink.link.id}|${wikilink.link.href}|${wikilink.link.caption}`
         );
       } else {
         // replace with link to the corresponding markdown file
@@ -77,7 +77,7 @@ export const parseBody = (
 };
 
 export const injectEmbeds = (body: string, documents: StoreDocument<ObsidianDocument>[]) => {
-  const regex = /\$doc_emb::([a-zA-Z0-9/_-]+)/g;
+  const regex = /\$doc_emb::([^\n\r]*)/g;
 
   const matches = body.matchAll(regex);
 
@@ -85,7 +85,7 @@ export const injectEmbeds = (body: string, documents: StoreDocument<ObsidianDocu
 
   for (const match of matches) {
     const fullMatch = match[0]; 
-    const id = match[1];
+    const [id, href, caption] = (match[1] ?? '').split('|');
     const document = documents.find(d => d.id === id);
 
     if (!document) {
@@ -97,7 +97,8 @@ export const injectEmbeds = (body: string, documents: StoreDocument<ObsidianDocu
 ---
 id: ${document.id}
 title: ${document.data.title}
-href: ${document.data.permalink}
+caption: ${caption}
+href: ${href}
 ---
 
 ${document.rendered.html}
