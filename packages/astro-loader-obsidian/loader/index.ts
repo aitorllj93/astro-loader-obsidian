@@ -39,11 +39,11 @@ const waitForDependencies = (store: DataStore, ids: string[], retries = 0) => ne
   }
 
   if (retries === MAX_WAIT_RETRIES) {
-    reject(`Embed documents ${ids.join(', ')} are unavailable`);
+    reject(new Error(`Embed documents ${ids.join(', ')} are unavailable`));
     return;
   }
 
-  setTimeout(() => waitForDependencies(store, ids, retries + 1).then(resolve), 1000);
+  setTimeout(() => waitForDependencies(store, ids, retries + 1).then(resolve).catch(reject), 1000);
 })
 
 export const ObsidianMdLoaderFn =
@@ -248,7 +248,7 @@ export const ObsidianMdLoaderFn =
 
         const embedDocuments = entryData.data.links?.filter(l => l.id && l.type === 'document' && l.isEmbedded).map(d => d.id as string) ?? [];
 
-        let dependencies: StoreDocument[] = [];
+        let dependencies: StoreDocument<ObsidianDocument>[] = [];
         if (embedDocuments?.length > 0) {
           try {
             dependencies = await waitForDependencies(store, embedDocuments);

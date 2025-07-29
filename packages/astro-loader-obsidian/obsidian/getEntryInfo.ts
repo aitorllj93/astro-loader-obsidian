@@ -21,6 +21,7 @@ import {
   updated,
 } from "./fields";
 import { zettel } from "./fields/zettel";
+import type { MarkdownError } from "../astro";
 
 export function getEntryInfo(
   contents: string,
@@ -34,10 +35,23 @@ export function getEntryInfo(
   data: Partial<ObsidianDocument>;
   rawData: string;
 } {
-  const parsed = safeParseFrontmatter(
-    contents,
-    fileURLToPath(fileUrl)
-  );
+  let parsed: ReturnType<typeof safeParseFrontmatter>;
+
+  try {
+    parsed = safeParseFrontmatter(
+      contents,
+      fileURLToPath(fileUrl)
+    );
+  } catch (e) {
+    console.error((e as MarkdownError));
+    parsed = {
+      matter: '',
+      data: {},
+      content: contents,
+      language: '',
+      orig: contents,
+    } as ReturnType<typeof safeParseFrontmatter>
+  }
 
   const { matter, content } = parsed;
   const data = parsed.data as Partial<ObsidianDocument> & Record<string, unknown>;

@@ -1,5 +1,21 @@
 import { z } from "astro:content";
 
+const arrayExclude = <S extends z.ZodTypeAny>(s: S) => {
+  return z.preprocess((as) => {
+    const result: S[] = [];
+    if (!Array.isArray(as)) {
+      return result;
+    }
+    for (const a of as) {
+      const parsed = s.safeParse(a);
+      if (parsed.success) {
+        result.push(parsed.data);
+      }
+    }
+    return result;
+  }, z.array(s));
+};
+
 export const ObsidianWikiLinkSchema = z.object({
   caption: z.string().nullish(),
   className: z.string().nullish(),
@@ -12,8 +28,13 @@ export const ObsidianWikiLinkSchema = z.object({
 });
 
 export const ObsidianCoreSchema = z.object({
-  tags: z.array(z.string()).optional(),
-  aliases: z.array(z.string()).optional(),
+  tags: arrayExclude(z.string()).nullish(),
+  aliases: z.union([
+    z.coerce.string()
+      .transform((value) => value.split(','))
+      .pipe(arrayExclude(z.string())),
+    arrayExclude(z.string()),
+  ]).nullish(),
   cssclasses: z.array(z.string()).optional(),
   links: ObsidianWikiLinkSchema.array().optional(),
   images: z
