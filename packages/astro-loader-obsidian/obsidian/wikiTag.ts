@@ -1,7 +1,10 @@
 import type { AstroIntegrationLogger } from "astro";
+import { join } from "node:path";
 
 import type { ObsidianContext } from "../types";
 import type { ObsidianLink } from "../schemas";
+import { toUrl } from "./obsidianId";
+import { slugify } from "./utils/slugify";
 
 type Wikitag = {
   text: string;
@@ -16,7 +19,7 @@ export const parseWikitags = (
 ): Wikitag[] => {
   const baseUrl = context.options.tagsUrl ?? 'tags';
   const tags: Wikitag[] = [];
-  const regex = /(?<!\w)#([A-Za-z0-9/_-]+)/g;
+  const regex = /(?<![\w:/])#([A-Za-z0-9/_-]+)/g;
 
   const matches = content.matchAll(regex);
 
@@ -40,10 +43,11 @@ export const parseWikitags = (
 
     const link: Wikitag = {
       link: {
+        id: slugify(tagId),
         isEmbedded: false,
         type: 'tag',
         title: name ?? tagId,
-        href: `/${baseUrl}/${tagId}`,
+        href: toUrl(tagId, join(context.baseUrl, baseUrl), context.options.i18n, context.defaultLocale),
         source,
       },
       text,

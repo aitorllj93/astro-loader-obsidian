@@ -63,7 +63,7 @@ export const parseBody = (
       // replace with link to the corresponding markdown file
       content = content.replace(
         tag.text,
-        `[${tag.link.title}](${tag.link.href})`
+        `[${tag.text}](${tag.link.href})`
       );
     }
   }
