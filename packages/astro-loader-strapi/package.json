@@ -1,0 +1,41 @@
+{
+	"name": "astro-loader-strapi",
+	"description": "Use your Strapi API in Astro projects",
+	"keywords": [
+		"withastro",
+		"astro-loader",
+		"strapi"
+	],
+	"version": "0.0.1",
+	"author": "Aitor Llamas Jiménez <aitorllj93@gmail.com>",
+	"homepage": "https://github.com/aitorllj93/astro-loader-obsidian",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/aitorllj93/astro-loader-obsidian.git",
+		"directory": "packages/astro-loader-strapi"
+	},
+	"bugs": "https://github.com/aitorllj93/astro-loader-obsidian/issues",
+	"license": "MIT",
+	"type": "module",
+	"exports": {
+		".": "./index.ts"
+	},
+	"devDependencies": {
+		"@types/js-yaml": "^4.0.9",
+		"@types/micromatch": "^4.0.9",
+		"@types/node": "18.16.9",
+		"@types/qs": "^6.14.0",
+		"astro": "^5.7.4"
+	},
+	"peerDependencies": {
+		"astro": "^5.7.4"
+	},
+	"dependencies": {
+		"@astrojs/internal-helpers": "^0.6.1",
+		"fast-glob": "^3.3.2",
+		"kleur": "^4.1.5",
+		"micromatch": "^4.0.8",
+		"p-limit": "^6.1.0",
+		"qs": "^6.14.0"
+	}
+}
