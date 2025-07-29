@@ -1,0 +1,80 @@
+
+
+blockquote[data-callout] {
+  border: none;
+  border-radius: 0.5rem;
+  padding-block: 1rem;
+
+  .callout-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+  }
+}
+
+blockquote[data-callout="abstract"],
+blockquote[data-callout="summary"],
+blockquote[data-callout="tldr"],
+blockquote[data-callout="tip"],
+blockquote[data-callout="hint"],
+blockquote[data-callout="important"] {
+  color: var(--color-hint-foreground);
+  border-color: var(--color-hint-border);
+  background-color: var(--color-hint-background);
+}
+
+blockquote[data-callout="info"],
+blockquote[data-callout="note"],
+blockquote[data-callout="todo"] {
+  color: var(--color-info-foreground);
+  border-color: var(--color-info-border);
+  background-color: var(--color-info-background);
+}
+
+blockquote[data-callout="success"],
+blockquote[data-callout="check"],
+blockquote[data-callout="done"] {
+  color: var(--color-success-foreground);
+  border-color: var(--color-success-border);
+  background-color: var(--color-success-background);
+}
+
+blockquote[data-callout="question"],
+blockquote[data-callout="help"],
+blockquote[data-callout="faq"],
+blockquote[data-callout="warning"],
+blockquote[data-callout="caution"],
+blockquote[data-callout="attention"] {
+  color: var(--color-warning-foreground);
+  border-color: var(--color-warning-border);
+  background-color: var(--color-warning-background);
+}
+
+blockquote[data-callout="failure"],
+blockquote[data-callout="fail"],
+blockquote[data-callout="missing"],
+blockquote[data-callout="danger"],
+blockquote[data-callout="error"],
+blockquote[data-callout="bug"] {
+  color: var(--color-danger-foreground);
+  border-color: var(--color-danger-border);
+  background-color: var(--color-danger-background);
+}
+
+blockquote[data-callout="example"] {
+  color: var(--color-example-foreground);
+  border-color: var(--color-example-border);
+  background-color: var(--color-example-background);
+}
+
+blockquote[data-callout="quote"],
+blockquote[data-callout="cite"] {
+  color: var(--color-quote-foreground);
+  border-color: var(--color-quote-border);
+  background-color: var(--color-quote-background);
+}
+
+.callout-content {
+  font-family: var(--font-paragraph);
+}

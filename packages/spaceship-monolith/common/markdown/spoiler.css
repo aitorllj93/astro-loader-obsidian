@@ -1,0 +1,27 @@
+
+
+@theme {
+  --animate-setZIndexWithDelay: setZIndexWithDelay 0.01s 1s forwards;
+
+  @keyframes setZIndexWithDelay {
+    to {
+      z-index: -1;
+    }
+  }
+
+}
+
+@utility spoiler {
+  @apply relative;
+
+  .spoiler-toggle {
+    @apply absolute inset-0 w-full h-full opacity-100 z-10 peer-checked:animate-setZIndexWithDelay peer-checked:opacity-0 cursor-pointer bg-obsidian-900/50 dark:bg-obsidian-200/50 backdrop-blur-lg transition-all duration-500 animate-ease rounded-sm;
+    
+    p {
+      @apply m-0 flex justify-center items-center w-full h-full font-paragraph text-white;
+    }
+  }
+  .spoiler-content {
+    @apply -z-10 flex flex-col w-full h-full font-paragraph peer-checked:z-0 cursor-pointer;
+  }
+}

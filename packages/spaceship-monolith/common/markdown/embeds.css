@@ -1,0 +1,42 @@
+
+iframe {
+  border-radius: 1.5rem;
+  height: 100%;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+}
+
+
+@utility embed-figure {
+  @apply flex flex-col sm:flex-row rounded-sm border-gray-400 dark:border-obsidian-400 border mb-4;
+}
+
+@utility embed-picture {
+  @apply sm:max-w-[min(50%,_320px)];
+
+  img {
+    @apply rounded-bl-sm rounded-tl-sm w-full h-full;
+  }
+}
+
+@utility embed-caption {
+  @apply flex flex-col py-4 px-5 gap-2;
+
+  h5 {
+    @apply text-lg font-bold line-clamp-1;
+  }
+
+  p {
+    @apply m-0 text-sm line-clamp-3 text-ellipsis;
+  }
+}
+
+@utility embed-url {
+  @apply text-obsidian-800;
+}
+
+@utility file-embed {
+  > a {
+    @apply no-underline opacity-100;
+  }
+}

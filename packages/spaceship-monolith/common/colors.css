@@ -1,0 +1,124 @@
+
+@theme {
+  /* GrayScales */
+  --color-gray-50: #fcfcfc;
+  --color-gray-100: #fafafa;
+  --color-gray-200: #f6f6f6;
+  --color-gray-300: #e3e3e3;
+  --color-gray-400: #e0e0e0;
+  --color-gray-500: #d4d4d4;
+  --color-gray-600: #bdbdbd;
+  --color-gray-700: #ababab;
+  --color-gray-800: #707070;
+  --color-gray-900: #5c5c5c;
+  --color-gray-950: #222222;
+
+  --color-obsidian-50: #212121;
+  --color-obsidian-100: #242424;
+  --color-obsidian-200: #262626;
+  --color-obsidian-300: #2a2a2a;
+  --color-obsidian-400: #363636;
+  --color-obsidian-500: #3f3f3f;
+  --color-obsidian-600: #555555;
+  --color-obsidian-700: #666666;
+  --color-obsidian-800: #999999;
+  --color-obsidian-900: #b3b3b3;
+  --color-obsidian-950: #dadada;
+
+  --color-purple-300: hsl(255, 89.76%, 75.9%);
+  --color-purple-400: hsl(257, 88.88%, 70.95%);
+  --color-purple-500: hsl(258, 88%, 66%);
+
+  --color-pink-500: #E942B6;
+
+  /** Accent Colors **/
+  --color-primary: var(--color-purple-500);
+  --color-text: rgb(0, 0, 0);
+  --color-text-dark: rgb(255, 255, 255);
+
+  --color-success-foreground: var(--color-green-500);
+  --color-success-background: var(--color-green-200);
+  --color-success-border: var(--color-green-400);
+  --color-danger-foreground: var(--color-red-500);
+  --color-danger-background: var(--color-red-200);
+  --color-danger-border: var(--color-red-400);
+  --color-warning-foreground: var(--color-yellow-500);
+  --color-warning-background: var(--color-yellow-200);
+  --color-warning-border: var(--color-yellow-400);
+  --color-hint-foreground: var(--color-teal-500);
+  --color-hint-background: var(--color-teal-200);
+  --color-hint-border: var(--color-teal-400);
+  --color-info-foreground: var(--color-blue-500);
+  --color-info-background: var(--color-blue-200);
+  --color-info-border: var(--color-blue-400);
+  --color-example-foreground: var(--color-purple-500);
+  --color-example-background: var(--color-purple-200);
+  --color-example-border: var(--color-purple-400);
+  --color-quote-foreground: var(--color-slate-500);
+  --color-quote-background: var(--color-slate-200);
+  --color-quote-border: var(--color-slate-400);
+  
+  /** Components **/
+  --color-background: var(--color-gray-200);
+  --color-article-background: var(--color-gray-50);
+  --color-article-title-foreground: var(--color-primary);
+  --color-article-subtitle-foreground: var(--color-gray-50);
+  --color-sidebar-background: var(--color-gray-50);
+  --color-tab-background: var(--color-gray-400);
+  --color-tab-active-background: transparent;
+  --color-tab-active-border: var(--color-text);
+  --color-menu-active-background: var(--color-gray-300);
+  --color-menu-foreground: var(--color-text);
+  --color-badge-background: var(--color-gray-50);
+  --color-badge-foreground: var(--color-text);
+  --color-badge-border: var(--color-gray-300);
+  --color-button-background: var(--color-gray-400);
+  --color-button-foreground: var(--color-text);
+  --color-footer-background: var(--color-gray-50);
+  --color-footer-foreground: var(--color-text);
+  --color-footer-border: var(--color-gray-300);
+  --color-search-border: var(--color-gray-300);
+
+  /** Prose **/
+  --color-blockquote-foreground: var(--color-text);
+  --color-code-background: var(--color-gray-200);
+  --color-code-foreground: var(--color-text);
+  --color-heading-foreground: var(--color-text);
+  --color-li-marker-foreground: var(--color-text);
+  --color-paragraph-foreground: var(--color-text);
+  --color-pre-background: var(--color-gray-200);
+  --color-strong-foreground: var(--color-text);
+  --color-hr-border: var(--color-gray-300);
+
+  /** Components: dark **/
+  --color-background-dark: var(--color-obsidian-200);
+  --color-article-background-dark: var(--color-obsidian-50);
+  --color-article-title-foreground-dark: var(--color-primary);
+  --color-article-subtitle-foreground-dark: var(--color-obsidian-50);
+  --color-sidebar-background-dark: var(--color-obsidian-50);
+  --color-tab-background-dark: var(--color-obsidian-400);
+  --color-tab-active-background-dark: transparent;
+  --color-tab-active-border-dark: var(--color-text-dark);
+  --color-menu-active-background-dark: var(--color-obsidian-300);
+  --color-menu-foreground-dark: var(--color-text-dark);
+  --color-badge-background-dark: var(--color-obsidian-50);
+  --color-badge-foreground-dark: var(--color-text-dark);
+  --color-badge-border-dark: var(--color-obsidian-300);
+  --color-button-background-dark: var(--color-obsidian-400);
+  --color-button-foreground-dark: var(--color-text-dark);
+  --color-footer-background-dark: var(--color-obsidian-50);
+  --color-footer-foreground-dark: var(--color-text-dark);
+  --color-footer-border-dark: var(--color-obsidian-300);
+  --color-search-border-dark: var(--color-obsidian-300);
+
+  /** Prose: dark **/
+  --color-blockquote-foreground-dark: var(--color-text-dark);
+  --color-code-background-dark: var(--color-obsidian-300);
+  --color-code-foreground-dark: var(--color-text-dark);
+  --color-heading-foreground-dark: var(--color-text-dark);
+  --color-li-marker-foreground-dark: var(--color-text-dark);
+  --color-paragraph-foreground-dark: var(--color-text-dark);
+  --color-pre-background-dark: var(--color-obsidian-300);
+  --color-strong-foreground-dark: var(--color-text-dark);
+  --color-hr-border-dark: var(--color-obsidian-300);
+}

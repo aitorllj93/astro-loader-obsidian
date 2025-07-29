@@ -1,0 +1,4 @@
+
+@utility footer {
+  @apply fixed z-40 border text-footer-foreground dark:text-footer-foreground-dark border-footer-border dark:border-footer-border-dark bottom-0 right-0 bg-footer-background dark:bg-footer-background-dark rounded-tl-xl px-2 py-2 flex gap-2 font-menu shadow-2xl;
+}

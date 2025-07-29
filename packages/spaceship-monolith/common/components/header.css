@@ -1,0 +1,4 @@
+
+@utility header-link {
+  @apply font-title text-menu-foreground dark:text-menu-foreground-dark flex gap-2;
+}

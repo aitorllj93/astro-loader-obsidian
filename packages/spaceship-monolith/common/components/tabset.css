@@ -1,0 +1,23 @@
+@utility tabset-tab {
+	@apply bg-tab-background dark:bg-tab-background-dark text-text dark:text-text-dark border-tab-active-border dark:border-tab-active-border-dark hover:bg-tab-active-background dark:hover:bg-tab-active-background-dark cursor-pointer flex justify-center truncate;
+}
+
+@utility tabset-bg {
+  @apply hidden;
+}
+
+@utility tabset-tab-one {
+	@apply peer-checked/tab-one:bg-tab-active-background dark:peer-checked/tab-one:bg-tab-active-background-dark;
+}
+
+@utility tabset-tab-two {
+	@apply peer-checked/tab-two:bg-tab-active-background dark:peer-checked/tab-two:bg-tab-active-background-dark;
+}
+
+@utility tabset-tab-three {
+	@apply peer-checked/tab-three:bg-tab-active-background dark:peer-checked/tab-three:bg-tab-active-background-dark;
+}
+
+@utility tabset-content {
+  @apply p-4 overflow-hidden w-full;
+}

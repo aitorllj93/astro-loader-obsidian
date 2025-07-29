@@ -1,0 +1,20 @@
+
+@utility tree-leaf {
+  @apply w-full rounded-lg font-menu text-menu-foreground dark:text-menu-foreground-dark;
+}
+
+@utility tree-leaf-folder {
+  @apply py-1 px-2 hover:bg-menu-active-background dark:hover:bg-menu-active-background-dark;
+}
+
+@utility tree-leaf-active {
+  @apply bg-menu-active-background dark:bg-menu-active-background-dark;
+}
+
+@utility tree-leaf-folder-summary {
+  @apply capitalize mb-0.5 rounded-lg py-1 px-2 cursor-pointer hover:bg-menu-active-background dark:hover:bg-menu-active-background-dark;
+}
+
+@utility tree-leaf-folder-summary-active {
+  @apply bg-menu-active-background dark:bg-menu-active-background-dark;
+}

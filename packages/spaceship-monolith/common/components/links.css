@@ -1,0 +1,12 @@
+
+@utility links {
+  @apply mb-4 text-menu-foreground dark:text-menu-foreground-dark font-menu;
+}
+
+@utility links-title {
+  @apply text-xl mb-2;
+}
+
+@utility link {
+  @apply w-full rounded-lg py-1 px-2 hover:bg-menu-active-background dark:hover:bg-menu-active-background-dark;
+}

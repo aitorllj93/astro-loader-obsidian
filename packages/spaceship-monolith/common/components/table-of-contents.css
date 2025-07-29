@@ -1,0 +1,12 @@
+
+@utility table-of-contents {
+  @apply text-menu-foreground dark:text-menu-foreground-dark font-menu;
+}
+
+@utility table-of-contents-title {
+  @apply text-xl mb-2;
+}
+
+@utility table-of-contents-link {
+  @apply w-full rounded-lg py-1 px-2 hover:bg-menu-active-background dark:hover:bg-menu-active-background-dark;
+}

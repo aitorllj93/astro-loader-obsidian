@@ -1,0 +1,28 @@
+@import "tailwindcss";
+@import "tailwindcss-animated";
+
+@import './colors';
+
+@import './components/article';
+@import './components/body';
+@import './components/footer';
+@import './components/header';
+@import './components/links';
+@import './components/main';
+@import './components/navigation-tree';
+@import './components/sidebar';
+@import './components/table-of-contents';
+@import './components/tabset';
+@import './components/pagefind';
+
+@import './markdown/callouts';
+@import './markdown/code';
+@import './markdown/embeds';
+@import './markdown/timeline';
+@import './markdown/spoiler';
+
+@view-transition {
+  navigation: auto;
+}
+
+@custom-variant marker (&::marker, & *::marker, &::-webkit-details-marker, & *::-webkit-details-marker);

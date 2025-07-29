@@ -1,0 +1,35 @@
+@utility sidebar {
+	@apply flex h-[100vh] sticky top-0 z-20;
+}
+
+@utility sidebar-arrow {
+	@apply absolute top-[22px]  z-30 cursor-pointer inline-block p-3 transition-all duration-500 peer-checked:rotate-180;
+
+	svg {
+		@apply text-button-foreground dark:text-button-foreground-dark scale-125;
+	}
+}
+
+@utility sidebar-left-arrow {
+	@apply left-[-11px] lg:left-[-22px] hover:left-0 peer-checked:left-[75vw] hover:peer-checked:left-[75vw] lg:peer-checked:left-[15vw] lg:hover:peer-checked:left-[15vw];
+}
+
+@utility sidebar-right-arrow {
+	@apply right-[-11px] lg:right-[-22px] hover:right-0 peer-checked:right-[75vw] hover:peer-checked:right-[75vw] lg:peer-checked:right-[15vw] lg:hover:peer-checked:right-[15vw];
+
+	svg {
+		@apply rotate-180;
+	}
+}
+
+@utility sidebar-content {
+	@apply fixed z-20 transition-all duration-500 transform peer-checked:translate-x-0 peer-checked:absolute lg:peer-checked:sticky h-full w-[80vw] lg:w-[15vw] bg-sidebar-background dark:bg-sidebar-background-dark;
+}
+
+@utility sidebar-content-left {
+	@apply left-0 -translate-x-full;
+}
+
+@utility sidebar-content-right {
+	@apply right-0 z-20 translate-x-full;
+}

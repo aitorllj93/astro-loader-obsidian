@@ -1,0 +1,83 @@
+
+@plugin "@tailwindcss/typography";
+@plugin 'tailwind-scrollbar';
+
+@utility article-background {
+  @apply bg-article-background dark:bg-article-background-dark;
+}
+
+@utility article-blockquote {
+  @apply prose-blockquote:text-blockquote-foreground dark:prose-blockquote:text-blockquote-foreground-dark;
+}
+
+@utility article-code {
+  @apply prose-code:rounded-lg prose-code:px-1 prose-code:py-0.5 prose-code:before:content-none prose-code:after:content-none prose-code:text-code-foreground dark:prose-code:text-code-foreground-dark prose-code:bg-code-background dark:prose-code:bg-code-background-dark prose-code:font-code prose-pre:!bg-pre-background dark:prose-pre:!bg-pre-background-dark; 
+}
+
+@utility article-heading {
+  @apply prose-headings:text-heading-foreground dark:prose-headings:text-heading-foreground-dark prose-h1:text-article-title-foreground dark:prose-h1:text-article-title-foreground-dark prose-h1:font-title prose-headings:font-heading;
+}
+
+@utility article-image {
+  @apply prose-img:mx-auto;
+}
+
+@utility article-link {
+ @apply prose-a:text-primary prose-a:opacity-[0.7] prose-a:hover:opacity-100; 
+}
+
+@utility article-list {
+  @apply prose-li:marker:text-li-marker-foreground dark:prose-li:marker:text-li-marker-foreground-dark;
+}
+
+@utility article-paragraph {
+  @apply text-paragraph-foreground dark:text-paragraph-foreground-dark prose-p:font-paragraph;
+}
+
+@utility article-prose {
+  @apply prose dark:prose-invert lg:prose-lg xl:prose-xl 2xl:prose-2xl;
+}
+
+@utility article-scroll {
+  @apply overflow-x-hidden overflow-y-auto scrollbar-thin;
+}
+
+@utility article-separator {
+  @apply prose-hr:border-t-2 prose-hr:border-hr-border dark:prose-hr:border-hr-border-dark;
+}
+
+@utility article-strong {
+  @apply prose-strong:text-strong-foreground dark:prose-strong:text-strong-foreground-dark;
+}
+
+@utility article-table {
+  @apply prose-thead:border-hr-border prose-tr:border-hr-border dark:prose-thead:border-hr-border-dark dark:prose-tr:border-hr-border-dark;
+}
+
+@utility article {
+  @apply grow-1 max-w-full article-background article-blockquote article-code article-heading article-image article-link article-list article-paragraph article-prose article-separator article-scroll article-strong article-table;
+}
+
+@utility article-subtitle {
+  @apply text-article-subtitle-foreground dark:text-article-subtitle-foreground-dark;
+}
+
+@utility article-description {
+  @apply !font-heading;
+}
+
+@utility article-author {
+  @apply font-heading;
+}
+
+@utility article-date {
+  @apply font-heading;
+}
+
+@utility article-tag {
+  @apply border border-badge-border dark:border-badge-border-dark bg-badge-background dark:bg-badge-background-dark font-menu text-base text-badge-foreground dark:text-badge-foreground-dark;
+}
+
+@utility article-cover {
+  @apply w-full max-h-48 lg:max-h-[30rem] object-cover;
+}
