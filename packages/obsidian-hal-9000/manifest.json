@@ -1,0 +1,11 @@
+{
+	"id": "obsidian-hal-9000",
+	"name": "HAL 9000",
+	"version": "1.0.0",
+	"minAppVersion": "0.15.0",
+	"description": "Spaceship Companion for Obsidian Vaults",
+	"author": "aitorllj93",
+	"authorUrl": "https://github.com/aitorllj93",
+	"fundingUrl": "https://github.com/sponsors/aitorllj93",
+	"isDesktopOnly": false
+}
