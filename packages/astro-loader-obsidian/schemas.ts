@@ -16,6 +16,13 @@ const arrayExclude = <S extends z.ZodTypeAny>(s: S) => {
   }, z.array(s));
 };
 
+const commaSeparatedStringArray = z.union([
+  z.coerce.string()
+    .transform((value) => value.split(','))
+    .pipe(arrayExclude(z.string())),
+  arrayExclude(z.string()),
+]);
+
 export const ObsidianWikiLinkSchema = z.object({
   caption: z.string().nullish(),
   className: z.string().nullish(),
@@ -29,13 +36,8 @@ export const ObsidianWikiLinkSchema = z.object({
 
 export const ObsidianCoreSchema = z.object({
   tags: arrayExclude(z.string()).nullish(),
-  aliases: z.union([
-    z.coerce.string()
-      .transform((value) => value.split(','))
-      .pipe(arrayExclude(z.string())),
-    arrayExclude(z.string()),
-  ]).nullish(),
-  cssclasses: z.array(z.string()).optional(),
+  aliases: commaSeparatedStringArray.nullish(),
+  cssclasses: commaSeparatedStringArray.nullish(),
   links: ObsidianWikiLinkSchema.array().optional(),
   images: z
     .array(
