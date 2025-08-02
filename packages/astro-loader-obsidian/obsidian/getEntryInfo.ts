@@ -22,6 +22,8 @@ import {
 } from "./fields";
 import { zettel } from "./fields/zettel";
 import type { MarkdownError } from "../astro";
+import type { Wikilink } from "./wikiLink";
+import type { Wikitag } from "./wikiTag";
 
 export function getEntryInfo(
   contents: string,
@@ -34,6 +36,8 @@ export function getEntryInfo(
   body: string;
   data: Partial<ObsidianDocument>;
   rawData: string;
+  wikilinks: Wikilink[];
+  wikitags: Wikitag[];
 } {
   let parsed: ReturnType<typeof safeParseFrontmatter>;
 
@@ -106,10 +110,7 @@ export function getEntryInfo(
 
   const parsedBody = parseBody(content, context, logger);
 
-  const links = documentLinks.concat(parsedBody.links);
-  data.links = links.filter(
-    (l, i) => links?.findIndex((dl) => dl.href === l.href) === i
-  );
+  // TODO: Remove after including in postprocessing
   data.images = parsedBody.images as { title: string; href: string }[];
 
   return {
@@ -117,5 +118,7 @@ export function getEntryInfo(
     body: parsedBody.content,
     // slug: parsed.data.permalink ?? parsed.data.slug,
     rawData: matter,
+    wikilinks: parsedBody.wikilinks,
+    wikitags: parsedBody.wikitags,
   };
 }

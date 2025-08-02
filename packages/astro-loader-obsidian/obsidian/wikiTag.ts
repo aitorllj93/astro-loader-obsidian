@@ -6,7 +6,7 @@ import type { ObsidianLink } from "../schemas";
 import { toUrl } from "./obsidianId";
 import { slugify } from "./utils/slugify";
 
-type Wikitag = {
+export type Wikitag = {
   text: string;
   link: ObsidianLink;
 };

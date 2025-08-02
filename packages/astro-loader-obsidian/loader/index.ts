@@ -7,7 +7,7 @@ import pLimit from "p-limit";
 
 import type { DataStore, LoaderContext } from "astro/loaders";
 
-import type { ObsidianMdLoaderOptions, StoreDocument } from "../types";
+import type { ObsidianContext, ObsidianMdLoaderOptions, StoreDocument } from "../types";
 
 import { generateId, toRelativePath } from "../astro";
 
@@ -18,7 +18,7 @@ import {
 } from "../obsidian/constants";
 import type { ContentEntryType } from "astro";
 import type { ObsidianDocument } from "../schemas";
-import { parseEmbeds } from "../obsidian/obsidianEmbeds";
+import { renderObsidian } from "../obsidian/render";
 
 export type { ObsidianMdLoaderOptions };
 
@@ -91,6 +91,18 @@ export const ObsidianMdLoaderFn =
           files.filter((f) => !isConfigFile(f, baseDir.toString()))
         );
 
+      const getContext = (entry: string, files: string[], assets: string[]): ObsidianContext => ({
+        assets,
+        author: opts.author,
+        base: opts.base,
+        baseUrl: `${config.base}${baseUrl}`,
+        entry,
+        files,
+        i18n: opts.i18n,
+        defaultLocale: config.i18n?.defaultLocale,
+        options: opts,
+      })
+
       async function getData(
         entry: string,
         base: URL,
@@ -113,22 +125,12 @@ export const ObsidianMdLoaderFn =
           return;
         }
 
-        const { body, data } = await getEntryInfo(
+        const { body, data, wikilinks, wikitags, } = await getEntryInfo(
           contents,
           fileUrl,
           entry,
           stats,
-          {
-            assets,
-            author: opts.author,
-            base: opts.base,
-            baseUrl: `${config.base}${baseUrl}`,
-            entry,
-            files,
-            i18n: opts.i18n,
-            defaultLocale: config.i18n?.defaultLocale,
-            options: opts,
-          },
+          getContext(entry, files, assets),
           logger
         );
         const id = generateId({ entry, base, data });
@@ -162,12 +164,6 @@ export const ObsidianMdLoaderFn =
           return;
         }
 
-        const parsedData = await parseData({
-          id,
-          data,
-          filePath,
-        });
-
         return {
           id,
           entry,
@@ -176,7 +172,8 @@ export const ObsidianMdLoaderFn =
           relativePath,
           digest,
           data,
-          parsedData
+          wikilinks,
+          wikitags,
         }
       }
 
@@ -207,17 +204,48 @@ export const ObsidianMdLoaderFn =
         return rendered;
       }
 
-      async function persistData(
+      async function renderObsidianData(
         entryData: Awaited<ReturnType<typeof getData>>,
-        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-        rendered: any,
+        rendered: Awaited<ReturnType<typeof renderData>>,
       ) {
-        if (!entryData) {
+        if (!entryData || !rendered) {
           return;
         }
 
-        const { body, filePath, id, parsedData, relativePath, digest } = entryData;
+        const obsidian = await renderObsidian(rendered.html, entryData.wikilinks, entryData.wikitags, store, logger);
+    
+        const links = (entryData.data.links ?? [])?.concat(obsidian.links);
 
+        entryData.data.links = links.filter(
+          (l, i) => links?.findIndex((dl) => dl.href === l.href) === i
+        );
+        rendered.html = obsidian.content;
+
+        // TODO: Enable later
+        // data.images = parsedBody.images as { title: string; href: string }[];
+
+        return {
+          entryData,
+          rendered,
+        }
+      }
+
+      async function persistData(
+        
+        obsidian: Awaited<ReturnType<typeof renderObsidianData>>,
+      ) {
+        if (!obsidian) {
+          return;
+        }
+
+        const { entryData, rendered } = obsidian;
+        const { body, filePath, id, data, relativePath, digest } = entryData;
+
+        const parsedData = await parseData({
+          id,
+          data,
+          filePath,
+        });
 
         if (rendered) {
           store.set({
@@ -249,29 +277,10 @@ export const ObsidianMdLoaderFn =
         assets: string[]
       ) {
         const entryData = await limit(() => getData(entry, base, files, assets));
-
-        if (!entryData) {
-          return;
-        }
-
         const rendered = await limit(() => renderData(entryData));
+        const obsidian = await limit(() => renderObsidianData(entryData, rendered));
 
-        const embedDocuments = entryData.data.links?.filter(l => l.id && l.type === 'document' && l.isEmbedded).map(d => d.id as string) ?? [];
-
-        let dependencies: StoreDocument<ObsidianDocument>[] = [];
-        if (embedDocuments?.length > 0) {
-          try {
-            dependencies = await waitForDependencies(store, embedDocuments);
-          } catch (e) {
-            logger.error((e as Error).message);
-          }
-        }
-
-        if (rendered && dependencies.length > 0) {
-          rendered.html = parseEmbeds(rendered.html, dependencies);
-        }
-
-        await limit(() => persistData(entryData, rendered));
+        await limit(() => persistData(obsidian));
       }
 
       // Load data and update the store

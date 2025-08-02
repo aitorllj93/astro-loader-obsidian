@@ -1,23 +1,31 @@
 import type { AstroIntegrationLogger } from "astro";
 import type { ObsidianContext } from "../types";
 import type {ObsidianLink } from "../schemas";
-import { parseWikilinks } from "./wikiLink";
-import { parseWikitags } from "./wikiTag";
+import { parseWikilinks, type Wikilink } from "./wikiLink";
+import { parseWikitags, type Wikitag } from "./wikiTag";
 
 export const parseBody = (
   body: string,
   context: ObsidianContext,
   logger: AstroIntegrationLogger,
-): { content: string; images: ObsidianLink[]; links: ObsidianLink[] } => {
+): { 
+  content: string; 
+  images: ObsidianLink[]; 
+  links: ObsidianLink[];
+  wikilinks: Wikilink[];
+  wikitags: Wikitag[];
+} => {
   let content = body;
   const links: ObsidianLink[] = [];
   const images: ObsidianLink[] = [];
 
   const wikilinks = parseWikilinks(body, 'body', context, logger);
+  let wikitags: Wikitag[] = [];
 
   for (const wikilink of wikilinks) {
     const hasTarget = typeof wikilink.link.href === "string";
 
+    // TODO: Check if it's possible to move this to post processing layer
     if (wikilink.link.type === 'image') {
       if (hasTarget) {
         images.push(wikilink.link); 
@@ -30,42 +38,10 @@ export const parseBody = (
           wikilink.link.title
       );
     }
-
-    if (wikilink.link.type === 'document') {
-      if (hasTarget) {
-        links.push(wikilink.link);
-      }
-
-      // if (hasTarget && wikilink.link.isEmbedded) {
-      //   // replace with embedding placeholder
-      //   content = content.replace(
-      //     wikilink.text,
-      //     `$doc_emb::${wikilink.link.id}|${wikilink.link.href}|${wikilink.link.caption}`
-      //   );
-      // } else {
-      //   // replace with link to the corresponding markdown file
-      //   content = content.replace(
-      //     wikilink.text,
-      //     hasTarget
-      //       ? `[${wikilink.link.title}](${wikilink.link.href})`
-      //       : wikilink.link.title
-      //   );
-      // }
-    }
   }
 
   if (context.options.parseTagsIntoLinks !== false) {
-    const wikitags = parseWikitags(body, 'body', context, logger);
-
-    for (const tag of wikitags) {
-      links.push(tag.link);
-
-      // replace with link to the corresponding markdown file
-      content = content.replace(
-        tag.text,
-        `[${tag.text}](${tag.link.href})`
-      );
-    }
+    wikitags = parseWikitags(body, 'body', context, logger);
   }
 
   // remove h1 from content
@@ -73,5 +49,5 @@ export const parseBody = (
     content = content.replace(/^# .+$/m, "");
   }
 
-  return { content, images, links };
+  return { content, images, links, wikilinks, wikitags };
 };

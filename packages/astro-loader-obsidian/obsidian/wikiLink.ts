@@ -7,7 +7,7 @@ import type { ObsidianLink } from "../schemas";
 import { getAssetFromLink, getDocumentFromLink, toUrl } from "./obsidianId";
 import { slugify } from "./utils/slugify";
 
-type Wikilink = {
+export type Wikilink = {
   /** @deprecated use Link.type instead */
   isImage: boolean;
   text: string;
