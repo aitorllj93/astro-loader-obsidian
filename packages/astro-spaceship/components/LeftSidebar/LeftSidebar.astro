@@ -19,13 +19,13 @@ const { logo, tree, open = true, website } = Astro.props;
 ---
 
 <Sidebar class="hidden lg:flex" id="left-sidebar-desktop" open={open}>
-  <Header id="header-desktop" logo={logo} website={website} />
+  <Header id="header-desktop" logo={logo} config={website} />
   <Search />
   <NavigationTree tree={tree} />
 </Sidebar>
 
 <Sidebar class="flex lg:hidden" id="left-sidebar-touch">
-  <Header id="header-touch" website={website} />
+  <Header id="header-touch" config={website} />
   <Search />
   <NavigationTree tree={tree} />
 </Sidebar>

@@ -10,6 +10,9 @@ const { tree, documents, tag, page, config } = Astro.props;
 ---
 
 <Layout config={config} page={page} footer={null}>
+  <Fragment slot="head">
+    <slot name="head" />
+  </Fragment>
   <LeftSidebar website={config} tree={tree} />
   <article class="article">
     <section class="article-content">

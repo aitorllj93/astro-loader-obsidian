@@ -6,10 +6,10 @@ export type Props = {
   id?: string;
   // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   logo?: any;
-  website: SpaceshipConfig;
+  config: SpaceshipConfig;
 };
 
-const { id, logo, website } = Astro.props;
+const { id, logo, config } = Astro.props;
 ---
 
 <header id={id} class="header">
@@ -17,7 +17,7 @@ const { id, logo, website } = Astro.props;
     href={import.meta.env.BASE_URL}
     class="header-link"
   >
-    {logo ? <logo /> : <Logo />}
-    {website.title}
+    {!config.logo ? (logo ? <logo /> : <Logo />) : <Fragment set:html={config.logo} />}
+    {config.title}
   </a>
 </header>

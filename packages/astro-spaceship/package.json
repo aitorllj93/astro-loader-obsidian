@@ -8,7 +8,7 @@
 		"withastro",
 		"astro-integration"
 	],
-	"version": "0.5.0",
+	"version": "0.5.1",
 	"author": "Aitor Llamas Jiménez <aitorllj93@gmail.com>",
 	"homepage": "https://github.com/aitorllj93/astro-loader-obsidian",
 	"repository": {
@@ -59,6 +59,7 @@
 		"reading-time": "^1.5.0",
 		"rehype-callouts": "^2.1.2",
 		"rehype-rewrite": "^4.0.2",
-		"remark-code-extra": "^1.0.1"
+		"remark-code-extra": "^1.0.1",
+		"zod": "^3.25.76"
 	}
 }

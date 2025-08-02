@@ -9,6 +9,8 @@ export type SpaceshipConfig = {
   description?: string;
   site?: string;
   title: string;
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  logo?: any | undefined;
   displayOptions?: {
     showAuthor?: boolean;
     showPublishDate?: boolean;
