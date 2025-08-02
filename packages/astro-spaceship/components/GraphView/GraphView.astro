@@ -1,0 +1,321 @@
+---
+import type { SpaceshipConfig } from '../../types';
+
+export type Props = {
+  config: SpaceshipConfig;
+  class?: string;
+  slug?: string | undefined;
+};
+
+const { config, slug, class: className = "flex w-full h-full" } = Astro.props;
+---
+
+<graph-view base={config.base} slug={slug} class={className}></graph-view>
+
+<script>
+  import type { GraphViewData, GraphViewNode } from "../../types";
+  import * as d3 from "d3";
+
+  class GraphView extends HTMLElement {
+    private isLoaded = false;
+
+    connectedCallback() {
+      const options = {
+        root: document,
+        rootMargin: "0px",
+        scrollMargin: "0px",
+        threshold: 1.0,
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            this.load();
+            observer.unobserve(this);
+            observer.disconnect();
+          }
+        }
+      }, options);
+
+      observer.observe(this);
+    }
+
+    load() {
+      if (this.isLoaded) {
+        return;
+      }
+      this.isLoaded = true;
+      this.loadData().then((data) => {
+        const chart = this.renderChart(data);
+        if (chart) this.append(chart);
+      });
+    }
+
+    async loadData(): Promise<GraphViewData> {
+      const base = this.getAttribute("base");
+      const slug = this.getAttribute("slug");
+      const url = base ? `/${base.replace(/^\/+|\/+$/g, '')}/knowledge-graph/${slug ?? "index"}.json` : `/knowledge-graph/${slug ?? "index"}.json`;
+
+      const response = await fetch(url);
+      return response.json();
+    }
+
+    renderChart(data: GraphViewData) {
+      const width = this.clientWidth;
+      const height = this.clientHeight || 200;
+      const radiusForce = 300;
+      const highlightColor = "hsl(258, 88%, 66%)";
+      const linkColor = "#AAAAB3";
+      const labelColor = "#fff";
+
+      const color = d3.scaleOrdinal(d3.schemeCategory10);
+
+      const links = data.links.map((d) => ({ ...d }));
+      const nodes = data.nodes.map((d) => ({ ...d }));
+
+      const simulation = d3
+        .forceSimulation<d3.SimulationNodeDatum & GraphViewNode>(nodes)
+        .force(
+          "link",
+          d3
+            .forceLink(links)
+            .id((d) => (d as GraphViewNode).id)
+            .distance(50)
+            .strength(0.1),
+        )
+        .force("charge", d3.forceManyBody().strength(-250))
+        .force(
+          "collide",
+          d3.forceCollide((d) => d.radius + 12),
+        )
+        .force("radial", d3.forceRadial(radiusForce))
+        .force("center", d3.forceCenter(0, 0));
+
+      const svg = d3
+        .create("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .attr("viewBox", [-width / 2, -height / 2, width, height])
+        .attr("style", "max-width: 100%; height: auto;");
+
+      svg.append("defs").append("filter").attr("id", "shadow").html(`
+        <feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="black" flood-opacity="0.4"/>
+      `);
+
+      svg.append("defs").append("filter").attr("id", "glow").html(`
+        <feGaussianBlur stdDeviation="3.5" result="coloredBlur"/>
+        <feFlood flood-color="${highlightColor}" flood-opacity="1"/>
+        <feComposite in2="coloredBlur" operator="in"/>
+        <feMerge>
+          <feMergeNode/>
+          <feMergeNode in="SourceGraphic"/>
+        </feMerge>
+      `);
+
+      const container = svg.append("g").attr("filter", "url(#shadow)");
+
+      const zoom = d3.zoom().on("zoom", (event) => {
+        container.attr("transform", event.transform);
+
+        const scale = event.transform.k;
+        labels.style("opacity", scale > 0.5 ? 1 : 0);
+      });
+
+      svg.call(zoom as any);
+
+      const link = container
+        .append("g")
+        .attr("stroke", linkColor)
+        .attr("stroke-opacity", 0.15)
+        .selectAll("line")
+        .data(links)
+        .join("line")
+        .attr("data-source", (d) => d.source)
+        .attr("data-target", (d) => d.target)
+        .attr("stroke-width", 1);
+
+      let wasDragged = false;
+      const nodeGroup = container
+        .append("g")
+        .selectAll("g")
+        .data(nodes)
+        .join("g")
+        .call(
+          d3
+            .drag()
+            .on("start", function (event: any) {
+              wasDragged = false;
+              if (!event.active) simulation.alphaTarget(0.3).restart();
+              event.subject.fx = event.subject.x;
+              event.subject.fy = event.subject.y;
+            })
+            .on("drag", function (event) {
+              wasDragged = true;
+              event.subject.fx = event.x;
+              event.subject.fy = event.y;
+            })
+            .on("end", function (event) {
+              if (!event.active) simulation.alphaTarget(0);
+              event.subject.fx = null;
+              event.subject.fy = null;
+            }) as any,
+        )
+        .on("click", (event, d) => {
+          if (!wasDragged) {
+            const slug = d.href ?? `/${d.id}}`;
+            window.open(slug, "_self");
+          }
+        });
+
+      const neighbors = new Map<string, Set<string>>();
+
+      for (const link of links) {
+        const src =
+          typeof link.source === "object" ? (link.source as any).id : link.source;
+        const tgt =
+          typeof link.target === "object" ? (link.target as any).id : link.target;
+
+        if (!neighbors.has(src)) neighbors.set(src, new Set());
+        if (!neighbors.has(tgt)) neighbors.set(tgt, new Set());
+
+        neighbors.get(src)!.add(tgt);
+        neighbors.get(tgt)!.add(src);
+      }
+
+      nodeGroup
+        .on("mouseover", function (event, d) {
+          const connected = neighbors.get(d.id) ?? new Set();
+          connected.add(d.id); // incluye el nodo central
+
+          link
+            .transition()
+            .duration(150)
+            .attr("stroke", (l) =>
+              (l.source as any).id === d.id || (l.target as any).id === d.id
+                ? highlightColor
+                : linkColor,
+            )
+            .attr("stroke-opacity", (l) =>
+              (l.source as any).id === d.id || (l.target as any).id === d.id ? 0.9 : 0.05,
+            )
+            .attr("stroke-width", 1);
+
+          // resalta nodos conectados
+          nodeGroup
+            .selectAll<d3.BaseType, GraphViewNode>("circle")
+            .attr("filter", (n) => (n.id === d.id ? "url(#glow)" : null))
+            .attr("fill-opacity", (n) => (connected.has(n.id) ? 1 : 0.5))
+            .attr("fill", (n) => {
+              if (n.id === d.id) return highlightColor;
+              // if (connected.has(n.id)) return color(n.group ?? "default");
+              return linkColor; // atenuado
+            });
+
+          // resalta etiquetas si están visibles
+          labels.attr("display", (l) => (connected.has(l.id) ? 'block' : 'none'));
+        })
+        .on("mouseout", function () {
+          link
+            .transition()
+            .duration(150)
+            .attr("stroke", linkColor)
+            .attr("stroke-opacity", 0.15)
+            .attr("stroke-width", 1);
+
+          // restaurar nodos
+          nodeGroup
+            .selectAll<d3.BaseType, GraphViewNode>("circle")
+            .attr("fill", (n) => linkColor /* color(n.group ?? "default") */)
+            .attr("fill-opacity", 1)
+            .attr("filter", null);
+
+          // restaurar etiquetas según zoom
+          labels.attr("display", (l) => 'block');
+        });
+
+      const node = nodeGroup
+        .append("circle")
+        .attr("r", (d) => d.radius)
+        .attr("cursor", "pointer")
+        .attr("fill-opacity", 1)
+        .attr("fill", (d) => linkColor /* color(d.group ?? "default") */)
+        .attr("data-id", (d) => d.id);
+
+      node.append("title").text((d) => d.title ?? d.id);
+
+      const labels = nodeGroup
+        .append("text")
+        .text((d) => d.title ?? d.id)
+        .attr("text-anchor", "middle")
+        .attr("dy", (d) => d.radius + 10)
+        .style("font-size", "10px")
+        .style("fill", labelColor)
+        .style("pointer-events", "none")
+        .style("opacity", 0); // empieza oculto
+
+      for (let i = 0; i < 300; ++i) simulation.tick();
+
+      fitToGraph(svg, container, nodes, width, height);
+
+      simulation.on("tick", () => {
+        link
+          .attr("x1", (d: any) => d.source.x)
+          .attr("y1", (d: any) => d.source.y)
+          .attr("x2", (d: any) => d.target.x)
+          .attr("y2", (d: any) => d.target.y);
+
+        nodeGroup.attr("transform", (d: any) => `translate(${d.x},${d.y})`);
+      });
+
+      function fitToGraph(
+        svg: d3.Selection<SVGSVGElement, undefined, null, undefined>,
+        container: d3.Selection<SVGGElement, undefined, null, undefined>,
+        nodes: GraphViewNode[],
+        width: number,
+        height: number,
+      ) {
+        const bounds = getGraphBounds(nodes as unknown as GraphViewNode & { x: number, y: number }[]);
+        const dx = bounds.x1 - bounds.x0;
+        const dy = bounds.y1 - bounds.y0;
+        const cx = (bounds.x0 + bounds.x1) / 2;
+        const cy = (bounds.y0 + bounds.y1) / 2;
+
+        const scale = 0.9 / Math.max(dx / width, dy / height);
+
+        // NUEVO: ajustamos al centro del viewBox, que está en (0, 0)
+        const x = -cx * scale;
+        const y = -cy * scale;
+
+        svg
+          .transition()
+          .duration(750)
+          .call(
+            zoom.transform as any,
+            d3.zoomIdentity.scale(scale).translate(x, y), // centrado del grafo en coordenadas escaladas
+          );
+      }
+
+      function getGraphBounds(nodes: GraphViewNode & { x: number, y: number }[]) {
+        let x0 = Infinity,
+          y0 = Infinity,
+          x1 = -Infinity,
+          y1 = -Infinity;
+        for (const n of nodes) {
+          if (!isNaN(n.x) && !isNaN(n.y)) {
+            x0 = Math.min(x0, n.x);
+            y0 = Math.min(y0, n.y);
+            x1 = Math.max(x1, n.x);
+            y1 = Math.max(y1, n.y);
+          }
+        }
+        return { x0, y0, x1, y1 };
+      }
+
+      simulation.alpha(1).restart();
+
+      return svg.node();
+    }
+  }
+
+  customElements.define("graph-view", GraphView);
+</script>

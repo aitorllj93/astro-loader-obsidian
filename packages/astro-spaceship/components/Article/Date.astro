@@ -1,0 +1,19 @@
+---
+import type { Document, SpaceshipConfig } from '../../types';
+
+export type Props = {
+  config: SpaceshipConfig;
+  document: Document;
+};
+
+const { config, document } = Astro.props;
+const { updated } = document.data;
+---
+
+{
+  updated && config.displayOptions?.showPublishDate !== false && (
+    <span data-pagefind-weight="0" class="article-date">
+      {updated.toLocaleDateString("es-ES")}
+    </span>
+  )
+}

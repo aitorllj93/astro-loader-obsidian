@@ -1,0 +1,32 @@
+---
+
+import type { Props } from "./utils/get-static-paths";
+import Layout from '../Layout/Layout.astro';
+import LeftSidebar from "../LeftSidebar/LeftSidebar.astro";
+
+export type { Props };
+
+const { tree, documents, tag, page, config } = Astro.props;
+---
+
+<Layout config={config} page={page} footer={null}>
+  <LeftSidebar website={config} tree={tree} />
+  <article class="article">
+    <section class="article-content">
+      <h1 class="article-title">#{tag.data.name}</h1>
+
+      <div class="article-body">
+        <ul>
+          {documents?.map(d => (
+            <li>
+              <a href={d.data.permalink}>
+                {d.data.title}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+    </section>
+  </article>
+</Layout>

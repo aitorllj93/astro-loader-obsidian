@@ -1,0 +1,23 @@
+---
+import type { SpaceshipConfig } from "../../types";
+import Logo from "./Logo.astro";
+
+export type Props = {
+  id?: string;
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  logo?: any;
+  website: SpaceshipConfig;
+};
+
+const { id, logo, website } = Astro.props;
+---
+
+<header id={id} class="header">
+  <a
+    href={import.meta.env.BASE_URL}
+    class="header-link"
+  >
+    {logo ? <logo /> : <Logo />}
+    {website.title}
+  </a>
+</header>

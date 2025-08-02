@@ -1,0 +1,11 @@
+---
+import type { Document } from "../../types";
+
+export type Props = {
+  document: Document;
+};
+
+const { subtitle } = Astro.props.document.data;
+---
+
+{subtitle && <h2  data-pagefind-weight="0.1" class="article-subtitle">{subtitle}</h2>}

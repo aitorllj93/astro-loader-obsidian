@@ -1,0 +1,36 @@
+---
+import { useI18n } from "../../i18n";
+import type { Document } from "../../types";
+import BackLinkIcon from "../Icons/BackLink.astro";
+
+export type Props = {
+  links?: Document[] | undefined;
+};
+
+const { links = [] } = Astro.props;
+
+const shouldRender = !!(links.length && links.length > 0);
+const { t } = useI18n(Astro);
+---
+
+{
+  shouldRender && (
+    <nav class="links">
+      <h2 class="links-title">{t('nav.linkedMentions')}</h2>
+      <ul class="flex flex-col gap-0.5">
+        {links.map((link) => (
+          <li class="link">
+            <a
+              class="flex gap-2"
+              href={link.data.permalink}
+              title={link.data.title}
+            >
+              <BackLinkIcon />
+              <span class="truncate">{link.data.title}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}

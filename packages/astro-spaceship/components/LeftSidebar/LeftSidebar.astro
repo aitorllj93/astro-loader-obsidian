@@ -1,0 +1,31 @@
+---
+import type { SpaceshipConfig, TreeData } from "../../types";
+
+import NavigationTree from "../Tree/Tree.astro";
+import Sidebar from '../Sidebar/Sidebar.astro';
+import Header from "../Header/Header.astro";
+import Search from "../Search/Search.astro";
+
+
+export type Props = {
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  logo?: any;
+  open?: boolean;
+  tree: TreeData;
+  website: SpaceshipConfig;
+}
+
+const { logo, tree, open = true, website } = Astro.props;
+---
+
+<Sidebar class="hidden lg:flex" id="left-sidebar-desktop" open={open}>
+  <Header id="header-desktop" logo={logo} website={website} />
+  <Search />
+  <NavigationTree tree={tree} />
+</Sidebar>
+
+<Sidebar class="flex lg:hidden" id="left-sidebar-touch">
+  <Header id="header-touch" website={website} />
+  <Search />
+  <NavigationTree tree={tree} />
+</Sidebar>

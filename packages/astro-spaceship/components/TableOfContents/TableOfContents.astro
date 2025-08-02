@@ -1,0 +1,49 @@
+---
+import { useI18n } from "../../i18n";
+import type { Document } from "../../types";
+
+export type Heading = {
+  depth: number;
+  slug: string;
+  text: string;
+};
+
+export type Props = {
+  document?: Document | undefined;
+};
+
+const { document } = Astro.props;
+
+const headings = document?.rendered?.metadata?.headings as Heading[];
+
+const shouldRender = !!(headings?.length && headings.length > 0);
+
+const { t } = useI18n(Astro);
+---
+
+{
+  shouldRender && (
+    <nav class="table-of-contents">
+      <h2 class="table-of-contents-title">{t("nav.tableOfContents")}</h2>
+      <ul class="flex flex-col gap-0.5 h-[calc(100vh_-_250px)] overflow-auto">
+        {headings.map(({ depth, slug, text }) => (
+          <li class="table-of-contents-link">
+            <a
+              class:list={[
+                "flex",
+                depth === 2 && "ml-2",
+                depth === 3 && "ml-4",
+                depth === 4 && "ml-6",
+                depth === 5 && "ml-8",
+                depth === 6 && "ml-10",
+              ]}
+              href={`#${slug}`}
+            >
+              <span class="truncate">{text}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}

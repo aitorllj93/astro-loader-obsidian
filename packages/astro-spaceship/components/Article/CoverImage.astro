@@ -1,0 +1,32 @@
+---
+import { getImage, Image } from 'astro:assets';
+
+export type Props = {
+  cover?: ImageMetadata | undefined;
+  'cover-x'?: number | undefined;
+  'cover-y'?: number | undefined;
+}
+
+const { cover, 'cover-x': coverX, 'cover-y': coverY } = Astro.props;
+
+const coverImage = cover ? (await getImage({
+  src: cover,
+  format: 'webp',
+  quality: 'high',
+})) : undefined;
+
+---
+{
+  coverImage && (
+    <Image
+      src={coverImage.src}
+      height={coverImage.attributes.height}
+      width={coverImage.attributes.width}
+      alt=""
+      class:list={["article-cover", coverX || coverY ? `` : "object-top"]}
+      style={
+        coverX || coverY ? `object-position: ${coverX}% ${coverY}%;` : ""
+      }
+    />
+  )
+}

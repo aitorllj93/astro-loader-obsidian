@@ -1,0 +1,21 @@
+---
+import type { Tag } from "../../types";
+
+export type Props = {
+  tags: Tag[];
+}
+
+const { tags } = Astro.props;
+
+---
+{
+  tags.length > 0 && (
+    <div data-pagefind-weight="0" class="flex flex-wrap flex-row lg:flex-row-reverse gap-4">
+      {tags.map((t) => (
+        <a class="article-tag" href={t.data.permalink}>
+          {t.data.name}
+        </a>
+      ))}
+    </div>
+  )
+}

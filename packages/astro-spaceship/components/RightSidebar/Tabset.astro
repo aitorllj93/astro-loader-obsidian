@@ -1,0 +1,124 @@
+---
+import type { Document, SpaceshipConfig } from "../../types";
+
+import GraphIcon from '../Icons/Graph.astro';
+import OutlineIcon from '../Icons/Outline.astro';
+import LinkIcon from '../Icons/Link.astro';
+
+import GraphView from "../GraphView/GraphView.astro";
+import TableOfContents from "../TableOfContents/TableOfContents.astro";
+
+import Links from "./Links.astro";
+
+export type Props = {
+  id?: string;
+  config: SpaceshipConfig;
+  document?: Document;
+  backlinks?: Document[];
+  showToC?: boolean;
+  showLinks?: boolean;
+  showRelations?: boolean;
+};
+
+const { config, id, document, backlinks, showToC = true, showLinks = true, showRelations = true } = Astro.props;
+
+const gridTemplates = {
+  "[grid-template-areas:'tab1_tab2_tab3''tabcontent_tabcontent_tabcontent'] grid-cols-3": showToC && showLinks && showRelations,
+  "[grid-template-areas:'tab2_tab3''tabcontent_tabcontent'] grid-cols-2": !showToC && showLinks && showRelations,
+  "[grid-template-areas:'tab3''tabcontent'] grid-cols-1": !showToC && !showLinks && showRelations,
+  "[grid-template-areas:'a_b_c''a_b_c']": !showToC && !showLinks && !showRelations,
+  "[grid-template-areas:'tab1_tab3''tabcontent_tabcontent'] grid-cols-2": showToC && !showLinks && showRelations,
+  "[grid-template-areas:'tab1''tabcontent'] grid-cols-1": showToC && !showLinks && !showRelations,
+  "[grid-template-areas:'tab1_tab2''tabcontent_tabcontent'] grid-cols-2": showToC && showLinks && !showRelations,
+};
+
+const template = Object.entries(gridTemplates).find(([_, v]) => v === true)?.[0];
+---
+
+<section
+  id={id}
+  class:list={[
+    "tabset",
+    "grid",
+    template
+  ]}
+>
+  <div class="tabset-bg"></div>
+  {showToC && (
+    <input
+      id={`${id}-tab-one`}
+      type="radio"
+      name={id}
+      class="peer/tab-one opacity-0 absolute [grid-area:tab1]"
+      checked
+    />
+    <label
+      for={`${id}-tab-one`}
+      class="tabset-tab tabset-tab-one [grid-area:tab1] "
+      title="Outline"
+      >
+        <OutlineIcon />
+    </label>
+  )}
+
+  {showLinks && (
+    <input
+      id={`${id}-tab-two`}
+      type="radio"
+      name={id}
+      class="peer/tab-two opacity-0 absolute [grid-area:tab2]"
+      checked={!showToC}
+    />
+    <label
+      for={`${id}-tab-two`}
+      class="tabset-tab tabset-tab-two [grid-area:tab2]"
+      title="Links"
+    >
+      <LinkIcon />
+    </label>
+  )}
+
+
+  {showRelations && (
+    <input
+      id={`${id}-tab-three`}
+      type="radio"
+      name={id}
+      class="peer/tab-three opacity-0 absolute [grid-area:tab3]"
+      checked={!showToC && !showLinks}
+    />
+    <label
+      for={`${id}-tab-three`}
+      class="tabset-tab tabset-tab-three [grid-area:tab3]"
+      title="Graph"
+    >
+      <GraphIcon />
+    </label>
+  )}
+
+  
+  {showToC && (
+    <div
+      class="hidden peer-checked/tab-one:block tabset-content [grid-area:tabcontent]"
+    >
+      <TableOfContents document={document} />
+    </div>
+  )}
+
+  {showLinks && (
+    <div
+      class="hidden peer-checked/tab-two:flex tabset-content [grid-area:tabcontent]"
+    >
+      <Links document={document} backlinks={backlinks} />
+    </div>
+  )}
+  
+  {showRelations && (
+    <div
+      class="hidden peer-checked/tab-three:flex tabset-content [grid-area:tabcontent]"
+    >
+        <GraphView config={config} class="flex w-[95%] h-full aspect-square mx-auto rounded-lg bg-article-background dark:bg-article-background-dark" slug={document?.id}  />
+    </div>
+  )}
+
+</section>

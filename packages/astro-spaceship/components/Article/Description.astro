@@ -1,0 +1,11 @@
+---
+import type { Document } from "../../types";
+
+export type Props = {
+  document: Document;
+};
+
+const { description } = Astro.props.document.data;
+---
+
+<p data-pagefind-weight="0.1" class="article-description" set:html={description} />

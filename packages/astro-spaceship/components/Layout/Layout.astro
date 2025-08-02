@@ -1,0 +1,38 @@
+---
+
+import type { FooterData, Page, SpaceshipConfig } from '../../types';
+
+import Footer from '../Footer/Footer.astro';
+import SEO from '../SEO/SEO.astro';
+
+export type Props = {
+  config: SpaceshipConfig;
+  page: Page;
+  footer: FooterData | null;
+}
+
+const { config, footer, page } = Astro.props;
+
+const { language } = page;
+
+---
+<!doctype html>
+<html class="scroll-smooth" lang={language}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="icon" type="image/svg+xml" href={`/${config.base}/favicon.svg`} />
+    <SEO page={page} />
+  </head>
+  <body class="body">
+    <div class="texture" />
+    <main class="main">
+      <slot />
+    </main>
+    <Footer data={footer}  />
+    <script>
+      import { initArticlePreviews } from '../../scripts/article-preview';
+      window.addEventListener('DOMContentLoaded', initArticlePreviews);
+    </script>
+  </body>
+</html>

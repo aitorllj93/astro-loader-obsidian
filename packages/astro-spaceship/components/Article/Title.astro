@@ -1,0 +1,11 @@
+---
+import type { Document } from "../../types";
+
+export type Props = {
+  document: Document;
+};
+
+const { title, subtitle } = Astro.props.document.data;
+---
+
+<h1 data-pagefind-weight="10" class:list={["article-title", subtitle && "!mb-2"]}>{title}</h1>

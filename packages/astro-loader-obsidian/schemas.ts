@@ -84,6 +84,10 @@ export const AuthorSchema = z.object({
   avatar: z.string().url(),
 });
 
+export const ExtensionsSchema = z.object({
+  order: z.number().optional(),
+})
+
 export const ZettelkastenDateIdMetaSchema = z.object({
   date: z.date().optional(),
 })
@@ -110,6 +114,7 @@ export const ObsidianDocumentSchema = ObsidianCoreSchema.merge(
 )
   .merge(PublishSchema)
   .merge(AstroSchema)
+  .merge(ExtensionsSchema)
   .merge(ZettelkastenSchema);
 
 export const ObsidianDocumentI18nSchema =

@@ -1,0 +1,17 @@
+---
+import type { Document, Node } from "../../types";
+
+import Leaf from "./Leaf.astro";
+
+export type Props = {
+  tree: Node<Document>[];
+};
+
+const { tree } = Astro.props;
+---
+
+<nav class="navigation-tree">
+  <ul class="navigation-tree-list">
+    {tree.map((document) => <Leaf node={document} />)}
+  </ul>
+</nav>

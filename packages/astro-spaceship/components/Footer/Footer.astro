@@ -1,0 +1,15 @@
+---
+import type { FooterData } from "../../types";
+
+export type Props = {
+  data: FooterData | null
+};
+
+const { data } = Astro.props;
+---
+
+{data && (
+  <footer class="footer">
+    <p>{data.readingTime}</p>
+  </footer>
+)}

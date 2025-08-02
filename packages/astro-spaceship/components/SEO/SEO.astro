@@ -1,0 +1,28 @@
+---
+import type { Page } from '../../types';
+
+export type Props = {
+  page: Page;
+};
+
+const { page } = Astro.props;
+
+const { seo, title } = page;
+
+---
+<title>{seo.title ?? title}</title>
+{seo.description && <meta name="description" content={seo.description} />}
+{seo.keywords && <meta name="keywords" content={seo.keywords} />}
+{seo.image && <meta property="og:image" content={seo.image} />}
+<meta name='language' content={page.language}>
+<link rel="canonical" href={seo.canonicalUrl ?? Astro.url} />
+
+{seo.openGraph?.title && <meta property="og:title" content={seo.openGraph.title} />}
+{seo.openGraph?.description && <meta property="og:description" content={seo.openGraph.description} />}
+{seo.openGraph?.image && <meta property="og:image" content={seo.openGraph.image} />}
+{seo.openGraph?.url && <meta property="og:url" content={seo.openGraph.url} />}
+{seo.openGraph?.siteName && <meta property="og:site_name" content={seo.openGraph.siteName} />}
+
+{seo.twitter?.title && <meta name="twitter:title" content={seo.twitter.title} />}
+{seo.twitter?.description && <meta name="twitter:description" content={seo.twitter.description} />}
+{seo.twitter?.image && <meta name="twitter:image" content={seo.twitter.image} />}

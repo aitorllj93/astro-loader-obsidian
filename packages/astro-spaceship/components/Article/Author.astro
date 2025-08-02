@@ -1,0 +1,25 @@
+---
+import { useI18n } from '../../i18n';
+import type { SpaceshipConfig, Author as TAuthor } from '../../types';
+
+export type Props = {
+  config: SpaceshipConfig;
+  author?: TAuthor | undefined;
+};
+
+const { t } = useI18n(Astro);
+
+const { author, config } = Astro.props;
+---
+{
+  author && config.displayOptions?.showAuthor !== false && (
+    <span data-pagefind-weight="0" class="article-author">
+      {t("article.author.name", { name: author.data.name })}
+    </span>
+  )
+}
+{
+  author?.data.title && config.displayOptions?.showAuthor !== false && (
+    <span data-pagefind-weight="0" class="article-author">{author.data.title}</span>
+  )
+}

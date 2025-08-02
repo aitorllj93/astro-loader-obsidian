@@ -1,0 +1,58 @@
+---
+import { render } from "astro:content";
+
+import type { Author as TAuthor, Document, Tag, SpaceshipConfig } from "../../types";
+
+import CoverImage from "./CoverImage.astro";
+import Tags from "./Tags.astro";
+import ArticleDate from "./Date.astro";
+import Author from "./Author.astro";
+import Title from "./Title.astro";
+import Subtitle from "./Subtitle.astro";
+import Description from "./Description.astro";
+
+export type Props = {
+  config: SpaceshipConfig,
+  author?: TAuthor | undefined;
+  document: Document;
+  tags: Tag[];
+};
+
+const { author, config, document, tags } = Astro.props;
+const { data } = document;
+
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+const { Content } = await render(document as any);
+
+const showMetaSection =
+  config.displayOptions?.showAuthor !== false ||
+  config.displayOptions?.showPublishDate !== false ||
+  tags.length > 0;
+
+const showDescriptionSection = !!data.description || showMetaSection;
+---
+
+<article class="article" data-pagefind-body>
+  <section class="article-content">
+    <Title document={document} />
+    <Subtitle document={document} />
+    {
+      showDescriptionSection && (
+        <div class="flex flex-col lg:flex-row justify-end">
+          <Description document={document} />
+          {showMetaSection && (
+            <div class="flex flex-col lg:items-end gap-2 w-full">
+              <Author config={config} author={author} />
+              <ArticleDate config={config} document={document} />
+              <Tags tags={tags} />
+            </div>
+          )}
+        </div>
+      )
+    }
+    <CoverImage {...data} />
+    <div data-pagefind-weight="0.1" class="article-body">
+      <Content />
+    </div>
+  </section>
+</article>

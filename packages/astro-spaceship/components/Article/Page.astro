@@ -1,0 +1,29 @@
+---
+import type { Props } from "./utils/get-static-paths.ts";
+import { buildFooter } from "../Footer/utils/buildFooter.ts";
+
+import Layout from "../Layout/Layout.astro";
+import LeftSidebar from "../LeftSidebar/LeftSidebar.astro";
+import RightSidebar from "../RightSidebar/RightSidebar.astro";
+
+import Entry from "./Entry.astro";
+
+
+export type { Props };
+
+const { author, document, backlinks, tree, page, tags, config } = Astro.props;
+
+const footer = buildFooter(Astro, document);
+---
+
+<Layout config={config} page={page} footer={footer}>
+  <slot />
+  <LeftSidebar website={config} tree={tree} />
+  <Entry config={config} author={author} document={document} tags={tags} />
+  <RightSidebar
+    config={config}
+    document={document} 
+    backlinks={backlinks}
+    showToC={(document?.rendered?.metadata?.headings as []).length > 0}
+    />
+</Layout>

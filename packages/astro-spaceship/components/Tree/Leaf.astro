@@ -1,0 +1,90 @@
+---
+import type { Document, Node } from "../../types";
+
+export type Props = {
+  expanded?: boolean;
+  node: Node<Document>;
+};
+
+const { expanded, node } = Astro.props;
+
+const isFolder = node.children?.length;
+
+let childIndex: Node<Document> | undefined;
+
+if (isFolder) {
+  const lastUrlPart = node.permalink.split("/").at(-1);
+
+  childIndex = node.children?.find((c) => {
+    const cLastUrlPart = c.permalink.split("/").at(-1);
+    return cLastUrlPart === lastUrlPart;
+  });
+}
+
+const isAnyChildrenActive = (node: Node<Document>) => {
+  const isActive = decodeURI(Astro.url.pathname).startsWith(node.permalink);
+
+  if (isActive) {
+    return isActive;
+  }
+
+  if (node.children) {
+    return node.children.some(isAnyChildrenActive);
+  }
+
+  return false;
+};
+
+const isActive = isAnyChildrenActive(node);
+
+const isIndexActive =
+  childIndex && decodeURI(Astro.url.pathname).startsWith(childIndex.permalink);
+---
+
+<li
+  class:list={[
+    "tree-leaf",
+    !isFolder && "tree-leaf-folder",
+    !isFolder && isActive && "tree-leaf-active",
+  ]}
+>
+  {
+    !isFolder ? (
+      <a href={node.permalink} title={node.name} class="truncate block">
+        {node.name}
+      </a>
+    ) : null
+  }
+  {
+    isFolder ? (
+      <details class="marker:content-none" open={expanded ?? isActive}>
+        <summary
+          class:list={[
+            "tree-leaf-folder-summary",
+            isIndexActive &&
+              "tree-leaf-folder-summary-active",
+          ]}
+        >
+          {childIndex ? (
+            <a
+              href={childIndex.permalink}
+              title={childIndex.name}
+              class="truncate block"
+            >
+              {childIndex.name}
+            </a>
+          ) : (
+            <span>{node.name}</span>
+          )}
+        </summary>
+        <ul class="flex flex-col gap-0.5 ms-2">
+          {node.children
+            ?.filter((c) => c.permalink !== childIndex?.permalink)
+            .map((c) => (
+              <Astro.self expanded={expanded} node={c} />
+            ))}
+        </ul>
+      </details>
+    ) : null
+  }
+</li>

@@ -1,0 +1,39 @@
+---
+import Arrow from "../Icons/Arrow.astro";
+
+export type Props = {
+  class?: string;
+  id?: string;
+  open?: boolean;
+  position?: "left" | "right";
+};
+
+const {
+  open = false,
+  position = "left",
+  class: className,
+  id = `${position}-drawer-toggle`,
+} = Astro.props;
+---
+
+<div class:list={["sidebar", className]}>
+  <input type="checkbox" id={id} class="relative sr-only peer" checked={open} />
+  <label
+    for={id}
+    class:list={[
+      "sidebar-arrow",
+      position === "left" ? "sidebar-left-arrow" : "sidebar-right-arrow",
+    ]}
+  >
+    <Arrow />
+  </label>
+
+  <div
+    class:list={[
+      "sidebar-content",
+      position === "left" ? "sidebar-content-left" : "sidebar-content-right",
+    ]}
+  >
+    <slot />
+  </div>
+</div>
