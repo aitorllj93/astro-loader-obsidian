@@ -17,8 +17,8 @@ import {
   ALLOWED_IMAGE_EXTENSIONS,
 } from "../obsidian/constants";
 import type { ContentEntryType } from "astro";
-import { injectEmbeds } from "../obsidian/obsidianBody";
 import type { ObsidianDocument } from "../schemas";
+import { parseEmbeds } from "../obsidian/obsidianEmbeds";
 
 export type { ObsidianMdLoaderOptions };
 
@@ -182,19 +182,12 @@ export const ObsidianMdLoaderFn =
 
       async function renderData(
         entryData: Awaited<ReturnType<typeof getData>>,
-        dependencies: StoreDocument<ObsidianDocument>[],
       ) {
         if (!entryData) {
           return;
         }
 
-        const { id, entry, body: entryBody, filePath, relativePath, digest, data, parsedData } = entryData;
-
-        let body = entryBody;
-
-        if (dependencies.length > 0) {
-          body = injectEmbeds(body, dependencies);
-        }
+        const { id, entry, body, filePath, digest, data } = entryData;
 
         let rendered = undefined;
 
@@ -210,6 +203,21 @@ export const ObsidianMdLoaderFn =
           logger.error(`Error rendering ${entry}: ${(error as Error).message}`);
           throw error;
         }
+
+        return rendered;
+      }
+
+      async function persistData(
+        entryData: Awaited<ReturnType<typeof getData>>,
+        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+        rendered: any,
+      ) {
+        if (!entryData) {
+          return;
+        }
+
+        const { body, filePath, id, parsedData, relativePath, digest } = entryData;
+
 
         if (rendered) {
           store.set({
@@ -246,6 +254,8 @@ export const ObsidianMdLoaderFn =
           return;
         }
 
+        const rendered = await limit(() => renderData(entryData));
+
         const embedDocuments = entryData.data.links?.filter(l => l.id && l.type === 'document' && l.isEmbedded).map(d => d.id as string) ?? [];
 
         let dependencies: StoreDocument<ObsidianDocument>[] = [];
@@ -257,7 +267,11 @@ export const ObsidianMdLoaderFn =
           }
         }
 
-        await limit(() => renderData(entryData, dependencies));
+        if (rendered && dependencies.length > 0) {
+          rendered.html = parseEmbeds(rendered.html, dependencies);
+        }
+
+        await limit(() => persistData(entryData, rendered));
       }
 
       // Load data and update the store

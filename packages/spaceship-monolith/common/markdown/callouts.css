@@ -1,80 +1,105 @@
 
 
-blockquote[data-callout] {
-  border: none;
-  border-radius: 0.5rem;
-  padding-block: 1rem;
+@utility callout {
+  @apply border-none rounded-lg px-6 py-3 my-6;
+}
 
-  .callout-title {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-weight: 600;
+
+@utility callout-title {
+  @apply text-base flex items-center gap-2 font-semibold;
+}
+
+@utility callout-title-icon {
+  svg {
+    @apply w-4.5 h-4.5;
   }
 }
 
-blockquote[data-callout="abstract"],
-blockquote[data-callout="summary"],
-blockquote[data-callout="tldr"],
-blockquote[data-callout="tip"],
-blockquote[data-callout="hint"],
-blockquote[data-callout="important"] {
-  color: var(--color-hint-foreground);
+@utility callout-content {
+  @apply font-paragraph text-text-normal;
+
+  p {
+    @apply my-4;
+  }
+}
+
+.callout[data-callout="abstract"],
+.callout[data-callout="summary"],
+.callout[data-callout="tldr"],
+.callout[data-callout="tip"],
+.callout[data-callout="hint"],
+.callout[data-callout="important"] {
+  .callout-title {
+   color: var(--color-hint-foreground);
+  }
   border-color: var(--color-hint-border);
   background-color: var(--color-hint-background);
 }
 
-blockquote[data-callout="info"],
-blockquote[data-callout="note"],
-blockquote[data-callout="todo"] {
-  color: var(--color-info-foreground);
+.callout[data-callout="info"],
+.callout[data-callout="note"],
+.callout[data-callout="todo"] {
+  .callout-title {
+    color: var(--color-info-foreground);
+  }
   border-color: var(--color-info-border);
   background-color: var(--color-info-background);
 }
 
-blockquote[data-callout="success"],
-blockquote[data-callout="check"],
-blockquote[data-callout="done"] {
-  color: var(--color-success-foreground);
+.callout[data-callout="success"],
+.callout[data-callout="check"],
+.callout[data-callout="done"] {
+  .callout-title {
+    color: var(--color-success-foreground);
+  }
   border-color: var(--color-success-border);
   background-color: var(--color-success-background);
 }
 
-blockquote[data-callout="question"],
-blockquote[data-callout="help"],
-blockquote[data-callout="faq"],
-blockquote[data-callout="warning"],
-blockquote[data-callout="caution"],
-blockquote[data-callout="attention"] {
-  color: var(--color-warning-foreground);
+.callout[data-callout="question"],
+.callout[data-callout="help"],
+.callout[data-callout="faq"],
+.callout[data-callout="warning"],
+.callout[data-callout="caution"],
+.callout[data-callout="attention"] {
+  .callout-title {
+    color: var(--color-warning-foreground);
+  }
   border-color: var(--color-warning-border);
   background-color: var(--color-warning-background);
 }
 
-blockquote[data-callout="failure"],
-blockquote[data-callout="fail"],
-blockquote[data-callout="missing"],
-blockquote[data-callout="danger"],
-blockquote[data-callout="error"],
-blockquote[data-callout="bug"] {
-  color: var(--color-danger-foreground);
+.callout[data-callout="failure"],
+.callout[data-callout="fail"],
+.callout[data-callout="missing"],
+.callout[data-callout="danger"],
+.callout[data-callout="error"],
+.callout[data-callout="bug"] {
+  .callout-title {
+    color: var(--color-danger-foreground);
+  }
   border-color: var(--color-danger-border);
   background-color: var(--color-danger-background);
 }
 
-blockquote[data-callout="example"] {
-  color: var(--color-example-foreground);
+.callout[data-callout="example"] {
+  .callout-title {
+    color: var(--color-example-foreground);
+  }
   border-color: var(--color-example-border);
   background-color: var(--color-example-background);
 }
 
-blockquote[data-callout="quote"],
-blockquote[data-callout="cite"] {
-  color: var(--color-quote-foreground);
+.callout[data-callout="quote"],
+.callout[data-callout="cite"] {
+  .callout-title {
+    color: var(--color-quote-foreground);
+  }
   border-color: var(--color-quote-border);
   background-color: var(--color-quote-background);
 }
 
-.callout-content {
-  font-family: var(--font-paragraph);
-}
+@source inline("callout");
+@source inline("callout-title");
+@source inline("callout-title-icon");
+@source inline("callout-content");

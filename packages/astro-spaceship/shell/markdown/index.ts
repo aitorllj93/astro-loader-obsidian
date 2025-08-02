@@ -4,18 +4,25 @@ import remarkEmbedder from '@remark-embedder/core';
 import remarkEmbedderOembed from '@remark-embedder/transformer-oembed';
 import rehypeRewrite from "rehype-rewrite";
 import remarkCodeExtra from "remark-code-extra";
-import remarkObsidianCallout from 'remark-obsidian-callout';
+import rehypeCallouts from 'rehype-callouts'
+import remarkWikiLink from "remark-wiki-link";
+
 
 import rehypeRewriteConfig from "./rehype";
 import remarkCodeExtraConfig from "./remark/code";
 import type { AstroUserConfig } from 'astro';
+import type { SpaceshipConfig } from '../../types';
 
 type MarkdownConfig = NonNullable<AstroUserConfig['markdown']>;
-type RemarkPlugin = NonNullable<MarkdownConfig['remarkPlugins']>[number];
 
-export default {
+export default (
+  websiteConfig: SpaceshipConfig
+) => ({
   remarkPlugins: [
-    (remarkObsidianCallout as RemarkPlugin), 
+    [remarkWikiLink, { 
+      aliasDivider: "|",
+      hrefTemplate: (permalink: string) => websiteConfig.base ? `/${websiteConfig.base}${permalink}` : `/${permalink}`,
+    }],
     // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     [(remarkEmbedder as any).default, {
       transformers: [
@@ -29,6 +36,7 @@ export default {
     ],
   ],
   rehypePlugins: [
+    rehypeCallouts,
     [
       rehypeRewrite,
       rehypeRewriteConfig,
@@ -40,4 +48,4 @@ export default {
       dark: 'github-dark',
     },
   },
-} satisfies MarkdownConfig
+}) satisfies MarkdownConfig

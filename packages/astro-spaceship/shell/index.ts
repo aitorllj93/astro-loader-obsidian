@@ -22,7 +22,7 @@ export const create = (
     defaultLocale: websiteConfig.defaultLocale,
     locales: [websiteConfig.defaultLocale],
   },
-  markdown,
+  markdown: markdown(websiteConfig),
   integrations: [
     pagefind(),
     sitemap(),
