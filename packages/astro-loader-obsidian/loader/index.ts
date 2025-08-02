@@ -201,16 +201,63 @@ export const ObsidianMdLoaderFn =
           throw error;
         }
 
-        return rendered;
+        return {
+          entryData,
+          rendered,
+        };
+      }
+
+      const dependsOn = (a: Awaited<ReturnType<typeof renderData>>, b: Awaited<ReturnType<typeof renderData>>) => 
+        a?.entryData.wikilinks.some(l => 
+          l.link.type === 'document' && 
+          l.link.isEmbedded && 
+          l.link.id === b?.entryData.id
+        );
+
+      const sortFiles = (
+        files: Awaited<ReturnType<typeof renderData>>[],
+        maxPerFile = 5
+      ) => {
+        const result: Awaited<ReturnType<typeof renderData>>[] = [];
+        const processCounts: Record<string, number> = {};
+
+        while (files.length > 0) {
+          const current = files[0];
+
+          if (!current?.entryData.id) {
+            files.shift();
+            continue;
+          }
+
+          processCounts[current.entryData.id] = (processCounts[current.entryData.id] || 0) + 1;
+      
+          if ((processCounts[current.entryData.id] ?? 0) > maxPerFile) {
+            result.push(files.shift());
+          }
+
+          const deps = current.entryData.wikilinks.filter(l => 
+            l.link.type === 'document' && 
+            l.link.isEmbedded && l.link.id
+            && files.some(f => f?.entryData.id === l.link.id)
+          );
+
+          if (deps.length === 0) {
+            result.push(files.shift());
+          } else {
+            files.push(files.shift());
+          }
+        }
+
+        return result;
       }
 
       async function renderObsidianData(
-        entryData: Awaited<ReturnType<typeof getData>>,
-        rendered: Awaited<ReturnType<typeof renderData>>,
+        renderedData: Awaited<ReturnType<typeof renderData>>,
       ) {
-        if (!entryData || !rendered) {
+        if (!renderedData || !renderedData.entryData || !renderedData.rendered) {
           return;
         }
+        const { rendered, entryData } = renderedData;
 
         const obsidian = await renderObsidian(rendered.html, entryData.wikilinks, entryData.wikitags, store, logger);
     
@@ -270,18 +317,18 @@ export const ObsidianMdLoaderFn =
         fileToIdMap.set(filePath, id);
       }
 
-      async function syncData(
-        entry: string,
-        base: URL,
-        files: string[],
-        assets: string[]
-      ) {
-        const entryData = await limit(() => getData(entry, base, files, assets));
-        const rendered = await limit(() => renderData(entryData));
-        const obsidian = await limit(() => renderObsidianData(entryData, rendered));
+      // async function syncData(
+      //   entry: string,
+      //   base: URL,
+      //   files: string[],
+      //   assets: string[]
+      // ) {
+      //   const entryData = await limit(() => getData(entry, base, files, assets));
+      //   const rendered = await limit(() => renderData(entryData));
+      //   const obsidian = await limit(() => renderObsidianData(rendered));
 
-        await limit(() => persistData(obsidian));
-      }
+      //   await limit(() => persistData(obsidian));
+      // }
 
       // Load data and update the store
 
@@ -290,8 +337,27 @@ export const ObsidianMdLoaderFn =
       const files = await getFiles();
       const assets = await getAssets();
 
-      await Promise.all(
-        files.map((entry) => syncData(entry, baseDir, files, assets))
+      // await Promise.all(
+      //   files.map((entry) => syncData(entry, baseDir, files, assets))
+      // );
+
+      await (
+        Promise.all(
+          files.map(f => limit(() => getData(f, baseDir, files, assets)))
+        ).then(
+          entries => Promise.all(
+            entries.map(entry => limit(() => renderData(entry)))
+          )
+        )
+        .then(sortFiles)
+        .then(
+          async (renders) => {
+            for (const render of renders) {
+              const obsidian = await renderObsidianData(render);
+              await persistData(obsidian);
+            }
+          }
+        )
       );
 
       // Remove entries that were not found this time
@@ -313,7 +379,12 @@ export const ObsidianMdLoaderFn =
           return;
         }
         const baseUrl = pathToFileURL(dirPath);
-        await syncData(entry, baseUrl as URL, files, assets);
+
+        await limit(() => getData(entry, baseUrl as URL, files, assets))
+          .then((entryData) => limit(() => renderData(entryData)))
+          .then((rendered) => limit(() => renderObsidianData(rendered)))
+          .then((obsidian) => limit(() => persistData(obsidian)))
+
         logger.info(`Reloaded data from ${green(entry)}`);
       }
 

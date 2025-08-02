@@ -126,6 +126,10 @@ body {
   @apply p-2;
 }
 
+@utility navigation-tree-list {
+  @apply flex flex-col gap-0.5 h-[calc(100vh_-_120px)] scrollbar-thin overflow-auto;
+}
+
 @utility tabset-bg {
   @apply block! z-0 absolute inset-0 h-[42px] bg-article-background dark:bg-obsidian-400;
 }

@@ -2,8 +2,10 @@ import type { AstroIntegrationLogger } from "astro";
 import type { Wikilink } from "./wikiLink";
 import type { DataStore } from "astro/loaders";
 import { renderEmbed } from "./obsidianEmbeds";
-import type { ObsidianLink } from "../schemas";
+import type { ObsidianDocument, ObsidianLink } from "../schemas";
 import type { Wikitag } from "./wikiTag";
+import type { StoreDocument } from "../types";
+
 
 export const renderObsidian = async (
   htmlBody: string, 
@@ -38,8 +40,19 @@ export const renderObsidian = async (
         links.push(wikilink.link);
       }
 
-      if (hasTarget && wikilink.link.isEmbedded) {
-        content = await renderEmbed(content, wikilink, store, logger);
+      if (hasTarget && wikilink.link.isEmbedded && wikilink.link.id) {
+        const document = store.get(wikilink.link.id) as StoreDocument<ObsidianDocument>|undefined;
+
+        if (!document) {
+          logger.warn(`Embed document "${wikilink.link.id}" is unavailable`);
+        }
+
+        content = content.replace(
+          wikilink.text,
+          document ?
+            await renderEmbed(content, wikilink, document, logger) :
+            `<span class="article-wikilink-embed">${wikilink.link.title}</span>`
+        );
       } else {
         content = content.replace(
           wikilink.text,

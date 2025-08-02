@@ -5,11 +5,8 @@ import type { Element, ElementContent, Node, Root, RootContent } from "hast";
 
 import type { StoreDocument } from "../types";
 import type { ObsidianDocument } from "../schemas";
-import type { DataStore } from 'astro/loaders';
 import type { Wikilink } from './wikiLink';
 import type { AstroIntegrationLogger } from 'astro';
-
-const MAX_WAIT_RETRIES = 4;
 
 const isElement = (node: Node): node is Element => node.type === "element";
 
@@ -61,25 +58,8 @@ const getSectionFromRoot = (root: Root, sectionStart: string): RootContent[] => 
   return result;
 };
 
-const retrieveDocument = (store: DataStore, id: string, retries = 0) => new Promise<StoreDocument<ObsidianDocument>>((resolve, reject) => {
-  const document = store.get(id);
-
-  if (document) {
-    resolve(document as StoreDocument<ObsidianDocument>);
-    return;
-  }
-
-  if (retries === MAX_WAIT_RETRIES) {
-    reject(new Error(`Embed document ${id} is unavailable`));
-    return;
-  }
-
-  setTimeout(() => retrieveDocument(store, id, retries + 1).then(resolve).catch(reject), 1000);
-})
-
-export const renderEmbed = async (htmlBody: string, link: Wikilink, store: DataStore, logger: AstroIntegrationLogger) => {
-  const [id, section] = link.text.split('#');
-  const document = (await retrieveDocument(store, link.link.id as string).catch(() => null));
+export const renderEmbed = async (htmlBody: string, link: Wikilink, document: StoreDocument<ObsidianDocument>, logger: AstroIntegrationLogger) => {
+  const [_, section] = link.link.caption?.split('#') ?? '';
 
   if (!document) {
     logger.warn(`Embed file ${link.link.id} not found`);
@@ -141,5 +121,5 @@ export const renderEmbed = async (htmlBody: string, link: Wikilink, store: DataS
     ].filter(Boolean) as ElementContent[]
   }]);
 
-  return htmlBody.replace(link.text, embed);
+  return embed;
 }
