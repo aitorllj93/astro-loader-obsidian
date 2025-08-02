@@ -4,12 +4,11 @@ import { isElement, isTag } from "../../utils/hast";
 
 import type { RewriteFn } from './types';
 
-import a from "./a";
 import img from "./img";
 import pre from "./pre";
 
 const rewrites: Record<string, RewriteFn<Element>> = {
-  a,
+  // a,
   img,
   pre,
 };

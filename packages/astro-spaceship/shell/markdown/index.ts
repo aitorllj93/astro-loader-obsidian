@@ -4,8 +4,7 @@ import remarkEmbedder from '@remark-embedder/core';
 import remarkEmbedderOembed from '@remark-embedder/transformer-oembed';
 import rehypeRewrite from "rehype-rewrite";
 import remarkCodeExtra from "remark-code-extra";
-import rehypeCallouts from 'rehype-callouts'
-import remarkWikiLink from "remark-wiki-link";
+import rehypeCallouts from 'rehype-callouts';
 
 
 import rehypeRewriteConfig from "./rehype";
@@ -19,10 +18,6 @@ export default (
   websiteConfig: SpaceshipConfig
 ) => ({
   remarkPlugins: [
-    [remarkWikiLink, { 
-      aliasDivider: "|",
-      hrefTemplate: (permalink: string) => websiteConfig.base ? `/${websiteConfig.base}${permalink}` : `/${permalink}`,
-    }],
     // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     [(remarkEmbedder as any).default, {
       transformers: [
