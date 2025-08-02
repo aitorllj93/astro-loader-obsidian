@@ -36,6 +36,10 @@
   --color-text: rgb(0, 0, 0);
   --color-text-dark: rgb(255, 255, 255);
 
+  --color-text-normal: var(--color-gray-950);
+  --color-text-muted: var(--color-gray-900);
+  --color-text-faint: var(--color-gray-700);
+
   --color-success-foreground: var(--color-green-500);
   --color-success-background: var(--color-green-200);
   --color-success-border: var(--color-green-400);
