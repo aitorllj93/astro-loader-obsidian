@@ -1,0 +1,9 @@
+
+
+@utility article-preview {
+  @apply z-20;
+
+  > article {
+    @apply flex max-h-60 shadow-xl rounded-lg;
+  }
+}

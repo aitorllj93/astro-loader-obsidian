@@ -4,6 +4,7 @@
 @import './colors';
 
 @import './components/article';
+@import './components/article-preview';
 @import './components/body';
 @import './components/footer';
 @import './components/header';
