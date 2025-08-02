@@ -45,7 +45,7 @@
 		"@remark-embedder/core": "^3.0.3",
 		"@remark-embedder/transformer-oembed": "^5.0.1",
 		"@tailwindcss/vite": "^4.1.11",
-		"astro-loader-obsidian": "^0.4.4",
+		"astro-loader-obsidian": "^0.5.0",
 		"astro-pagefind": "^1.8.3",
 		"d3": "^7.9.0",
 		"fast-glob": "^3.3.2",
