@@ -259,7 +259,7 @@ export const ObsidianMdLoaderFn =
         }
         const { rendered, entryData } = renderedData;
 
-        const obsidian = await renderObsidian(rendered.html, entryData.wikilinks, entryData.wikitags, store, logger);
+        const obsidian = await renderObsidian(rendered as StoreDocument['rendered'], entryData.wikilinks, entryData.wikitags, store, logger);
     
         const links = (entryData.data.links ?? [])?.concat(obsidian.links);
 

@@ -2,12 +2,21 @@
 @plugin "@tailwindcss/typography";
 @plugin 'tailwind-scrollbar';
 
+@utility prose {
+  blockquote p:first-of-type::before {
+    content: none;
+  }
+  blockquote p:first-of-type::after {
+    content: none;
+  }
+}
+
 @utility article-background {
   @apply bg-article-background dark:bg-article-background-dark;
 }
 
 @utility article-blockquote {
-  @apply prose-blockquote:text-blockquote-foreground dark:prose-blockquote:text-blockquote-foreground-dark;
+  @apply prose-blockquote:font-normal prose-blockquote:not-italic prose-blockquote:ps-6 prose-blockquote:border-l-2 prose-blockquote:border-primary prose-blockquote:text-blockquote-foreground dark:prose-blockquote:text-blockquote-foreground-dark;
 }
 
 @utility article-code {
@@ -55,15 +64,29 @@
 }
 
 @utility article {
-  @apply grow-1 max-w-full article-background article-blockquote article-code article-heading article-image article-link article-list article-paragraph article-prose article-separator article-scroll article-strong article-table;
+  @apply text-base p-8 grow-1 max-w-full article-background article-blockquote article-code article-heading article-image article-link article-list article-paragraph article-prose article-separator article-scroll article-strong article-table;
+
+  ::selection {
+    @apply bg-primary/20 dark:bg-primary/25;
+  }
 }
 
+
+@utility article-content {
+  @apply max-w-[700px] mx-auto;
+}
+
+@utility article-title {
+  @apply text-h1 font-bold;
+}
+
+
 @utility article-subtitle {
-  @apply text-article-subtitle-foreground dark:text-article-subtitle-foreground-dark;
+  @apply text-h2 text-article-subtitle-foreground dark:text-article-subtitle-foreground-dark;
 }
 
 @utility article-description {
-  @apply !font-heading;
+  @apply text-base !font-heading !m-0;
 }
 
 @utility article-author {
@@ -75,7 +98,7 @@
 }
 
 @utility article-tag {
-  @apply border border-badge-border dark:border-badge-border-dark bg-badge-background dark:bg-badge-background-dark font-menu text-base text-badge-foreground dark:text-badge-foreground-dark;
+  @apply no-underline text-sm rounded-4xl py-1 px-2.5 border border-badge-border dark:border-badge-border-dark bg-badge-background dark:bg-badge-background-dark font-menu text-badge-foreground dark:text-badge-foreground-dark;
 }
 
 @utility article-cover {

@@ -2,6 +2,8 @@
 @import "tailwindcss-animated";
 
 @import './colors';
+@import './fonts';
+@import './sizings';
 
 @import './components/article';
 @import './components/article-preview';
@@ -27,3 +29,7 @@
 }
 
 @custom-variant marker (&::marker, & *::marker, &::-webkit-details-marker, & *::-webkit-details-marker);
+
+body {
+  font-family: var(--font-sans);
+}

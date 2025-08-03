@@ -1,6 +1,14 @@
 
+@utility navigation-tree {
+  @apply p-2;
+}
+
+@utility navigation-tree-list {
+  @apply flex flex-col gap-0.5 h-[calc(100vh_-_120px)] scrollbar-thin overflow-auto;
+}
+
 @utility tree-leaf {
-  @apply w-full rounded-lg font-menu text-menu-foreground dark:text-menu-foreground-dark;
+  @apply text-ui-sm w-full rounded-lg font-menu text-menu-foreground dark:text-menu-foreground-dark;
 }
 
 @utility tree-leaf-folder {

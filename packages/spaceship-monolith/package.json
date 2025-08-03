@@ -7,7 +7,7 @@
 		"css",
 		"ui"
 	],
-	"version": "0.6.0",
+	"version": "0.6.1",
 	"author": "Aitor Llamas Jiménez <aitorllj93@gmail.com>",
 	"homepage": "https://github.com/aitorllj93/astro-loader-obsidian",
 	"repository": {
@@ -22,7 +22,9 @@
 		"./base": "./common/base.css",
 		"./dark": "./dark.css",
 		"./light": "./light.css",
-		"./theme": "./theme.css"
+		"./theme": "./theme.css",
+		"./galaxy": "./galaxy/theme.css",
+		"./themes/*": "./*"
 	},
 	"devDependencies": {
 		"@types/node": "18.16.9",

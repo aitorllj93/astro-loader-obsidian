@@ -36,6 +36,8 @@ iframe {
 }
 
 @utility file-embed {
+  @apply border-l-2 border-primary ps-6;
+
   > a {
     @apply no-underline opacity-100;
   }
@@ -43,4 +45,8 @@ iframe {
 
 @utility file-embed-link {
   @apply float-right;
+}
+
+@utility file-embed-title {
+  @apply font-semibold;
 }

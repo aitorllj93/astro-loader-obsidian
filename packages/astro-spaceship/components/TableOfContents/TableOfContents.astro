@@ -25,7 +25,7 @@ const { t } = useI18n(Astro);
   shouldRender && (
     <nav class="table-of-contents">
       <h2 class="table-of-contents-title">{t("nav.tableOfContents")}</h2>
-      <ul class="flex flex-col gap-0.5 h-[calc(100vh_-_250px)] overflow-auto">
+      <ul class="table-of-contents-list">
         {headings.map(({ depth, slug, text }) => (
           <li class="table-of-contents-link">
             <a

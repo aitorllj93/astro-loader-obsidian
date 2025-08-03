@@ -1,0 +1,98 @@
+@import '../common/base';
+
+@theme {
+
+  --color-background: #F4F5FB;
+  --color-background-dark: #393A47;
+
+  --color-sidebar-background: #F4F5FB;
+  --color-sidebar-background-dark: #393A47;
+  --color-sidebar-content-background: #F4F5FB;
+  --color-sidebar-content-background-dark: #393A47;
+  
+
+  --color-header-background: transparent;
+  --color-header-background-dark: transparent;
+
+  --color-tabset-background: transparent;
+  --color-tabset-background-dark: transparent;
+
+  --color-tab-background: transparent;
+  --color-tab-background-dark: transparent;
+  --color-tab-active-background: var(--color-gray-50);
+  --color-tab-active-background-dark: #494B61;
+
+  --color-menu-active-background: rgba(158, 159, 169, 0.15);
+  --color-menu-active-background-dark: rgba(158, 159, 169, 0.15);
+  --color-menu-foreground-dark: #AAAEC5;
+
+  --color-article-background-dark: #2D2E3A;
+
+  --shadow-card: 0px 0px 6px 0px rgba(195,197,213,0.4), 0px 0px 2px rgba(195,197,213,0.2), 0 0 0 1px hsla(232, calc(0.4* 80%), calc(64%), 0.2);
+  --shadow-card-dark: rgba(142, 148, 188, 0.2) 0px 0px 0px 1px;
+
+  --shadow-btn: var(--shadow-card);
+  --shadow-btn-dark: var(--shadow-card-dark);
+
+  --shadow-article: var(--shadow-card);
+  --shadow-article-dark: var(--shadow-card-dark);
+}
+
+@utility sidebar-content {
+  @apply border-0;
+}
+
+@utility pagefind-ui__button {
+  @apply border-0! shadow-btn!;
+}
+
+@utility header {
+  @apply px-4;
+}
+
+@utility header-link {
+  @apply border-0;
+}
+
+@utility navigation-tree {
+  @apply px-4;
+}
+
+@utility pagefind-ui-sidebar-search {
+  @apply px-4;
+}
+
+@utility tabset {
+  @apply px-4;
+}
+
+@utility tabset-content {
+  @apply border-0;
+}
+
+
+@utility tabset-tab {
+  @apply mt-4 rounded-md hover:shadow-btn dark:hover:shadow-btn-dark;
+}
+
+@utility tabset-tab-one {
+  @apply peer-checked/tab-one:shadow-btn dark:peer-checked/tab-one:shadow-btn-dark;
+}
+
+
+@utility tabset-tab-two {
+  @apply peer-checked/tab-two:shadow-btn dark:peer-checked/tab-two:shadow-btn-dark;
+}
+
+
+@utility tabset-tab-three {
+  @apply peer-checked/tab-three:shadow-btn dark:peer-checked/tab-three:shadow-btn-dark;
+}
+
+@utility article {
+  @apply lg:my-4 lg:mx-2 rounded-t-md shadow-article dark:shadow-article-dark;
+}
+
+@utility footer {
+  @apply hidden;
+}

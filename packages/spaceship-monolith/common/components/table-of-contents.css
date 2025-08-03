@@ -4,9 +4,13 @@
 }
 
 @utility table-of-contents-title {
-  @apply text-xl mb-2;
+  @apply text-ui-sm mb-2 font-bold;
 }
 
 @utility table-of-contents-link {
-  @apply w-full rounded-lg py-1 px-2 hover:bg-menu-active-background dark:hover:bg-menu-active-background-dark;
+  @apply text-ui-sm w-full rounded-lg py-1 px-2 hover:bg-menu-active-background dark:hover:bg-menu-active-background-dark;
+}
+
+@utility table-of-contents-list {
+  @apply flex flex-col gap-0.5;
 }

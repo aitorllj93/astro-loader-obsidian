@@ -1,0 +1,22 @@
+
+
+@theme {
+  --text-base: 16px;
+  --text-h1: 1.802em;
+  --text-h2: 1.802em;
+  --text-h2: 1.602em;
+  --text-h3: 1.424em;
+  --text-h4: 1.266em;
+  --text-h5: 1.125em;
+  --text-h6: 1em;
+
+  --text-xxs: 0.8em;
+  --text-xs: 0.875em;
+  --text-sm: 0.933em;
+  --text-ui-xs: 12px;
+  --text-ui-sm: 13px;
+  --text-ui-md: 15px;
+  --text-ui-lg: 20px;
+
+  --left-sidebar-content-height: calc(100vh - 50px);
+}

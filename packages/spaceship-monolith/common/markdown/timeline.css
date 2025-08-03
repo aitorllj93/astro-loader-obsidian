@@ -1,6 +1,6 @@
 
 @utility timeline {
-  @apply flex flex-col relative;
+  @apply flex flex-col relative ps-0!;
 }
 
 @utility timeline-item {

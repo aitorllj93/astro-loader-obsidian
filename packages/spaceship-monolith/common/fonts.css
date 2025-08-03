@@ -1,0 +1,12 @@
+
+
+@theme {
+  --font-sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica", "Arial", "Segoe UI", "Inter", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "Cascadia Mono", "Roboto Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Monaco, "Consolas", "Source Code Pro", monospace;
+
+  --font-title: var(--font-sans);
+  --font-heading: var(--font-sans);
+  --font-paragraph: var(--font-sans);
+  --font-menu: var(--font-sans);
+  --font-code: var(--font-mono);
+}

@@ -49,6 +49,14 @@ export type ObsidianContext = {
   options: ObsidianMdLoaderOptions;
 };
 
+
+type Heading = {
+  depth: number;
+  slug: string;
+  text: string;
+};
+
+
 export type StoreDocument<T = unknown> = {
   id: string;
   data: T;
@@ -58,11 +66,11 @@ export type StoreDocument<T = unknown> = {
   rendered: {
     html: string;
     metadata: {
-      headings: [];
-      localImagePaths: [];
-      remoteImagePaths: [];
+      headings: Heading[];
+      localImagePaths: Array<string>;
+      remoteImagePaths: Array<string>;
       frontmatter: unknown;
-      imagePaths: [];
+      imagePaths: Array<string>;
     }
   }
 }

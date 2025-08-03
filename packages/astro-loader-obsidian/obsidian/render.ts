@@ -52,13 +52,13 @@ const replaceOutsideDataCode = async (
 
 
 export const renderObsidian = async (
-  htmlBody: string,
+  rendered: StoreDocument['rendered'],
   wikilinks: Wikilink[],
   wikitags: Wikitag[],
   store: DataStore,
   logger: AstroIntegrationLogger
 ) => {
-  let content = htmlBody;
+  let content = rendered.html;
   const links: ObsidianLink[] = [];
   const images: ObsidianLink[] = [];
 
@@ -86,7 +86,7 @@ export const renderObsidian = async (
         links.push(wikilink.link);
       }
 
-      let rendered: string | null = null;
+      let replacement: string | null = null;
 
       if (hasTarget && wikilink.link.isEmbedded && wikilink.link.id) {
         const document = store.get(wikilink.link.id) as StoreDocument<ObsidianDocument> | undefined;
@@ -95,17 +95,23 @@ export const renderObsidian = async (
           logger.warn(`Embed document "${wikilink.link.id}" is unavailable`);
         }
 
-        rendered = document
+        replacement = document
           ? await renderEmbed(content, wikilink, document, logger)
           : `<span class="article-wikilink-embed">${wikilink.link.title}</span>`;
       } else {
-        rendered = hasTarget ?
+        replacement = hasTarget ?
           `<a class="article-wikilink" href=${wikilink.link.href}>${wikilink.link.title}</a>` :
           `<span class="article-wikilink">${wikilink.link.title}</span>`
       }
 
       if (rendered) {
-        await replaceOutsideDataCode(root, wikilink.text, rendered);
+        await replaceOutsideDataCode(root, wikilink.text, replacement);
+      }
+
+      const heading = rendered.metadata.headings.find(h => h.text === wikilink.text);
+
+      if (heading) {
+        heading.text = wikilink.link.title;
       }
     }
   }

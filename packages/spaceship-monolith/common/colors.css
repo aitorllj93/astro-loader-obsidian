@@ -29,6 +29,7 @@
   --color-purple-400: hsl(257, 88.88%, 70.95%);
   --color-purple-500: hsl(258, 88%, 66%);
 
+
   --color-pink-500: #E942B6;
 
   /** Accent Colors **/
@@ -65,20 +66,23 @@
   /** Components **/
   --color-background: var(--color-gray-200);
   --color-article-background: var(--color-gray-50);
-  --color-article-title-foreground: var(--color-primary);
-  --color-article-subtitle-foreground: var(--color-gray-50);
+  --color-article-title-foreground: var(--color-text-normal);
+  --color-article-subtitle-foreground: var(--color-obsidian-50);
   --color-sidebar-background: var(--color-gray-50);
-  --color-tab-background: var(--color-gray-400);
-  --color-tab-active-background: transparent;
+  --color-sidebar-content-background: var(--color-gray-200);
+  --color-tabset-background: var(--color-gray-50);
+  --color-tab-background: var(--color-gray-50);
+  --color-tab-active-background: var(--color-gray-200);
   --color-tab-active-border: var(--color-text);
   --color-menu-active-background: var(--color-gray-300);
   --color-menu-foreground: var(--color-text);
-  --color-badge-background: var(--color-gray-50);
-  --color-badge-foreground: var(--color-text);
-  --color-badge-border: var(--color-gray-300);
+  --color-badge-background: color-mix(in oklab, var(--color-purple-500) 10%, transparent);
+  --color-badge-foreground: var(--color-purple-500);
+  --color-badge-border: color-mix(in oklab, var(--color-purple-500) 15%, transparent);
   --color-button-background: var(--color-gray-400);
   --color-button-foreground: var(--color-text);
-  --color-footer-background: var(--color-gray-50);
+  --color-header-background: var(--color-gray-50);
+  --color-footer-background: var(--color-gray-200);
   --color-footer-foreground: var(--color-text);
   --color-footer-border: var(--color-gray-300);
   --color-search-border: var(--color-gray-300);
@@ -97,20 +101,23 @@
   /** Components: dark **/
   --color-background-dark: var(--color-obsidian-200);
   --color-article-background-dark: var(--color-obsidian-50);
-  --color-article-title-foreground-dark: var(--color-primary);
-  --color-article-subtitle-foreground-dark: var(--color-obsidian-50);
+  --color-article-title-foreground-dark: var(--color-text-dark);
+  --color-article-subtitle-foreground-dark: var(--color-gray-50);
   --color-sidebar-background-dark: var(--color-obsidian-50);
-  --color-tab-background-dark: var(--color-obsidian-400);
-  --color-tab-active-background-dark: transparent;
+  --color-sidebar-content-background-dark: var(--color-obsidian-200);
+  --color-tabset-background-dark: var(--color-obsidian-400);
+  --color-tab-background-dark: var(--color-obsidian-50);
+  --color-tab-active-background-dark: var(--color-obsidian-200);
   --color-tab-active-border-dark: var(--color-text-dark);
   --color-menu-active-background-dark: var(--color-obsidian-300);
   --color-menu-foreground-dark: var(--color-text-dark);
-  --color-badge-background-dark: var(--color-obsidian-50);
-  --color-badge-foreground-dark: var(--color-text-dark);
-  --color-badge-border-dark: var(--color-obsidian-300);
+  --color-badge-background-dark: color-mix(in oklab, var(--color-purple-500) 10%, transparent);
+  --color-badge-foreground-dark: hsl(233, 64%, 68%);
+  --color-badge-border-dark: color-mix(in oklab, var(--color-purple-500) 15%, transparent);
   --color-button-background-dark: var(--color-obsidian-400);
   --color-button-foreground-dark: var(--color-text-dark);
-  --color-footer-background-dark: var(--color-obsidian-50);
+  --color-header-background-dark: var(--color-obsidian-400);
+  --color-footer-background-dark: var(--color-obsidian-200);
   --color-footer-foreground-dark: var(--color-text-dark);
   --color-footer-border-dark: var(--color-obsidian-300);
   --color-search-border-dark: var(--color-obsidian-300);

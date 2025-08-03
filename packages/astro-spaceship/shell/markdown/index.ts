@@ -15,7 +15,11 @@ import type { SpaceshipConfig } from '../../types';
 type MarkdownConfig = NonNullable<AstroUserConfig['markdown']>;
 
 export default (
-  websiteConfig: SpaceshipConfig
+  websiteConfig: SpaceshipConfig,
+  {
+    remarkPlugins = [],
+    rehypePlugins = [],
+  }: MarkdownConfig = {}, 
 ) => ({
   remarkPlugins: [
     // biome-ignore lint/suspicious/noExplicitAny: <explanation>
@@ -29,6 +33,7 @@ export default (
       remarkCodeExtra,
       remarkCodeExtraConfig,
     ],
+    ...remarkPlugins,
   ],
   rehypePlugins: [
     rehypeCallouts,
@@ -36,6 +41,7 @@ export default (
       rehypeRewrite,
       rehypeRewriteConfig,
     ],
+    ...rehypePlugins,
   ],
   shikiConfig: {
     themes: {

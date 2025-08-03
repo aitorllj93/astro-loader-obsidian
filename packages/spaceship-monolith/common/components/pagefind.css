@@ -11,15 +11,15 @@
 }
 
 @utility pagefind-ui__search-input {
-  @apply outline-hidden! border! border-search-border! dark:border-search-border-dark! focus:border-primary! focus:border-2!;
+  @apply text-ui-sm! outline-hidden! border! border-search-border! dark:border-search-border-dark! focus:border-primary! focus:border-2!;
 }
 
 @utility pagefind-ui__search-clear {
-  @apply text-text! dark:text-text-dark!;
+  @apply text-ui-sm! text-text! dark:text-text-dark!;
 }
 
 @utility pagefind-ui__message {
-  @apply p-1!;
+  @apply p-0!;
 }
 
 @utility pagefind-ui__results {
@@ -40,7 +40,7 @@
 }
 
 @utility pagefind-ui__result-link {
-  @apply text-text! dark:text-text-dark! cursor-pointer! line-clamp-1! truncate!;
+  @apply text-ui-sm! text-text! dark:text-text-dark! cursor-pointer! line-clamp-1! truncate!;
 
 
   /** patch to make the link cover the entire result **/
@@ -50,7 +50,7 @@
 }
 
 @utility pagefind-ui__result-excerpt {
-  @apply text-xs! font-menu! text-[--var(--pagefind-ui-text)];
+  @apply text-ui-sm! font-menu! text-[--var(--pagefind-ui-text)];
 
   mark {
     @apply bg-primary! text-text-dark! rounded-sm! px-0.5!;
@@ -65,13 +65,15 @@
 }
 
 @utility pagefind-ui-sidebar-search {
+  @apply p-2;
+
   .pagefind-ui__search-input, .pagefind-ui__search-clear, .pagefind-ui__button, .pagefind-ui__drawer {
     @apply bg-sidebar-background/70! dark:bg-sidebar-background-dark/70! backdrop-blur-md!;
   }
 
   .pagefind-ui__drawer {
     @apply absolute! left-0! right-0! mt-0! z-[9999]! p-1!;
-    @apply h-[var(--left-sidebar-content-height)]! overflow-y-auto! scrollbar-thin!;
+    @apply h-[calc(var(--left-sidebar-content-height)_-_50px)]! overflow-y-auto! scrollbar-thin! overflow-x-hidden!;
   }
 
   .pagefind-ui__result-excerpt {

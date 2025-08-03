@@ -1,5 +1,14 @@
+
+@utility tabset-bg {
+  @apply block! z-0 absolute inset-0 h-[42px] bg-tabset-background dark:bg-tabset-background-dark;
+}
+
 @utility tabset-tab {
-	@apply bg-tab-background dark:bg-tab-background-dark text-text dark:text-text-dark border-tab-active-border dark:border-tab-active-border-dark hover:bg-tab-active-background dark:hover:bg-tab-active-background-dark cursor-pointer flex justify-center truncate;
+	@apply z-10 m-2 rounded-lg bg-tab-background dark:bg-tab-background-dark text-text dark:text-text-dark border-tab-active-border dark:border-tab-active-border-dark hover:bg-tab-active-background dark:hover:bg-tab-active-background-dark cursor-pointer flex justify-center truncate;
+
+  svg {
+    @apply m-1 w-4.5 h-4.5;
+  }
 }
 
 @utility tabset-bg {
@@ -19,5 +28,9 @@
 }
 
 @utility tabset-content {
-  @apply p-4 overflow-hidden w-full;
+  @apply p-2 overflow-hidden w-full border-t border-gray-400 dark:border-obsidian-400;
+
+  > * {
+    @apply flex flex-col gap-0.5 max-h-[calc(100dvh_-_100px)] md:max-h-[calc(100dvh_-_100px)] scrollbar-thin overflow-auto;
+  }
 }

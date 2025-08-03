@@ -14,7 +14,7 @@ import expressiveCodeLight from './expressive-code/light';
 
 export const create = (
   websiteConfig: SpaceshipConfig,
-  overrides?: AstroUserConfig
+  { markdown: markdownConfig, ...overrides }: AstroUserConfig = {}
 ): AstroUserConfig =>
 ({
   ...(websiteConfig.site ? { site: websiteConfig.site } : {}),
@@ -26,7 +26,7 @@ export const create = (
     defaultLocale: websiteConfig.defaultLocale,
     locales: [websiteConfig.defaultLocale],
   },
-  markdown: markdown(websiteConfig),
+  markdown: markdown(websiteConfig, markdownConfig),
   integrations: [
     pagefind(),
     sitemap(),
@@ -41,8 +41,3 @@ export const create = (
   },
   ...overrides,
 });
-
-create({
-  defaultLocale: 'en',
-  title: 'asassa'
-}, {})
