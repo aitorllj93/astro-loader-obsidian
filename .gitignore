@@ -16,3 +16,6 @@ pnpm-debug.log*
 
 # build output
 dist/
+
+.astro
+Icon
