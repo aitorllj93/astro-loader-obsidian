@@ -1,18 +1,17 @@
 
-
 @utility timeline {
   @apply flex flex-col relative;
 }
 
 @utility timeline-item {
-  @apply justify-items-center shrink-0 items-center grid relative;
+  @apply justify-items-center shrink-0 items-center grid relative m-0!;
 
   grid-template-rows:  .5rem auto minmax(0,1fr);
   grid-template-columns: minmax(0,1fr) auto minmax(0,1fr);
 }
 
 @utility timeline-item__card {
-  @apply bg-white dark:bg-obsidian-300 m-1 mb-10 p-4 rounded-lg shadow-md;
+  @apply bg-white dark:bg-obsidian-300 m-1 mb-10 p-4 rounded-lg shadow-md  px-6 py-1.75;
 }
 
 @utility timeline-item__card--start {
@@ -38,6 +37,8 @@
 }
 
 @utility timeline-item__line--start {
+  @apply border-0! my-0!;
+
   grid-row-start: 1;
   grid-column-start: 2;
   width: .25rem;
@@ -51,6 +52,8 @@
 }
 
 @utility timeline-item__line--end {
+  @apply border-0! my-0!;
+
   background-color: var(--color-purple-700);
   border: none;
   border-top-left-radius: 8px;
@@ -63,7 +66,7 @@
 }
 
 @utility timeline-card--date {
-  @apply font-paragraph italic;
+  @apply font-paragraph font-bold;
 }
 
 @utility timeline-card--title {

@@ -5,7 +5,7 @@ import { embed } from "./embed";
 import { spoiler } from "./spoiler";
 import { timeline } from "./timeline";
 
-const transformers = {
+export const transformers = {
   'spoiler-markdown': spoiler,
   'timeline-labeled': timeline,
   'embed': embed,

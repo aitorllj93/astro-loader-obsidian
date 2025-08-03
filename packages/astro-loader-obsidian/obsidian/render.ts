@@ -1,4 +1,6 @@
 import type { AstroIntegrationLogger } from "astro";
+import { parse, type HTMLElement, type TextNode, type Node } from 'node-html-parser';
+
 import type { Wikilink } from "./wikiLink";
 import type { DataStore } from "astro/loaders";
 import { renderEmbed } from "./obsidianEmbeds";
@@ -6,24 +8,68 @@ import type { ObsidianDocument, ObsidianLink } from "../schemas";
 import type { Wikitag } from "./wikiTag";
 import type { StoreDocument } from "../types";
 
+const replaceOutsideDataCode = async (
+  root: HTMLElement,
+  wikilinkText: string,
+  replacementHTML: string
+) => {
+  const textNodes: TextNode[] = [];
+
+  const walk = (node: Node) => {
+    if (node.nodeType === 3) {
+      // TextNode
+      if (!isInsideDataCode(node)) {
+        textNodes.push(node as TextNode);
+      }
+    } else {
+      const element = node as HTMLElement;
+      // Recorre hijos (no inspeccionamos atributos, porque queremos evitarlos)
+      element.childNodes.forEach(walk);
+    }
+  };
+
+  const isInsideDataCode = (node: Node): boolean => {
+    let current: HTMLElement | null = node.parentNode as HTMLElement;
+    while (current) {
+      const dataCode = current.getAttribute?.('data-code');
+      if (dataCode?.includes(wikilinkText)) {
+        return true;
+      }
+      current = current.parentNode as HTMLElement;
+    }
+    return false;
+  };
+
+  walk(root);
+
+  for (const textNode of textNodes) {
+    const replaced = textNode.rawText.replaceAll(wikilinkText, replacementHTML);
+    if (replaced !== textNode.rawText) {
+      textNode.rawText = replaced;
+    }
+  }
+};
+
 
 export const renderObsidian = async (
-  htmlBody: string, 
+  htmlBody: string,
   wikilinks: Wikilink[],
   wikitags: Wikitag[],
-  store: DataStore, 
+  store: DataStore,
   logger: AstroIntegrationLogger
 ) => {
   let content = htmlBody;
   const links: ObsidianLink[] = [];
   const images: ObsidianLink[] = [];
 
+  const root = parse(content);
+
   for (const wikilink of wikilinks) {
     const hasTarget = typeof wikilink.link.href === "string";
 
     if (wikilink.link.type === 'image') {
       if (hasTarget) {
-        images.push(wikilink.link); 
+        images.push(wikilink.link);
       }
 
       // TODO: enable this if possible
@@ -40,26 +86,26 @@ export const renderObsidian = async (
         links.push(wikilink.link);
       }
 
+      let rendered: string | null = null;
+
       if (hasTarget && wikilink.link.isEmbedded && wikilink.link.id) {
-        const document = store.get(wikilink.link.id) as StoreDocument<ObsidianDocument>|undefined;
+        const document = store.get(wikilink.link.id) as StoreDocument<ObsidianDocument> | undefined;
 
         if (!document) {
           logger.warn(`Embed document "${wikilink.link.id}" is unavailable`);
         }
 
-        content = content.replace(
-          wikilink.text,
-          document ?
-            await renderEmbed(content, wikilink, document, logger) :
-            `<span class="article-wikilink-embed">${wikilink.link.title}</span>`
-        );
+        rendered = document
+          ? await renderEmbed(content, wikilink, document, logger)
+          : `<span class="article-wikilink-embed">${wikilink.link.title}</span>`;
       } else {
-        content = content.replace(
-          wikilink.text,
-          hasTarget ? 
-            `<a class="article-wikilink" href=${wikilink.link.href}>${wikilink.link.title}</a>` :
-            `<span class="article-wikilink">${wikilink.link.title}</span>`
-        );
+        rendered = hasTarget ?
+          `<a class="article-wikilink" href=${wikilink.link.href}>${wikilink.link.title}</a>` :
+          `<span class="article-wikilink">${wikilink.link.title}</span>`
+      }
+
+      if (rendered) {
+        await replaceOutsideDataCode(root, wikilink.text, rendered);
       }
     }
   }
@@ -68,13 +114,12 @@ export const renderObsidian = async (
     links.push(tag.link);
     const hasTarget = typeof tag.link.href === "string";
 
-    content = content.replace(
-      tag.text,
-      hasTarget ? 
-        `<a class="article-tag" href=${tag.link.href}>${tag.text}</a>` :
-        `<span class="article-tag">${tag.text}</span>`
-    );
+    replaceOutsideDataCode(root, tag.text, hasTarget ?
+      `<a class="article-tag" href=${tag.link.href}>${tag.text}</a>` :
+      `<span class="article-tag">${tag.text}</span>`);
   }
+
+  content = root.toString();
 
   return {
     content,

@@ -44,7 +44,7 @@ export const timeline = (node: Text) => {
     const mdastDate = mdast2Tree(fromMarkdown(item.date, undefined), {
       className: ["timeline-card--date"],
     });
-    const mdastTitle = mdast2Tree(fromMarkdown(item.title, undefined), {
+    const mdastTitle = mdast2Tree(fromMarkdown(item.title.startsWith('#') ? item.title : `### ${item.title}`, undefined), {
       className: ["timeline-card--title"],
     });
     const mdastContent = mdast2Tree(fromMarkdown(item.content, undefined), {
@@ -113,7 +113,7 @@ export const timeline = (node: Text) => {
         type: "element",
         tagName: "ul",
         properties: {
-          className: ["not-prose timeline"],
+          className: ["timeline"],
         },
         children,
       },

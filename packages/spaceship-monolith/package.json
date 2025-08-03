@@ -7,7 +7,7 @@
 		"css",
 		"ui"
 	],
-	"version": "0.5.1",
+	"version": "0.6.0",
 	"author": "Aitor Llamas Jiménez <aitorllj93@gmail.com>",
 	"homepage": "https://github.com/aitorllj93/astro-loader-obsidian",
 	"repository": {
