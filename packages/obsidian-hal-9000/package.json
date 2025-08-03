@@ -1,6 +1,6 @@
 {
 	"name": "obsidian-hal-9000",
-	"version": "1.0.0",
+	"version": "0.0.1",
 	"description": "Spaceship Companion for Obsidian Vaults",
 	"main": "main.js",
 	"scripts": {
