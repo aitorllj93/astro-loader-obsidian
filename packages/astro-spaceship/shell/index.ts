@@ -12,6 +12,9 @@ import markdown from "./markdown";
 import expressiveCodeDark from './expressive-code/dark';
 import expressiveCodeLight from './expressive-code/light';
 
+/**
+ * @deprecated use astroSpaceship integration instead
+ */
 export const create = (
   websiteConfig: SpaceshipConfig,
   { markdown: markdownConfig, ...overrides }: AstroUserConfig = {}

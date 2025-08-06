@@ -12,7 +12,7 @@ import remarkCodeExtraConfig from "./remark/code";
 import type { AstroUserConfig } from 'astro';
 import type { SpaceshipConfig } from '../../types';
 
-type MarkdownConfig = NonNullable<AstroUserConfig['markdown']>;
+export type MarkdownConfig = NonNullable<AstroUserConfig['markdown']>;
 
 export default (
   websiteConfig: SpaceshipConfig,

@@ -6,6 +6,7 @@ export type SpaceshipConfig = {
   author?: string;
   base?: string;
   defaultLocale: string;
+  locales?: string[];
   description?: string;
   site?: string;
   title: string;
