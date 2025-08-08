@@ -2,11 +2,14 @@
 
 @utility callout {
   @apply border-none rounded-lg px-6 py-3 my-6;
+  border-color: var(--color-callout-border);
+  background-color: var(--color-callout-background);
 }
 
 
 @utility callout-title {
   @apply text-base flex items-center gap-2 font-semibold;
+  color: var(--color-callout-foreground);
 }
 
 @utility callout-title-icon {
@@ -29,31 +32,25 @@
 .callout[data-callout="tip"],
 .callout[data-callout="hint"],
 .callout[data-callout="important"] {
-  .callout-title {
-   color: var(--color-hint-foreground);
-  }
-  border-color: var(--color-hint-border);
-  background-color: var(--color-hint-background);
+   --color-callout-foreground: var(--color-hint-foreground);
+  --color-callout-border: var(--color-hint-border);
+  --color-callout-background: var(--color-hint-background);
 }
 
 .callout[data-callout="info"],
 .callout[data-callout="note"],
 .callout[data-callout="todo"] {
-  .callout-title {
-    color: var(--color-info-foreground);
-  }
-  border-color: var(--color-info-border);
-  background-color: var(--color-info-background);
+   --color-callout-foreground: var(--color-info-foreground);
+  --color-callout-border: var(--color-info-border);
+  --color-callout-background: var(--color-info-background);
 }
 
 .callout[data-callout="success"],
 .callout[data-callout="check"],
 .callout[data-callout="done"] {
-  .callout-title {
-    color: var(--color-success-foreground);
-  }
-  border-color: var(--color-success-border);
-  background-color: var(--color-success-background);
+   --color-callout-foreground: var(--color-success-foreground);
+  --color-callout-border: var(--color-success-border);
+  --color-callout-background: var(--color-success-background);
 }
 
 .callout[data-callout="question"],
@@ -62,11 +59,9 @@
 .callout[data-callout="warning"],
 .callout[data-callout="caution"],
 .callout[data-callout="attention"] {
-  .callout-title {
-    color: var(--color-warning-foreground);
-  }
-  border-color: var(--color-warning-border);
-  background-color: var(--color-warning-background);
+   --color-callout-foreground: var(--color-warning-foreground);
+  --color-callout-border: var(--color-warning-border);
+  --color-callout-background: var(--color-warning-background);
 }
 
 .callout[data-callout="failure"],
@@ -75,28 +70,22 @@
 .callout[data-callout="danger"],
 .callout[data-callout="error"],
 .callout[data-callout="bug"] {
-  .callout-title {
-    color: var(--color-danger-foreground);
-  }
-  border-color: var(--color-danger-border);
-  background-color: var(--color-danger-background);
+   --color-callout-foreground: var(--color-danger-foreground);
+  --color-callout-border: var(--color-danger-border);
+  --color-callout-background: var(--color-danger-background);
 }
 
 .callout[data-callout="example"] {
-  .callout-title {
-    color: var(--color-example-foreground);
-  }
-  border-color: var(--color-example-border);
-  background-color: var(--color-example-background);
+   --color-callout-foreground: var(--color-example-foreground);
+  --color-callout-border: var(--color-example-border);
+  --color-callout-background: var(--color-example-background);
 }
 
 .callout[data-callout="quote"],
 .callout[data-callout="cite"] {
-  .callout-title {
-    color: var(--color-quote-foreground);
-  }
-  border-color: var(--color-quote-border);
-  background-color: var(--color-quote-background);
+   --color-callout-foreground: var(--color-quote-foreground);
+  --color-callout-border: var(--color-quote-border);
+  --color-callout-background: var(--color-quote-background);
 }
 
 @source inline("callout");

@@ -10,7 +10,7 @@ const { tags } = Astro.props;
 ---
 {
   tags.length > 0 && (
-    <div data-pagefind-weight="0" class="flex flex-wrap flex-row lg:flex-row-reverse gap-4">
+    <div data-pagefind-weight="0" class="article-tags">
       {tags.map((t) => (
         <a class="article-tag" href={t.data.permalink}>
           {t.data.name}

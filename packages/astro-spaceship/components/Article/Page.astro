@@ -21,7 +21,9 @@ const footer = buildFooter(Astro, document);
     <slot name="head" />
   </Fragment>
   <LeftSidebar website={config} tree={tree} />
-  <Entry config={config} author={author} document={document} tags={tags} />
+  <slot name="entry">
+    <Entry config={config} author={author} document={document} tags={tags} />
+  </slot>
   <RightSidebar
     config={config}
     document={document} 

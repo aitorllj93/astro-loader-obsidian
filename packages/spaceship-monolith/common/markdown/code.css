@@ -3,6 +3,12 @@
   background: transparent !important;
 }
 
+@utility expressive-code {
+  pre > code {
+    @apply font-code!;
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   .astro-code,
   .astro-code span {
@@ -12,3 +18,5 @@
     text-decoration: var(--shiki-dark-text-decoration) !important;
   }
 }
+
+@source inline("expressive-code");

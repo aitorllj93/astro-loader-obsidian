@@ -36,7 +36,7 @@
 }
 
 @utility article-list {
-  @apply prose-li:marker:text-li-marker-foreground dark:prose-li:marker:text-li-marker-foreground-dark;
+  @apply prose-li:font-paragraph prose-li:marker:text-li-marker-foreground dark:prose-li:marker:text-li-marker-foreground-dark;
 }
 
 @utility article-paragraph {
@@ -89,12 +89,21 @@
   @apply text-base !font-heading !m-0;
 }
 
+
+@utility article-meta {
+  @apply flex flex-col lg:items-end gap-2 w-full;
+}
+
 @utility article-author {
   @apply font-heading;
 }
 
 @utility article-date {
   @apply font-heading;
+}
+
+@utility article-tags {
+  @apply flex flex-wrap flex-row lg:flex-row-reverse gap-4;
 }
 
 @utility article-tag {
