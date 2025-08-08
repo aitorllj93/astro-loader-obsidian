@@ -37,6 +37,7 @@ export const spoiler = (node: Text) => {
               {
                 type: 'element',
                 tagName: 'p',
+                properties: {},
                 children: [
                   {
                     type: 'text',

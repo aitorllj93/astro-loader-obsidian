@@ -4,7 +4,9 @@ import remarkEmbedder from '@remark-embedder/core';
 import remarkEmbedderOembed from '@remark-embedder/transformer-oembed';
 import rehypeRewrite from "rehype-rewrite";
 import remarkCodeExtra from "remark-code-extra";
+import remarkMath from "remark-math";
 import rehypeCallouts from 'rehype-callouts';
+import rehypeMathjax from 'rehype-mathjax';
 
 
 import rehypeRewriteConfig from "./rehype";
@@ -33,6 +35,7 @@ export default (
       remarkCodeExtra,
       remarkCodeExtraConfig,
     ],
+    remarkMath,
     ...remarkPlugins,
   ],
   rehypePlugins: [
@@ -41,6 +44,7 @@ export default (
       rehypeRewrite,
       rehypeRewriteConfig,
     ],
+    rehypeMathjax,
     ...rehypePlugins,
   ],
   shikiConfig: {

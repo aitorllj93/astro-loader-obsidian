@@ -1,0 +1,8 @@
+mjx-container {
+  display: inline-block;
+}
+
+mjx-container[display="true"] {
+  display: flex;
+  justify-items: center;
+}

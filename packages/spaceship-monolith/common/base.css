@@ -21,6 +21,7 @@
 @import './markdown/callouts';
 @import './markdown/code';
 @import './markdown/embeds';
+@import './markdown/math';
 @import './markdown/timeline';
 @import './markdown/spoiler';
 
