@@ -4,6 +4,19 @@
   @apply border-none rounded-lg px-6 py-3 my-6;
   border-color: var(--color-callout-border);
   background-color: var(--color-callout-background);
+
+  summary {
+    @apply cursor-pointer;
+    > .callout-fold-icon > svg {
+      transform: rotate(-90deg);
+    }
+  }
+
+  &[open] summary {
+    > .callout-fold-icon > svg {
+      transform: none;
+    }
+  }
 }
 
 

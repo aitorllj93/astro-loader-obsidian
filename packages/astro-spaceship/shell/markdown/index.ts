@@ -13,6 +13,7 @@ import rehypeMermaid from 'rehype-mermaid';
 import rehypeRewriteConfig from "./rehype";
 import remarkCodeExtraConfig from "./remark/code";
 import remarkComments from './remark/comments';
+
 import type { AstroUserConfig } from 'astro';
 import type { SpaceshipConfig } from '../../types';
 
@@ -42,7 +43,17 @@ export default (
     ...remarkPlugins,
   ],
   rehypePlugins: [
-    rehypeCallouts,
+    [
+      rehypeCallouts,
+      {
+        callouts: {
+          details: {
+            title: '',
+            indicator: '',
+          }
+        }
+      }
+    ],
     [
       rehypeRewrite,
       rehypeRewriteConfig,
