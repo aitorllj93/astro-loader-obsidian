@@ -11,6 +11,7 @@ import rehypeMathjax from 'rehype-mathjax';
 
 import rehypeRewriteConfig from "./rehype";
 import remarkCodeExtraConfig from "./remark/code";
+import remarkComments from './remark/comments';
 import type { AstroUserConfig } from 'astro';
 import type { SpaceshipConfig } from '../../types';
 
@@ -35,6 +36,7 @@ export default (
       remarkCodeExtra,
       remarkCodeExtraConfig,
     ],
+    remarkComments,
     remarkMath,
     ...remarkPlugins,
   ],
