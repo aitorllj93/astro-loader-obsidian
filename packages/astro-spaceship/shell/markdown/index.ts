@@ -7,6 +7,7 @@ import remarkCodeExtra from "remark-code-extra";
 import remarkMath from "remark-math";
 import rehypeCallouts from 'rehype-callouts';
 import rehypeMathjax from 'rehype-mathjax';
+import rehypeMermaid from 'rehype-mermaid';
 
 
 import rehypeRewriteConfig from "./rehype";
@@ -47,6 +48,7 @@ export default (
       rehypeRewriteConfig,
     ],
     rehypeMathjax,
+    rehypeMermaid,
     ...rehypePlugins,
   ],
   shikiConfig: {
