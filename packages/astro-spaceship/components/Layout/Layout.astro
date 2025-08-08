@@ -8,7 +8,7 @@ import SEO from '../SEO/SEO.astro';
 export type Props = {
   config: SpaceshipConfig;
   page: Page;
-  footer: FooterData | null;
+  footer?: FooterData | null | undefined;
 }
 
 const { config, footer, page } = Astro.props;
