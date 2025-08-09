@@ -2,12 +2,14 @@
 import { getImage, Image } from 'astro:assets';
 
 export type Props = {
+  class?: string;
+  style?: string;
   cover?: ImageMetadata | undefined;
   'cover-x'?: number | undefined;
   'cover-y'?: number | undefined;
 }
 
-const { cover, 'cover-x': coverX, 'cover-y': coverY } = Astro.props;
+const { class: className, style, cover, 'cover-x': coverX, 'cover-y': coverY } = Astro.props;
 
 const coverImage = cover ? (await getImage({
   src: cover,
@@ -18,15 +20,18 @@ const coverImage = cover ? (await getImage({
 ---
 {
   coverImage && (
-    <Image
-      src={coverImage.src}
-      height={coverImage.attributes.height}
-      width={coverImage.attributes.width}
-      alt=""
-      class:list={["article-cover", coverX || coverY ? `` : "object-top"]}
-      style={
-        coverX || coverY ? `object-position: ${coverX}% ${coverY}%;` : ""
-      }
-    />
+    <figure class:list={["article-cover", className]} style={style}>
+      <Image
+        src={coverImage.src}
+        height={coverImage.attributes.height}
+        width={coverImage.attributes.width}
+        alt=""
+        class:list={["article-cover-image", coverX || coverY ? `` : "object-top"]}
+        style={
+          coverX || coverY ? `object-position: ${coverX}% ${coverY}%;` : ""
+        }
+      />
+      <slot name="figcaption"></slot>
+    </figure>
   )
 }

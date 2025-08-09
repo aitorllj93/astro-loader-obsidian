@@ -42,6 +42,6 @@
 @utility column {
   @apply p-2 w-full border-t border-gray-400 dark:border-obsidian-400;
   .column-content {
-    @apply flex flex-col gap-4 max-h-[calc(var(--left-sidebar-content-height)_-_50px)] scrollbar-thin overflow-auto;
+    @apply flex flex-col gap-4 max-h-[var(--left-sidebar-content-height)] scrollbar-thin overflow-auto;
   }
 }
