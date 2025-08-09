@@ -64,9 +64,9 @@ const { config, slug, class: className = "flex w-full h-full" } = Astro.props;
       const width = this.clientWidth;
       const height = this.clientHeight || 200;
       const radiusForce = 300;
-      const highlightColor = window.getComputedStyle(this).getPropertyValue('--color-graph-highlight') ?? "hsl(258, 88%, 66%)";
-      const linkColor = window.getComputedStyle(this).getPropertyValue('--color-graph-link') ?? "#AAAAB3";
-      const labelColor = window.getComputedStyle(this).getPropertyValue('--color-graph-label') ??  "#fff";
+      const highlightColor = window.getComputedStyle(this).getPropertyValue('--color-graph-highlight').length > 0 ? window.getComputedStyle(this).getPropertyValue('--color-graph-highlight') : "hsl(258, 88%, 66%)";
+      const linkColor = window.getComputedStyle(this).getPropertyValue('--color-graph-link').length > 0 ? window.getComputedStyle(this).getPropertyValue('--color-graph-link') : "#AAAAB3";
+      const labelColor = window.getComputedStyle(this).getPropertyValue('--color-graph-label').length > 0 ? window.getComputedStyle(this).getPropertyValue('--color-graph-label') :  "#fff";
 
       const color = d3.scaleOrdinal(d3.schemeCategory10);
 
