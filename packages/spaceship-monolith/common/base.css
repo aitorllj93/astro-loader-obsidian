@@ -17,6 +17,7 @@
 @import './components/table-of-contents';
 @import './components/tabset';
 @import './components/pagefind';
+@import './components/graph';
 
 @import './markdown/callouts';
 @import './markdown/code';

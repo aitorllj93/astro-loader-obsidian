@@ -4,7 +4,7 @@
 }
 
 @utility navigation-tree-list {
-  @apply flex flex-col gap-0.5 h-[calc(100vh_-_120px)] scrollbar-thin overflow-auto;
+  @apply flex flex-col gap-0.5 h-[calc(var(--left-sidebar-content-height)_-_var(--left-sidebar-header-height))]! scrollbar-thin overflow-auto;
 }
 
 @utility tree-leaf {

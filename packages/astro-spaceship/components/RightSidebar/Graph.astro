@@ -1,0 +1,19 @@
+---
+import { useI18n } from "../../i18n";
+import type { Document, SpaceshipConfig } from "../../types";
+
+import GraphView from "../GraphView/GraphView.astro";
+
+export type Props = {
+  config: SpaceshipConfig;
+  document?: Document | undefined;
+};
+
+const { config, document } = Astro.props;
+
+const { t } = useI18n(Astro);
+---
+<div class="graph-view">
+  <h2 class="graph-title">{t("nav.graph")}</h2>
+  <GraphView config={config} class="graph" slug={document?.id}  />
+</div>

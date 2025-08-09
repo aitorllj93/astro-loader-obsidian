@@ -1,0 +1,27 @@
+---
+import type { Document, SpaceshipConfig } from "../../types";
+
+import TableOfContents from "../TableOfContents/TableOfContents.astro";
+
+import Links from "./Links.astro";
+import Graph from "./Graph.astro";
+
+export type Props = {
+  id?: string;
+  config: SpaceshipConfig;
+  document?: Document;
+  backlinks?: Document[];
+  showToC?: boolean;
+  showLinks?: boolean;
+  showRelations?: boolean;
+};
+
+const { config, id, document, backlinks, showToC = true, showLinks = true, showRelations = true } = Astro.props;
+---
+<div class="column">
+  <div class="column-content">
+    {showRelations && (<Graph config={config} document={document} /> )}
+    {showToC && (<TableOfContents document={document} />)}
+    {showLinks && (<Links document={document} backlinks={backlinks} />)}
+  </div>
+</div>

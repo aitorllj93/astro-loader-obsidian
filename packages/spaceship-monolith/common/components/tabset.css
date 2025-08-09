@@ -4,7 +4,7 @@
 }
 
 @utility tabset-tab {
-	@apply z-10 m-2 rounded-lg bg-tab-background dark:bg-tab-background-dark text-text dark:text-text-dark border-tab-active-border dark:border-tab-active-border-dark hover:bg-tab-active-background dark:hover:bg-tab-active-background-dark cursor-pointer flex justify-center truncate;
+	@apply z-10 m-2 rounded-lg bg-tab-background dark:bg-tab-background-dark text-tab-foreground dark:text-tab-foreground-dark border-tab-active-border dark:border-tab-active-border-dark hover:bg-tab-active-background dark:hover:bg-tab-active-background-dark cursor-pointer flex justify-center truncate;
 
   svg {
     @apply m-1 w-4.5 h-4.5;
@@ -15,22 +15,33 @@
   @apply hidden;
 }
 
+@utility tabset-tab-active {
+  @apply bg-tab-active-background text-tab-active-foreground dark:bg-tab-active-background-dark dark:text-tab-active-foreground-dark;
+}
+
 @utility tabset-tab-one {
-	@apply peer-checked/tab-one:bg-tab-active-background dark:peer-checked/tab-one:bg-tab-active-background-dark;
+	@apply peer-checked/tab-one:tabset-tab-active;
 }
 
 @utility tabset-tab-two {
-	@apply peer-checked/tab-two:bg-tab-active-background dark:peer-checked/tab-two:bg-tab-active-background-dark;
+	@apply peer-checked/tab-two:tabset-tab-active;
 }
 
 @utility tabset-tab-three {
-	@apply peer-checked/tab-three:bg-tab-active-background dark:peer-checked/tab-three:bg-tab-active-background-dark;
+	@apply peer-checked/tab-three:tabset-tab-active;
 }
 
 @utility tabset-content {
   @apply p-2 overflow-hidden w-full border-t border-gray-400 dark:border-obsidian-400;
 
-  > * {
-    @apply flex flex-col gap-0.5 max-h-[calc(100dvh_-_100px)] md:max-h-[calc(100dvh_-_100px)] scrollbar-thin overflow-auto;
+  > * { 
+    @apply flex flex-col gap-0.5 max-h-[var(--left-sidebar-content-height)] scrollbar-thin overflow-auto;
+  }
+}
+
+@utility column {
+  @apply p-2 w-full border-t border-gray-400 dark:border-obsidian-400;
+  .column-content {
+    @apply flex flex-col gap-4 max-h-[calc(var(--left-sidebar-content-height)_-_50px)] scrollbar-thin overflow-auto;
   }
 }

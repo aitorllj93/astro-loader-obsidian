@@ -87,7 +87,13 @@ export default ((node: Element, index: number, parent: Parent) => {
     return null;
   }
 
-  for (const fragment of ((node.properties.alt as string) ?? '').split('|')) {
+  const altFragments = ((node.properties.alt as string) ?? '').split('|');
+
+  node.tagName = 'figure';
+  node.properties.alt = title;
+  node.properties.class = 'figure-image';
+
+  for (const fragment of altFragments) {
     const sizing = imageSizing(fragment);
 
     if (sizing) {
@@ -100,7 +106,7 @@ export default ((node: Element, index: number, parent: Parent) => {
     const layoutClassName = imageDisplayClassNames[fragment];
 
     if (layoutClassName) {
-      node.properties.className = layoutClassName;
+      node.properties.class = [node.properties.class, layoutClassName].join(' ');
       continue;
     }
 
@@ -111,8 +117,6 @@ export default ((node: Element, index: number, parent: Parent) => {
   image.properties.alt = title;
   image.properties.class = 'mx-0';
 
-  node.tagName = 'figure';
-  node.properties.alt = title;
   node.children = [
     image,
     caption && caption !== title ? {

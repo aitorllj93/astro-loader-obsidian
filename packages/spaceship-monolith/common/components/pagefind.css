@@ -1,13 +1,13 @@
 
 @utility pagefind-ui {
-  @apply w-full! text-text! dark:text-text-dark!;
+  @apply w-full! text-search-text! dark:text-search-text-dark!;
 
   --pagefind-ui-scale: 0.75;
   --pagefind-ui-font: var(--font-menu);
 }
 
 @utility pagefind-ui__form {
-  @apply before:bg-text! dark:before:bg-[rgb(132,132,132)]!;
+  @apply before:bg-search-text! dark:before:bg-search-text-dark!;
 }
 
 @utility pagefind-ui__search-input {
@@ -15,7 +15,7 @@
 }
 
 @utility pagefind-ui__search-clear {
-  @apply text-ui-sm! text-text! dark:text-text-dark!;
+  @apply text-ui-sm! text-search-text! dark:text-search-text-dark!;
 }
 
 @utility pagefind-ui__message {
@@ -40,7 +40,7 @@
 }
 
 @utility pagefind-ui__result-link {
-  @apply text-ui-sm! text-text! dark:text-text-dark! cursor-pointer! line-clamp-1! truncate!;
+  @apply text-ui-sm! text-search-text! dark:text-search-text-dark! cursor-pointer! line-clamp-1! truncate!;
 
 
   /** patch to make the link cover the entire result **/
@@ -53,7 +53,7 @@
   @apply text-ui-sm! font-menu! text-[--var(--pagefind-ui-text)];
 
   mark {
-    @apply bg-primary! text-text-dark! rounded-sm! px-0.5!;
+    @apply bg-primary! text-search-text-mark! dark:text-search-text-mark-dark! rounded-sm! px-0.5!;
   }
 
   /** patch to make the link cover the entire result **/
@@ -61,7 +61,7 @@
 }
 
 @utility pagefind-ui__button {
-  @apply bg-primary! border-text! dark:border-text-dark! text-text! dark:text-text-dark!;
+  @apply bg-primary! border-text! dark:border-text-dark! text-search-text! dark:text-search-text-dark!;
 }
 
 @utility pagefind-ui-sidebar-search {
@@ -73,7 +73,10 @@
 
   .pagefind-ui__drawer {
     @apply absolute! left-0! right-0! mt-0! z-[9999]! p-1!;
-    @apply h-[calc(var(--left-sidebar-content-height)_-_50px)]! overflow-y-auto! scrollbar-thin! overflow-x-hidden!;
+
+    .pagefind-ui__results-area {
+      @apply mt-0! h-[calc(var(--left-sidebar-content-height)_-_var(--left-sidebar-header-height))]! overflow-y-auto! scrollbar-thin! overflow-x-hidden!;
+    }
   }
 
   .pagefind-ui__result-excerpt {
@@ -82,7 +85,7 @@
 }
 
 @utility pagefind-ui-main-search {
-  @apply w-[90%]! text-text-dark!;
+  @apply w-[90%]! text-search-text-dark!;
 
   .pagefind-ui__search-clear {
     @apply bg-transparent!;
@@ -105,11 +108,11 @@
   }
 
   .pagefind-ui__result-link, .pagefind-ui__message {
-    @apply text-text-dark!;
+    @apply text-search-text-dark!;
   }
 
   .pagefind-ui__result {
-    @apply text-text-dark! hover:bg-menu-active-background/30! dark:hover:bg-menu-active-background-dark/50!;
+    @apply text-search-text-dark! hover:bg-menu-active-background/30! dark:hover:bg-menu-active-background-dark/50!;
   }
 }
 

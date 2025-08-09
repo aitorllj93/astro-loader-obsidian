@@ -117,7 +117,7 @@ const template = Object.entries(gridTemplates).find(([_, v]) => v === true)?.[0]
     <div
       class="hidden peer-checked/tab-three:flex tabset-content [grid-area:tabcontent]"
     >
-        <GraphView config={config} class="flex w-[95%] h-full aspect-square mx-auto rounded-lg bg-article-background dark:bg-article-background-dark" slug={document?.id}  />
+        <GraphView config={config} class="graph" slug={document?.id}  />
     </div>
   )}
 

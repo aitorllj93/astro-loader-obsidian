@@ -70,23 +70,35 @@
   @apply border-0;
 }
 
+@utility column {
+  @apply border-0;
+}
+
+@utility column-content {
+  @apply border-0;
+}
+
 
 @utility tabset-tab {
   @apply mt-4 rounded-md hover:shadow-btn dark:hover:shadow-btn-dark;
 }
 
+@utility tabset-tab-active {
+  @apply shadow-btn dark:shadow-btn-dark;
+}
+
 @utility tabset-tab-one {
-  @apply peer-checked/tab-one:shadow-btn dark:peer-checked/tab-one:shadow-btn-dark;
+  @apply peer-checked/tab-one:tabset-tab-active;
 }
 
 
 @utility tabset-tab-two {
-  @apply peer-checked/tab-two:shadow-btn dark:peer-checked/tab-two:shadow-btn-dark;
+  @apply peer-checked/tab-two:tabset-tab-active;
 }
 
 
 @utility tabset-tab-three {
-  @apply peer-checked/tab-three:shadow-btn dark:peer-checked/tab-three:shadow-btn-dark;
+  @apply peer-checked/tab-three:tabset-tab-active;
 }
 
 @utility article {

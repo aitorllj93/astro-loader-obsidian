@@ -19,4 +19,5 @@
   --text-ui-lg: 20px;
 
   --left-sidebar-content-height: calc(100vh - 50px);
+  --left-sidebar-header-height: 50px;
 }

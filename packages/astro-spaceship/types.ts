@@ -15,6 +15,9 @@ export type SpaceshipConfig = {
   displayOptions?: {
     showAuthor?: boolean;
     showPublishDate?: boolean;
+    rightSidebar?: {
+      mode?: 'tabset' | 'column';
+    }
   }
 };
 

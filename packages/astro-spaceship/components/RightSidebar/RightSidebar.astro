@@ -3,6 +3,7 @@ import type { Document, SpaceshipConfig } from "../../types";
 
 import Sidebar from "../Sidebar/Sidebar.astro";
 
+import Column from "./Column.astro";
 import Tabset from "./Tabset.astro";
 
 export type Props = {
@@ -13,12 +14,16 @@ export type Props = {
   showLinks?: boolean;
   showRelations?: boolean;
 };
+
+const mode: 'tabset' | 'column' = Astro.props.config.displayOptions?.rightSidebar?.mode ?? 'tabset';
 ---
 
 <Sidebar class="hidden lg:flex" open position="right" id="right-sidebar-desktop">
-  <Tabset id="right-sidebar-desktop-tabset" {...Astro.props} />
+  { mode === 'column' && <Column id="right-sidebar-desktop-column" {...Astro.props} />}
+  { mode === 'tabset' && <Tabset id="right-sidebar-desktop-tabset" {...Astro.props} />}
 </Sidebar>
 
 <Sidebar class="flex lg:hidden" position="right" id="right-sidebar-touch">
-  <Tabset  id="right-sidebar-touch-tabset" {...Astro.props} />
+  { mode === 'column' && <Column id="right-sidebar-touch-column" {...Astro.props} />}
+  { mode === 'tabset' && <Tabset  id="right-sidebar-touch-tabset" {...Astro.props} />}
 </Sidebar>
