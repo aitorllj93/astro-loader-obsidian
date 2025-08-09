@@ -1,0 +1,24 @@
+
+@utility callout {
+  @apply text-quote-foreground! bg-quote-background! border-quote-border m-4 px-8;
+}
+
+@utility callout-title {
+  @apply justify-end text-5xl font-menu text-black/30 hover:text-gold;
+}
+
+@utility callout-title-icon {
+  @apply hidden;
+}
+
+@utility callout-content {
+  h2 {
+    @apply text-quote-foreground! font-menu text-3xl leading-7.5 -mt-8 mb-0;
+  }
+  p {
+    @apply text-xl font-menu text-balance text-quote-foreground italic m-0;
+  }
+  p:first-of-type {
+    @apply flex-col justify-end text-end text-black/30 hover:text-gold pl-10;
+  }
+}

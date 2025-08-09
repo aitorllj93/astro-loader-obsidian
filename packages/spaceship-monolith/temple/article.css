@@ -1,0 +1,13 @@
+
+
+@utility article-title {
+  @apply text-primary text-5xl!;
+}
+
+@utility article-subtitle {
+  @apply font-menu! text-3xl! text-gray-700!;
+}
+
+@utility article-description {
+  @apply font-menu! text-3xl! text-gray-700!;
+}

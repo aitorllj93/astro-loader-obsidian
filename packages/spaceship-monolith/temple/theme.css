@@ -1,0 +1,123 @@
+
+@import '../galaxy/theme';
+
+@import './article';
+@import './callouts';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* caesar-dressing-latin-400-normal */
+@font-face {
+  font-family: 'Caesar Dressing';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(https://cdn.jsdelivr.net/fontsource/fonts/caesar-dressing@latest/latin-400-normal.woff2) format('woff2'), url(https://cdn.jsdelivr.net/fontsource/fonts/caesar-dressing@latest/latin-400-normal.woff) format('woff');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+/* cinzel-latin-wght-normal */
+@font-face {
+  font-family: 'Cinzel Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400 900;
+  src: url(https://cdn.jsdelivr.net/fontsource/fonts/cinzel:vf@latest/latin-wght-normal.woff2) format('woff2-variations');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+/* cormorant-garamond-latin-400-normal */
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(https://cdn.jsdelivr.net/fontsource/fonts/cormorant-garamond@latest/latin-400-normal.woff2) format('woff2'), url(https://cdn.jsdelivr.net/fontsource/fonts/cormorant-garamond@latest/latin-400-normal.woff) format('woff');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+/* libre-baskerville-latin-400-normal */
+@font-face {
+  font-family: 'Libre Baskerville';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(https://cdn.jsdelivr.net/fontsource/fonts/libre-baskerville@latest/latin-400-normal.woff2) format('woff2'), url(https://cdn.jsdelivr.net/fontsource/fonts/libre-baskerville@latest/latin-400-normal.woff) format('woff');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+/* lora-latin-wght-normal */
+@font-face {
+  font-family: 'Lora Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400 700;
+  src: url(https://cdn.jsdelivr.net/fontsource/fonts/lora:vf@latest/latin-wght-normal.woff2) format('woff2-variations');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+/* inter-latin-wght-normal */
+@font-face {
+  font-family: 'Inter Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url(https://cdn.jsdelivr.net/fontsource/fonts/inter:vf@latest/latin-wght-normal.woff2) format('woff2-variations');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+/* space-grotesk-latin-wght-normal */
+@font-face {
+  font-family: 'Space Grotesk Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 300 700;
+  src: url(https://cdn.jsdelivr.net/fontsource/fonts/space-grotesk:vf@latest/latin-wght-normal.woff2) format('woff2-variations');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+@theme {
+  --color-brown-50: #fdf8f6;
+  --color-brown-100: #f2e8e5;
+  --color-brown-200: #eaddd7;
+  --color-brown-300: #e0cec7;
+  --color-brown-400: #d2bab0;
+  --color-brown-500: #bfa094;
+  --color-brown-600: #a18072;
+  --color-brown-700: #977669;
+  --color-brown-800: #846358;
+  --color-brown-900: #43302b;
+
+  --color-ivory: #f8f4ec;       /** Fondo principal tipo pergamino */
+  --color-obsidian: #2d1f0e;      /** Texto principal / fondo oscuro   */
+  --color-sand: #e5d7c0;          /** Fondo de cabecera, suave */
+  --color-gold: #cbb89d;          /** Decorativo (bordes, detalles) */
+  --color-clay: #5c4b3a;          /** Subtítulos / tono ritual */
+  --color-ash: #7a6d5d;           /** Texto pequeño / neutro */
+  --color-terracotta: #b02e0c;    /** Precios / elementos de acción */
+  --color-linen: #fffdf8;         /** Tarjetas / productos */
+  --color-stone: #d8cdb9;         /** Bordes suaves */
+  --color-mosaic: #1e150a;        /** Fondo de footer oscuro y texturizado */
+
+  /** dark theme colors **/
+  --color-night-wood: #211a15;    /** Fondo principal tipo pergamino */
+  --color-bone: #f5f2ec;          /** Texto principal / fondo oscuro   */
+  --color-temple-stone: #2a2018;   /** Fondo de cabecera, suave */
+  --color-dirty-gold: #836b50;    /** Decorativo (bordes, detalles) */
+  --color-sandstone: #cfb99d;     /** Subtítulos / tono ritual */
+  --color-fog: #e9e4dc;            /** Texto pequeño / neutro */
+  --color-ember: #d97d4d;         /** Precios / elementos de acción */
+  --color-smoke-linen: #2b2118;   /** Tarjetas / productos */
+  --color-burnt-clay: #544a3d;    /** Bordes suaves */
+  --color-scorch: #0f0b07;          /** Fondo de footer oscuro y texturizado */
+
+  --color-primary: var(--color-terracotta);
+
+  --font-title: "Cinzel Variable", "sans-serif";
+  --font-heading: "Cormorant Garamond",  "sans-serif";
+  --font-paragraph: "Lora";
+  --font-menu: "Libre Baskerville",  "sans-serif";
+  --font-code: "Space Grotesk Variable", "ui-monospace";
+
+  --animate-bg-position: animate-bg-position 15s linear infinite;
+}
