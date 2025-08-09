@@ -16,6 +16,10 @@
 
 @utility article-cover {
   @apply max-h-[396px]! h-[180px] md:h-[396px]! my-18! sticker;
+
+  .article-cover-image {
+    @apply w-full h-full object-cover;
+  }
 }
 
 @utility article-title {
