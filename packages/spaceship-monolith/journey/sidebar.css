@@ -1,0 +1,34 @@
+
+
+@utility sidebar {
+	@apply flex h-[var(--left-sidebar-content-height)] top-3 lg:top-6 rounded-xl;
+}
+
+@utility sidebar-content {
+  @apply rounded-xl shadow-lg py-8 px-2;
+}
+
+@utility sidebar-arrow {
+	@apply bg-button-background dark:bg-button-background-dark rounded-full;
+}
+
+@utility header {
+  @apply h-11 px-2;
+}
+
+@utility font-menu {
+  font-size-adjust: 0.7;
+  line-height: 2;
+}
+
+@utility pagefind-ui-sidebar-search {
+  .pagefind-ui__drawer {
+    @apply py-2!;
+  }
+}
+
+@utility column {
+  .column-content {
+    @apply max-h-[calc(var(--left-sidebar-content-height)_-_50px)];
+  }
+}

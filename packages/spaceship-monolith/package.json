@@ -24,6 +24,7 @@
 		"./light": "./light.css",
 		"./theme": "./theme.css",
 		"./galaxy": "./galaxy/theme.css",
+		"./journey": "./journey/theme.css",
 		"./themes/*": "./*"
 	},
 	"devDependencies": {

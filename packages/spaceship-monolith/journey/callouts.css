@@ -1,0 +1,74 @@
+
+
+@utility callout {
+  @apply relative rounded-none! my-9! py-4.5!;
+  border: 1px solid var(--color-callout-border);
+
+  box-shadow:
+    0 2px 4px rgba(0,0,0,0.25),      /* pegado: justo bajo el top */
+    0 16px 28px rgba(0,0,0,0.18);    /* flotando: difusa hacia abajo */
+
+  transform: rotate(-0.35deg);
+  transform-origin: top center;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    /* añadimos una tercera capa de background simulando cinta */
+    background-image:
+      linear-gradient(to bottom, rgba(0,0,0,0.18), transparent 12px),
+      radial-gradient(120% 60% at 50% -10%, rgba(0,0,0,0.08), transparent 60%),
+      linear-gradient(to bottom, rgba(255,255,255,0.55), rgba(255,255,255,0.35));
+    background-size:
+      100% 14px,
+      120% 70%,
+      60% 18px;                /* ancho de la “cinta” */
+    background-position:
+      top left,
+      top center,
+      50% 0;                   /* centrada arriba */
+    background-repeat: no-repeat;
+    filter: drop-shadow(0 2px 2px rgba(0,0,0,0.15));
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 44px;
+    height: 44px;
+    /* simulamos el reverso del papel con un gradiente más claro */
+    background: linear-gradient(225deg,
+      var(--color-callout-foreground) 0%,
+      var(--color-callout-background) 100%);
+    /* triángulo de pliegue */
+    clip-path: polygon(100% 100%, 0 100%, 100% 0);
+    /* sombra del pliegue sobre el papel */
+    box-shadow: -2px -2px 4px rgba(0,0,0,0.12);
+    /* que no tape el contenido */
+    pointer-events: none;
+  }
+}
+
+@utility callout-title {
+  @apply font-heading [font-size-adjust:0.6] leading-9;
+}
+
+@utility callout-content {
+  p {
+    @apply my-4.5!;
+  }
+}
+
+.callout[data-callout="details"] {
+  @apply transform-none border-none shadow-none;
+  &::before {
+    @apply hidden;
+  }
+  &::after {
+    @apply hidden;
+  }
+}

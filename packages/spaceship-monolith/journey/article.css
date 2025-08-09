@@ -1,0 +1,65 @@
+
+
+@utility article {
+  @apply my-0! py-9! px-4! lg:px-8! rounded-xl! shadow-lg mb-0 paper! dark:paper-dark! z-[1] prose-headings:[font-size-adjust:0.6] prose-headings:mt-18! prose-headings:my-9! prose-headings:leading-9! prose-li:[font-size-adjust:0.6] prose-li:leading-9! prose-p:[font-size-adjust:0.6] prose-p:leading-9! prose-ol:my-9! prose-ul:my-9! prose-p:my-9! prose-li:m-0! prose-figure:my-18! prose-figcaption:leading-9! prose-figcaption:mt-0! prose-figcaption:font-heading prose-hr:my-9!;
+}
+
+@utility article-content {
+  .sticker {
+    @apply mx-2!;
+  }
+}
+
+@utility article-image {
+  @apply prose-img:rounded-3xl prose-img:mx-auto!;
+}
+
+@utility article-cover {
+  @apply max-h-[396px]! h-[180px] md:h-[396px]! my-18! sticker;
+}
+
+@utility article-title {
+  @apply text-center mt-0! leading-9! font-bold! text-lg! md:text-h1! my-9!;
+}
+
+@utility article-subtitle {
+  @apply !mt-2 text-center opacity-60 italic;
+}
+
+@utility article-description {
+  @apply !m-0 !my-9 text-2xl lg:text-3xl xl:text-4xl text-balance;
+}
+
+@utility article-tags {
+  @apply gap-0;
+}
+
+@utility article-tag {
+  @apply font-code! lg:text-lg! [font-size-adjust:0.5]! leading-4! my-1.25! mr-2 py-1! px-6! tag!;
+
+  &::before {
+    content: '#'
+  }
+}
+
+@utility article-meta {
+  @apply gap-0;
+}
+
+@utility article-author {
+  @apply [font-size-adjust:0.6] leading-9;
+}
+
+
+@utility article-date {
+  @apply [font-size-adjust:0.4] leading-9;
+}
+
+@utility figure-image {
+  @apply sticker max-h-[396px]! h-[180px] md:h-[396px]!;
+
+  &:nth-child(4n+1) { --rot: 1.12deg; }
+  &:nth-child(4n+2) { --rot: -1.7deg; }
+  &:nth-child(4n+3) { --rot: 1.25deg; }
+  &:nth-child(4n+4) { --rot: -1.16deg; }
+}

@@ -1,0 +1,64 @@
+
+
+.thought {
+  display:flex;
+  background-color:var(--color-white);
+  padding:20px;
+  border-radius:30px;
+  min-width:40px;
+  max-width:220px;
+  min-height:40px;
+  margin:20px;
+  position:relative;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  z-index: 0;
+}
+
+.thought:before,
+.thought:after {
+  content:"";
+  background-color:var(--color-white);
+  border-radius:50%;
+  display:block;
+  position:absolute;
+  z-index: -1;
+}
+
+.thought:before {
+  width:44px;
+  height:44px;
+  top:-12px;
+  left:28px;
+  box-shadow:-50px 30px 0 -12px var(--color-white);
+}
+
+.thought:after {
+  bottom:-10px;
+  right:26px;
+  width:30px;
+  height:30px;
+  box-shadow:40px -34px 0 0 var(--color-white),
+             -28px -6px 0 -2px var(--color-white),
+             -24px 17px 0 -6px var(--color-white),
+             -5px 25px 0 -10px var(--color-white);
+}
+
+/* @media (prefers-color-scheme: dark) {
+  .thought,
+  .thought:before,
+  .thought:after {
+    background-color:var(--color-stone-500);
+  }
+  .thought:before {
+    box-shadow:-50px 30px 0 -12px var(--color-stone-500);
+  }
+  .thought:after {
+    box-shadow:40px -34px 0 0 var(--color-stone-500),
+               -28px -6px 0 -2px var(--color-stone-500),
+               -24px 17px 0 -6px var(--color-stone-500),
+               -5px 25px 0 -10px var(--color-stone-500);
+  }
+
+} */
