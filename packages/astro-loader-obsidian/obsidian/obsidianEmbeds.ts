@@ -1,7 +1,7 @@
 
 import { fromHtml } from 'hast-util-from-html'
 import { toHtml } from 'hast-util-to-html'
-import type { Element, ElementContent, Node, Root, RootContent } from "hast";
+import type { Element, ElementContent, Node, Root, RootContent, Parent } from "hast";
 
 import type { StoreDocument } from "../types";
 import type { ObsidianDocument } from "../schemas";
@@ -19,43 +19,60 @@ const getTextFromElement = (el: Element): string => {
 };
 
 
-const getSectionFromRoot = (root: Root, sectionStart: string): RootContent[] => {
-  const children = root.children;
+const collectSection = (parent: Parent, sectionStart: string): RootContent[] | null => {
+  const { children } = parent;
   const result: RootContent[] = [];
 
   let capturing = false;
   let startLevel = 0;
 
-  for (const node of children) {
-    if (!isElement(node)) {
-      if (capturing) result.push(node);
+  for (let i = 0; i < children.length; i++) {
+    const node = children[i];
+
+    if (!node){
       continue;
     }
 
-    const tag = node.tagName;
-    const isHeading = /^h[1-6]$/.test(tag);
-    const headingText = getTextFromElement(node);
-
-    if (isHeading) {
-      const level = Number.parseInt(tag.charAt(1));
-
-      if (!capturing && headingText === sectionStart) {
-        capturing = true;
-        startLevel = level;
-        result.push(node);
-        continue;
+    // --- si ya estamos capturando, añadimos hasta que aparezca corte
+    if (capturing) {
+      if (isElement(node)) {
+        const tag = node.tagName;
+        if (/^h[1-6]$/i.test(tag)) {
+          const level = Number.parseInt(tag.charAt(1), 10);
+          if (level <= startLevel) break; // corte en mismo nivel o superior
+        }
       }
-
-      if (capturing && level <= startLevel) {
-        // Se encontró un nuevo heading de mismo nivel o superior → cortar
-        break;
-      }
+      result.push(node);
+      continue;
     }
 
-    if (capturing) result.push(node);
+    // --- aún no estamos capturando: ¿es el heading de inicio?
+    if (isElement(node)) {
+      const tag = node.tagName;
+      if (/^h[1-6]$/i.test(tag)) {
+        const headingText = getTextFromElement(node);
+        if (headingText === sectionStart) {
+          startLevel = Number.parseInt(tag.charAt(1), 10);
+          capturing = true;
+          result.push(node); // incluir el propio heading
+          continue;
+        }
+      }
+
+      // Buscar recursivamente dentro de este elemento
+      const deep = collectSection(node as unknown as Parent, sectionStart);
+      if (deep?.length) return deep;
+    }
+    // nodos no-element no disparan nada mientras no capturamos
   }
 
-  return result;
+  return capturing ? result : null;
+}
+
+
+const getSectionFromRoot = (root: Root, sectionStart: string): RootContent[] => {
+  const out = collectSection(root as unknown as Parent, sectionStart);
+  return out ?? [];
 };
 
 export const renderEmbed = async (htmlBody: string, link: Wikilink, document: StoreDocument<ObsidianDocument>, logger: AstroIntegrationLogger) => {
