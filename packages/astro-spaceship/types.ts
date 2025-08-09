@@ -16,7 +16,7 @@ export type SpaceshipConfig = {
     showAuthor?: boolean;
     showPublishDate?: boolean;
     rightSidebar?: {
-      mode?: 'tabset' | 'column';
+      mode?: 'tabset' | 'column' | string;
     }
   }
 };

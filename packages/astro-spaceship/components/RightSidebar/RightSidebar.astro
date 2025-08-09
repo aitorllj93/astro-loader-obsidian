@@ -1,4 +1,5 @@
 ---
+import { z } from "astro:content";
 import type { Document, SpaceshipConfig } from "../../types";
 
 import Sidebar from "../Sidebar/Sidebar.astro";
@@ -15,7 +16,9 @@ export type Props = {
   showRelations?: boolean;
 };
 
-const mode: 'tabset' | 'column' = Astro.props.config.displayOptions?.rightSidebar?.mode ?? 'tabset';
+const Mode = z.union([z.literal('tabset'), z.literal('column')]).nullish().default('tabset');
+
+const mode = Mode.parse(Astro.props.config.displayOptions?.rightSidebar?.mode);
 ---
 
 <Sidebar class="hidden lg:flex" open position="right" id="right-sidebar-desktop">
