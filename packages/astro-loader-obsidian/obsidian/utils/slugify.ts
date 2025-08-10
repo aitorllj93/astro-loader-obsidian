@@ -32,8 +32,9 @@ const normalizeEntry = (text: string) => {
   );
 };
 
-export function slugify(str: string) {
-  const withoutFileExt = str.replace(new RegExp(`${path.extname(str)}\$`), "");
+export function slugify(str: string, includeFileExt = false) {
+  const extname = path.extname(str);
+  const withoutFileExt = str.replace(new RegExp(`${extname}\$`), "");
   const rawSlugSegments = withoutFileExt.split(path.sep);
 
   const slug = rawSlugSegments
@@ -43,5 +44,5 @@ export function slugify(str: string) {
     .join("/")
     .replace(/\/index$/, "");
 
-  return slug;
+  return includeFileExt ? `${slug}${extname}` : slug;
 }

@@ -44,6 +44,7 @@ export type ObsidianContext = {
   files: string[];
   base: string | URL | undefined;
   baseUrl: string;
+  publicUrl: string;
   i18n: boolean | undefined;
   defaultLocale: string | undefined;
   options: ObsidianMdLoaderOptions;

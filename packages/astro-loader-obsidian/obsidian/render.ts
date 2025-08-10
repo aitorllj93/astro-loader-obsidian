@@ -56,11 +56,21 @@ export const renderObsidian = async (
   wikilinks: Wikilink[],
   wikitags: Wikitag[],
   store: DataStore,
-  logger: AstroIntegrationLogger
-) => {
+  logger: AstroIntegrationLogger,
+): Promise<{
+  content: string;
+  images: ObsidianLink[];
+  links: ObsidianLink[];
+  audios: ObsidianLink[];
+  videos: ObsidianLink[];
+  files: ObsidianLink[];
+}> => {
   let content = rendered.html;
   const links: ObsidianLink[] = [];
   const images: ObsidianLink[] = [];
+  const audios: ObsidianLink[] = [];
+  const videos: ObsidianLink[] = [];
+  const files: ObsidianLink[] = [];
 
   const root = parse(content);
 
@@ -80,6 +90,55 @@ export const renderObsidian = async (
       //     wikilink.link.title
       // );
     }
+
+    if (wikilink.link.type === 'audio') {
+      if (hasTarget) {
+        audios.push(wikilink.link);
+      }
+
+      let replacement: string | null = null;
+
+      if (hasTarget && wikilink.link.isEmbedded && wikilink.link.id) {
+        replacement = `<audio class="audio-embed" controls src="${wikilink.link.href}"></audio>`;
+      } else {
+        replacement = `<a class="audio-link" href=${wikilink.link.href}>${wikilink.link.title}</a>`
+      }
+    
+      await replaceOutsideDataCode(root, wikilink.text, replacement);
+    }
+
+    if (wikilink.link.type === 'video') {
+      if (hasTarget) {
+        videos.push(wikilink.link);
+      }
+
+      let replacement: string | null = null;
+
+      if (hasTarget && wikilink.link.isEmbedded && wikilink.link.id) {
+        replacement = `<video class="video-embed" controls src="${wikilink.link.href}"></video>`;
+      } else {
+        replacement = `<a class="video-link" href=${wikilink.link.href}>${wikilink.link.title}</a>`
+      }
+    
+      await replaceOutsideDataCode(root, wikilink.text, replacement);
+    }
+
+    if (wikilink.link.type === 'file') {
+      if (hasTarget) {
+        files.push(wikilink.link);
+      }
+
+      let replacement: string | null = null;
+
+      if (hasTarget && wikilink.link.isEmbedded && wikilink.link.id) {
+        replacement = `<iframe class="iframe-embed" src="${wikilink.link.href}"></iframe>`;
+      } else {
+        replacement = `<a class="iframe-link" href=${wikilink.link.href}>${wikilink.link.title}</a>`
+      }
+    
+      await replaceOutsideDataCode(root, wikilink.text, replacement);
+    }
+
 
     if (wikilink.link.type === 'document') {
       if (hasTarget) {
@@ -104,9 +163,7 @@ export const renderObsidian = async (
           `<span class="article-wikilink">${wikilink.link.title}</span>`
       }
 
-      if (rendered) {
-        await replaceOutsideDataCode(root, wikilink.text, replacement);
-      }
+      await replaceOutsideDataCode(root, wikilink.text, replacement);
 
       const heading = rendered.metadata.headings.find(h => h.text === wikilink.text);
 
@@ -120,7 +177,7 @@ export const renderObsidian = async (
     links.push(tag.link);
     const hasTarget = typeof tag.link.href === "string";
 
-    replaceOutsideDataCode(root, tag.text, hasTarget ?
+    await replaceOutsideDataCode(root, tag.text, hasTarget ?
       `<a class="article-tag" href=${tag.link.href}>${tag.text}</a>` :
       `<span class="article-tag">${tag.text}</span>`);
   }
@@ -131,6 +188,9 @@ export const renderObsidian = async (
     content,
     images,
     links,
+    audios,
+    videos,
+    files,
   };
 
 }

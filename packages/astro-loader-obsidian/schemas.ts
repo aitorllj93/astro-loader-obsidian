@@ -30,7 +30,7 @@ export const ObsidianWikiLinkSchema = z.object({
   id: z.string().optional(),
   isEmbedded: z.boolean(),
   title: z.string(),
-  type: z.enum(['image', 'document', 'tag']),
+  type: z.enum(['image', 'audio', 'video', 'file', 'document', 'tag']),
   source: z.string().optional(),
 });
 

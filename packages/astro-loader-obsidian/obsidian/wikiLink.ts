@@ -1,16 +1,18 @@
 import type { AstroIntegrationLogger } from "astro";
 import { dirname, relative } from "node:path";
 
-import { ALLOWED_IMAGE_EXTENSIONS } from "./constants";
+import { ALLOWED_AUDIO_EXTENSIONS, ALLOWED_VIDEO_EXTENSIONS, ALLOWED_FILE_EXTENSIONS, ALLOWED_IMAGE_EXTENSIONS } from "./constants";
 import type { ObsidianContext } from "../types";
 import type { ObsidianLink } from "../schemas";
 import { getAssetFromLink, getDocumentFromLink, toUrl } from "./obsidianId";
 import { slugify } from "./utils/slugify";
+import { getAssetPublicUrl } from "./assets";
 
 export type Wikilink = {
   /** @deprecated use Link.type instead */
   isImage: boolean;
   text: string;
+  file?: string|undefined;
   link: ObsidianLink;
 };
 
@@ -42,8 +44,25 @@ const imageSizing = (text: string): {
   return null;
 }
 
-const getLinkType = (text: string): ObsidianLink['type'] => ALLOWED_IMAGE_EXTENSIONS.some(i => text.includes(i)) ?
-  'image' : 'document';
+const getLinkType = (text: string): ObsidianLink['type'] => {
+  if (ALLOWED_IMAGE_EXTENSIONS.some(i => text.includes(i))) {
+    return 'image';
+  }
+
+  if (ALLOWED_AUDIO_EXTENSIONS.some(i => text.includes(i))) {
+    return 'audio';
+  }
+
+  if (ALLOWED_VIDEO_EXTENSIONS.some(i => text.includes(i))) {
+    return 'video';
+  }
+
+  if (ALLOWED_FILE_EXTENSIONS.some(i => text.includes(i))) {
+    return 'file';
+  }
+
+  return 'document';
+};
 
 export const parseWikilinks = (
   content: string,
@@ -106,14 +125,15 @@ export const parseWikilinks = (
 
     let href: string | null = null;
     let id: string | undefined;
+    let file: string | undefined;
 
     if (type === 'document') {
       const [idWithoutAnchor, anchorTag] = idHref.split('#');
-      const documentId = getDocumentFromLink(idWithoutAnchor ?? idHref, context.files);
+      file = getDocumentFromLink(idWithoutAnchor ?? idHref, context.files);
 
-      if (documentId) {
+      if (file) {
         href = toUrl(
-          documentId,
+          file,
           context.baseUrl,
           context.i18n,
           context.defaultLocale
@@ -136,18 +156,22 @@ export const parseWikilinks = (
         }
       }
 
-      id = slugify(documentId ?? idHref);
+      id = slugify(file ?? idHref);
     }
 
-    if (type === 'image') {
-      const assetId = getAssetFromLink(idHref, context.assets);
+    if (
+      ['image', 'audio', 'video', 'file'].includes(type)
+    ) {
+      file = getAssetFromLink(idHref, context.assets);
 
-      if (assetId) {
-        const relativePath = relative(dirname(`/${context.entry}`), `/${assetId}`);
-        href = relativePath.startsWith('.') ? relativePath : `./${relativePath}`;
-        id = slugify(assetId);
+      if (file) {
+        const relativePath = relative(dirname(`/${context.entry}`), `/${file}`);
+        href = type === 'image' ? 
+          relativePath.startsWith('.') ? relativePath : `./${relativePath}` :
+          getAssetPublicUrl(file, context.publicUrl);
+        id = slugify(file);
       } else {
-        logger.warn(`Could not find image from Obsidian image "${idHref}"`);
+        logger.warn(`Could not find ${type} from Obsidian ${type} "${idHref}"`);
       }
     }
 
@@ -165,6 +189,7 @@ export const parseWikilinks = (
 
     links.push({
       text,
+      file,
       link,
       isImage: link.type === 'image',
     });

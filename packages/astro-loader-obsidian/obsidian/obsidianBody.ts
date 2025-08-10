@@ -1,6 +1,6 @@
 import type { AstroIntegrationLogger } from "astro";
 import type { ObsidianContext } from "../types";
-import type {ObsidianLink } from "../schemas";
+import type { ObsidianLink } from "../schemas";
 import { parseWikilinks, type Wikilink } from "./wikiLink";
 import { parseWikitags, type Wikitag } from "./wikiTag";
 
@@ -8,9 +8,11 @@ export const parseBody = (
   body: string,
   context: ObsidianContext,
   logger: AstroIntegrationLogger,
-): { 
-  content: string; 
-  images: ObsidianLink[]; 
+): {
+  content: string;
+  audios: ObsidianLink[];
+  files: ObsidianLink[];
+  images: ObsidianLink[];
   links: ObsidianLink[];
   wikilinks: Wikilink[];
   wikitags: Wikitag[];
@@ -18,6 +20,8 @@ export const parseBody = (
   let content = body;
   const links: ObsidianLink[] = [];
   const images: ObsidianLink[] = [];
+  const audios: ObsidianLink[] = [];
+  const files: ObsidianLink[] = [];
 
   const wikilinks = parseWikilinks(body, 'body', context, logger);
   let wikitags: Wikitag[] = [];
@@ -28,7 +32,7 @@ export const parseBody = (
     // TODO: Check if it's possible to move this to post processing layer
     if (wikilink.link.type === 'image') {
       if (hasTarget) {
-        images.push(wikilink.link); 
+        images.push(wikilink.link);
       }
 
       content = content.replace(
@@ -37,6 +41,18 @@ export const parseBody = (
           ? `![${wikilink.link.caption ?? wikilink.link.title}](${wikilink.link.href})` :
           wikilink.link.title
       );
+    }
+
+    if (wikilink.link.type === 'audio') {
+      if (hasTarget) {
+        audios.push(wikilink.link);
+      }
+    }
+
+    if (wikilink.link.type === 'file') {
+      if (hasTarget) {
+        files.push(wikilink.link);
+      }
     }
   }
 
@@ -49,5 +65,5 @@ export const parseBody = (
     content = content.replace(/^# .+$/m, "");
   }
 
-  return { content, images, links, wikilinks, wikitags };
+  return { content, audios, files, images, links, wikilinks, wikitags };
 };

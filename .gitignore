@@ -13,11 +13,10 @@ pnpm-debug.log*
 
 # macOS-specific files
 .DS_Store
-
-# build output
-dist/
-
-.astro
 Icon
 
+
+# build output
+.astro
+dist/
 docs/public/vault/

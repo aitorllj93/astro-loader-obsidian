@@ -14,11 +14,12 @@ import { generateId, toRelativePath } from "../astro";
 import { isConfigFile, getEntryInfo } from "../obsidian";
 import {
   ALLOWED_DOCUMENT_EXTENSIONS,
-  ALLOWED_IMAGE_EXTENSIONS,
+  ALLOWED_ASSET_EXTENSIONS,
 } from "../obsidian/constants";
 import type { ContentEntryType } from "astro";
 import type { ObsidianDocument } from "../schemas";
 import { renderObsidian } from "../obsidian/render";
+import { exposeObsidianAsset, getAssetsPublicUrl } from "../obsidian/assets";
 
 export type { ObsidianMdLoaderOptions };
 
@@ -64,7 +65,7 @@ export const ObsidianMdLoaderFn =
         opts.pattern ?? `**/*.${ALLOWED_DOCUMENT_EXTENSIONS[0].replace(".", "")}`;
       const assetsPattern =
         opts.assetsPattern ??
-        `**/*.{${ALLOWED_IMAGE_EXTENSIONS.map((ext) => ext.replace(".", "")).join(
+        `**/*.{${ALLOWED_ASSET_EXTENSIONS.map((ext) => ext.replace(".", "")).join(
           ","
         )}}`;
       const baseUrl = opts.url ?? collection;
@@ -96,6 +97,7 @@ export const ObsidianMdLoaderFn =
         author: opts.author,
         base: opts.base,
         baseUrl: `${config.base}${baseUrl}`,
+        publicUrl: getAssetsPublicUrl(baseDir, config.base),
         entry,
         files,
         i18n: opts.i18n,
@@ -206,13 +208,6 @@ export const ObsidianMdLoaderFn =
           rendered,
         };
       }
-
-      const dependsOn = (a: Awaited<ReturnType<typeof renderData>>, b: Awaited<ReturnType<typeof renderData>>) => 
-        a?.entryData.wikilinks.some(l => 
-          l.link.type === 'document' && 
-          l.link.isEmbedded && 
-          l.link.id === b?.entryData.id
-        );
 
       const sortFiles = (
         files: Awaited<ReturnType<typeof renderData>>[],
@@ -336,6 +331,10 @@ export const ObsidianMdLoaderFn =
 
       const files = await getFiles();
       const assets = await getAssets();
+
+      await (Promise.all(
+        assets.map(a => limit(() => exposeObsidianAsset(a, baseDir, config.publicDir)))
+      ));
 
       // await Promise.all(
       //   files.map((entry) => syncData(entry, baseDir, files, assets))
