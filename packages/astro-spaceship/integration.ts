@@ -20,7 +20,7 @@ export function astroSpaceship(
   return {
     name: INTEGRATION_NAME,
     hooks: {
-      'astro:config:setup': ({ updateConfig, config, }) => {
+      'astro:config:setup': ({ injectRoute, updateConfig, config, }) => {
         updateConfig({
           ...config,
           ...(spaceship.site ? { site: spaceship.site } : {}),
@@ -58,7 +58,17 @@ export function astroSpaceship(
               tailwindcss()
             ],
           },
-        })
+        });
+
+        injectRoute({
+          pattern: '_spaceship/graph/index.json',
+          entrypoint: 'node_modules/astro-spaceship/pages/graph-index.ts',
+        });
+
+        injectRoute({
+          pattern: '_spaceship/graph/[...slug].json',
+          entrypoint: 'node_modules/astro-spaceship/pages/graph-slug.ts',
+        });
       },
     },
   }

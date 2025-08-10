@@ -13,6 +13,7 @@ const { class: className, style, cover, 'cover-x': coverX, 'cover-y': coverY } =
 
 const coverImage = cover ? (await getImage({
   src: cover,
+  inferSize: true,
   format: 'webp',
   quality: 'high',
 })) : undefined;
@@ -26,7 +27,7 @@ const coverImage = cover ? (await getImage({
         height={coverImage.attributes.height}
         width={coverImage.attributes.width}
         alt=""
-        class:list={["article-cover-image", coverX || coverY ? `` : "object-top"]}
+        class:list={["article-cover-image", coverX || coverY ? `` : "object-center"]}
         style={
           coverX || coverY ? `object-position: ${coverX}% ${coverY}%;` : ""
         }

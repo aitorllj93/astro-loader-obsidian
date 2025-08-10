@@ -54,7 +54,7 @@ const { config, slug, class: className = "flex w-full h-full" } = Astro.props;
     async loadData(): Promise<GraphViewData> {
       const base = this.getAttribute("base");
       const slug = this.getAttribute("slug");
-      const url = base ? `/${base.replace(/^\/+|\/+$/g, '')}/knowledge-graph/${slug ?? "index"}.json` : `/knowledge-graph/${slug ?? "index"}.json`;
+      const url = base ? `/${base.replace(/^\/+|\/+$/g, '')}/_spaceship/graph/${slug ?? "index"}.json` : `/_spaceship/graph/${slug ?? "index"}.json`;
 
       const response = await fetch(url);
       return response.json();

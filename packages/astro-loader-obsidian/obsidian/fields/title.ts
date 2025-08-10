@@ -1,8 +1,10 @@
 import path from "node:path";
 
 import type { FrontmatterData } from "../utils/frontmatter";
+import type { ObsidianContext } from "../../types";
 
 export const title = (
+  context: ObsidianContext,
   entry: string,
   content: string,
   data: FrontmatterData
@@ -17,7 +19,7 @@ export const title = (
     .replace("#", "")
     .trim();
 
-  if (h1InContent) {
+  if (context.options.removeH1 && h1InContent) {
     return h1InContent;
   }
 

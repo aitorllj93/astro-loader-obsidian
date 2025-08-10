@@ -72,7 +72,7 @@ export function getEntryInfo(
     }
   }
  
-  data.title = title(entry, content, data);
+  data.title = title(context, entry, content, data);
   data.permalink = permalink(entry, context, data);
   data.description = description(data);
   data.slug = slug(entry, context, data);
