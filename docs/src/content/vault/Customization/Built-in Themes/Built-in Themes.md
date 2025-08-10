@@ -2,3 +2,4 @@
 - [[Galaxy]]
 - [[Monolith]]
 - [[Journey]]
+- [[Temple]]

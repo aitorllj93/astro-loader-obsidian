@@ -8,6 +8,13 @@ order: 10
 
 ![[Cheatsheet#Herculis enim cohaesit]]
 
+### Embed Audios
+
+![[Stable Audio.flac]]
+
+### Embed PDFs
+
+![[The Worst Mistake in History.pdf]]
 ### Usage
 
 ```sh
