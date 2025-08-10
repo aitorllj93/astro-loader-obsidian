@@ -1,0 +1,20 @@
+---
+import {
+  getStaticPathsForThemeFactory,
+  type Props,
+} from "astro-spaceship/components/Article/utils/_get-static-paths-for-theme.ts";
+import Page from "astro-spaceship/components/Article/Page.astro";
+
+import "@/styles/themes/galaxy-dark.css";
+import config from "@/config";
+
+const getStaticPathsForThemePage = getStaticPathsForThemeFactory({ config });
+
+const staticPath = await getStaticPathsForThemePage("galaxy");
+
+if (!staticPath) {
+  return Astro.redirect("404");
+}
+---
+
+<Page {...staticPath.props} />

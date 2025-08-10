@@ -1,0 +1,17 @@
+---
+import { getStaticPathsFactory, type Props } from "astro-spaceship/components/Article/utils/get-static-paths.ts";
+import Page from 'astro-spaceship/components/Article/Page.astro';
+
+import '@/styles/global.css';
+import config from '@/config';
+
+
+export type { Props };
+
+export const getStaticPaths = getStaticPathsFactory({
+  config,
+});
+
+---
+
+<Page {...Astro.props} />

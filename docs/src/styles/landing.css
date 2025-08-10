@@ -1,0 +1,49 @@
+@import "spaceship-monolith/dark";
+@source "../../../node_modules/astro-spaceship/shell/markdown";
+
+@keyframes move-twink-back {
+	from {
+		background-position: 0 0;
+	}
+	to {
+		background-position: -10000px 5000px;
+	}
+}
+
+@keyframes move-clouds-back {
+	from {
+		background-position: 0 0;
+	}
+	to {
+		background-position: 10000px 0;
+	}
+}
+
+.stars, .twinkling, .clouds {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	width: 100%;
+	height: 100%;
+	display: block;
+}
+
+.stars {
+	background: #000 url('../assets/stars.png') repeat top center;
+	z-index: -3;
+}
+
+.twinkling {
+	background: transparent url('../assets/twinkling.png') repeat top center;
+	z-index: -2;
+	animation: move-twink-back 200s linear infinite;
+}
+
+.clouds {
+	background: transparent url('../assets/clouds.png') repeat top center;
+	z-index: -1;
+	opacity: 0.4;
+	animation: move-clouds-back 200s linear infinite;
+}

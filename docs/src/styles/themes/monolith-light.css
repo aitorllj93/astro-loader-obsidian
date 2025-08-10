@@ -1,0 +1,3 @@
+@import "spaceship-monolith/light";
+@source "../../../node_modules/astro-loader-obsidian";
+@source "../../../node_modules/astro-spaceship";

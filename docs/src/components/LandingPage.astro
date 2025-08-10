@@ -1,0 +1,56 @@
+---
+import { Image } from "astro:assets";
+
+import Logo from "@/assets/logo.png";
+
+import config from "@/config";
+
+import GraphView from "astro-spaceship/components/GraphView/GraphView.astro";
+import Layout from "astro-spaceship/components/Layout/Layout.astro";
+
+const baseUrl = `${config.base}introduction/introduction`;
+---
+
+<Layout
+  config={config}
+  page={{
+    title: config.title,
+    language: config.defaultLocale,
+    seo: {
+      description: config.description,
+    },
+  }}
+  footer={null}
+>
+  <div class="stars"></div>
+  <div class="twinkling"></div>
+  <div class="clouds"></div>
+  <div class="absolute w-full h-full">
+    <GraphView config={config} />
+  </div>
+  <a href={baseUrl}>
+    <section
+      class="perspective group absolute left-[50%] top-[50%] -translate-x-[50%] -translate-y-[50%]"
+    >
+      <Image
+        src={Logo}
+        alt=""
+        class="mx-auto h-[33vh] w-auto transition-all group-hover:rotate-x-25"
+      />
+    </section>
+  </a>
+  <a href={baseUrl}>
+    <section
+      class="absolute bottom-[20px] md:bottom-[100px] left-[50%] -translate-x-[50%] flex flex-col gap-3 md:gap-6 items-center transition-all group-hover:-rotate-x-25"
+    >
+      <h1
+        class="text-6xl lg:text-8xl font-title bg-gradient-to-r from-obsidian-500 via-purple-400 to-pink-500 inline-block text-transparent bg-clip-text"
+      >
+        {config.title}
+      </h1>
+      <p class="text-xl lg:text-3xl text-balance text-center font-heading text-white">
+        {config.description}
+      </p>
+    </section>
+  </a>
+</Layout>

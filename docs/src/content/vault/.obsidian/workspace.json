@@ -1,0 +1,267 @@
+{
+  "main": {
+    "id": "805dded5bc2976a4",
+    "type": "split",
+    "children": [
+      {
+        "id": "a81720ebe9876fd3",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "86126c6b737a2639",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Features/Components/Timeline.md",
+                "mode": "preview",
+                "source": true
+              },
+              "icon": "lucide-file",
+              "title": "Timeline"
+            }
+          },
+          {
+            "id": "598caa5b4387e23c",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Graph view"
+            }
+          },
+          {
+            "id": "37089c8be1072b53",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Features/Components/Components.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Components"
+            }
+          },
+          {
+            "id": "bafa53de62279560",
+            "type": "leaf",
+            "state": {
+              "type": "FileClassView__Business",
+              "state": {},
+              "icon": "handshake",
+              "title": "Business"
+            }
+          },
+          {
+            "id": "80ed07375798ce58",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Features/Components/Timeline.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Timeline"
+            }
+          }
+        ],
+        "currentTab": 4
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "3141678628460048",
+    "type": "split",
+    "children": [
+      {
+        "id": "16f6ae21e7a2d3ab",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "23b60824676cc055",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "1a7a3251a91784f2",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "44c1dc0da1c47a98",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "6462d287dceb22d0",
+    "type": "split",
+    "children": [
+      {
+        "id": "42668c7f558cbda1",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "f49a37d44f48b0ff",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Features/Components/Timeline.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for Timeline"
+            }
+          },
+          {
+            "id": "cd2cce40914af584",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links"
+            }
+          },
+          {
+            "id": "d87c5872be9c2df4",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "3d84eb4e9d9dc4dd",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "obsidian42-brat:BRAT": false
+    }
+  },
+  "active": "80ed07375798ce58",
+  "lastOpenFiles": [
+    "Features/Components/Components.md",
+    "Features/Components/Callouts.md",
+    "_types/Business.md",
+    "_types",
+    "Features/Embed files.md",
+    "Features/Components/Link Embeds.md",
+    "Features/Components/Images.md",
+    "Features/Features.md",
+    "Features/Cover Image.md",
+    "Features/Examples/Cheatsheet.md",
+    "Features/Examples/Examples.md",
+    "Features/Examples/Lorem.md",
+    "Features/Components/Embed files.md",
+    "Features/Components/File Embeds.md",
+    "Features/Components/Embeds.md",
+    "Features/Components/Timeline.md",
+    "Features/Components/Spoilers.md",
+    "Customization/Customization.md",
+    "Showcase/Showcase.md",
+    "Features/Sorting.md",
+    "Untitled.canvas",
+    "Markdown/Markdown.md",
+    "Markdown/Examples/Lorem.md",
+    "Showcase",
+    "Markdown/Examples/Cheatsheet.md",
+    "Markdown/Examples/Examples.md",
+    "Markdown/Components/Spoilers.md",
+    "Markdown/Components/Embeds.md",
+    "Untitled.md",
+    "Assets/Screenshots/001.jpg",
+    "Assets/Screenshots/004.jpg",
+    "Assets/Screenshots/003.jpg",
+    "Assets/Screenshots/0003.jpg",
+    "Assets/Screenshots/002.jpg",
+    "Assets/Screenshots/Captura de pantalla Abr 06 2025.jpg",
+    "Assets/Screenshots/Captura de pantalla Abr 06 2025 (4).jpg",
+    "Assets/Screenshots/Captura de pantalla Abr 06 2025 (3).jpg",
+    "Assets/Screenshots/Captura de pantalla Abr 06 2025 (1).jpg",
+    "Assets/Screenshots",
+    "Assets/logos",
+    "Assets/BlogCover.avif",
+    "Assets",
+    "Examples/Cheatsheets",
+    "Examples",
+    "examples/nested",
+    "examples"
+  ]
+}

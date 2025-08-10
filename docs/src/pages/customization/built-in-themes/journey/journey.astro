@@ -1,0 +1,125 @@
+---
+import {
+  getStaticPathsForThemeFactory,
+  type Props,
+} from "astro-spaceship/components/Article/utils/_get-static-paths-for-theme.ts";
+import Page from "astro-spaceship/components/Article/Page.astro";
+
+import CoverImage from "astro-spaceship/components/Article/CoverImage.astro";
+import Tags from "astro-spaceship/components/Article/Tags.astro";
+import ArticleDate from "astro-spaceship/components/Article/Date.astro";
+import Author from "astro-spaceship/components/Article/Author.astro";
+import Title from "astro-spaceship/components/Article/Title.astro";
+import Subtitle from "astro-spaceship/components/Article/Subtitle.astro";
+import Description from "astro-spaceship/components/Article/Description.astro";
+
+import "@/styles/themes/journey.css";
+import config from "@/config";
+import { render } from "astro:content";
+
+const getStaticPathsForThemePage = getStaticPathsForThemeFactory({ config });
+
+const staticPath = await getStaticPathsForThemePage("journey");
+
+if (!staticPath) {
+  return Astro.redirect("404");
+}
+
+const {
+  author,
+  document,
+  tags,
+} = staticPath.props;
+
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+const { Content } = await render(document as any);
+
+const showMetaSection =
+  config.displayOptions?.showAuthor !== false ||
+  config.displayOptions?.showPublishDate !== false ||
+  tags.length > 0;
+
+const showDescriptionSection = !!document.data.description;
+
+
+const hash = (str: string) => {
+  let h = 5381;
+  for (let i = 0; i < str.length; i++) h = ((h << 5) + h) ^ str.charCodeAt(i);
+  // fuerza a unsigned 32-bit
+  return h >>> 0;
+};
+
+const angleFromKey = (key: string, min = -3, max = 3) => {
+  const h = hash(key);
+  const t = h / 0xffffffff; // 0..1
+  return min + t * (max - min);
+};
+---
+
+<Page {...staticPath.props} config={{
+  ...config,
+  displayOptions: {
+    ...config.displayOptions,
+    rightSidebar: {
+      mode: 'column'
+    }
+  }
+}}>
+  <Fragment slot="head">
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="https://cdn.jsdelivr.net/fontsource/fonts/dancing-script:vf@latest/latin-wght-normal.woff2"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="https://cdn.jsdelivr.net/fontsource/fonts/patrick-hand@latest/latin-400-normal.woff2"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="https://cdn.jsdelivr.net/fontsource/fonts/karla:vf@latest/latin-wght-normal.woff2"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="https://cdn.jsdelivr.net/fontsource/fonts/quicksand:vf@latest/latin-wght-normal.woff2"
+      crossorigin="anonymous"
+    />
+  </Fragment>
+  <article slot="entry" class="article" data-pagefind-body>
+    <section class="article-content">
+      <Title document={document} />
+      <Subtitle document={document} />
+      {
+        showDescriptionSection && (
+          <Description document={document} />
+        )
+      }
+      {document.data.cover && (
+        <CoverImage {...document.data} style={`--rot:${angleFromKey(document.data.cover.src).toFixed(2)}deg;`}>
+          <span slot="figcaption" class="gloss" aria-hidden="true"></span>
+        </CoverImage>
+      )}
+      <div data-pagefind-weight="0.1" class="article-body">
+        <Content />
+        {showMetaSection && (<hr>)}
+      </div>
+      {showMetaSection && (
+        <div class="article-meta">
+          <Author config={config} author={author} />
+          <ArticleDate config={config} document={document} />     
+          <Tags tags={tags} />
+        </div>
+      )}
+    </section>
+  </article>
+</Page>

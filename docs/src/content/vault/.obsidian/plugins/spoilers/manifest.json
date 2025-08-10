@@ -1,0 +1,11 @@
+{
+	"id": "spoilers",
+	"name": "Spoilers",
+	"version": "1.0.4",
+	"minAppVersion": "1.5.12",
+	"description": "Hide and reveal blocks of information",
+	"author": "Jacobtread",
+	"authorUrl": "https://github.com/Jacobtread",
+	"fundingUrl": "https://github.com/sponsors/jacobtread",
+	"isDesktopOnly": false
+}

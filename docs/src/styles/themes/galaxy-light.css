@@ -1,0 +1,5 @@
+@import "spaceship-monolith/galaxy";
+@source "../../../node_modules/astro-loader-obsidian";
+@source "../../../node_modules/astro-spaceship";
+
+@custom-variant dark (&:where(.dark, .dark *));

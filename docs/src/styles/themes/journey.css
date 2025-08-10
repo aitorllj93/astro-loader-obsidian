@@ -1,0 +1,6 @@
+@import 'spaceship-monolith/journey';
+
+@source "../../../node_modules/astro-loader-obsidian";
+@source "../../../node_modules/astro-spaceship";
+
+
