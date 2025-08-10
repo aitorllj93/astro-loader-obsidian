@@ -13,8 +13,7 @@ pnpm-debug.log*
 
 # macOS-specific files
 .DS_Store
-Icon
-
+Icon
 
 # build output
 .astro
