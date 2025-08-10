@@ -78,9 +78,9 @@
   --color-tab-active-foreground: var(--color-text);
   --color-menu-active-background: var(--color-gray-300);
   --color-menu-foreground: var(--color-text);
-  --color-badge-background: color-mix(in oklab, var(--color-purple-500) 10%, transparent);
-  --color-badge-foreground: var(--color-purple-500);
-  --color-badge-border: color-mix(in oklab, var(--color-purple-500) 15%, transparent);
+  --color-badge-background: color-mix(in oklab, var(--color-primary) 10%, transparent);
+  --color-badge-foreground: var(--color-primary);
+  --color-badge-border: color-mix(in oklab, var(--color-primary) 15%, transparent);
   --color-button-background: var(--color-gray-400);
   --color-button-foreground: var(--color-text);
   --color-header-background: var(--color-gray-50);
