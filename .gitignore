@@ -18,4 +18,6 @@ pnpm-debug.log*
 dist/
 
 .astro
-Icon
+Icon
+
+docs/public/vault/
