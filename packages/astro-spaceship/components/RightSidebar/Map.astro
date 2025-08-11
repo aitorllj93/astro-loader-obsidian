@@ -1,0 +1,23 @@
+---
+import { useI18n } from '../../i18n';
+import type { Document, SpaceshipConfig } from '../../types'
+import MapView from '../MapView/MapView.astro';
+
+export type Props = {
+  config: SpaceshipConfig;
+  document: Document | undefined;
+}
+
+const { config, document } = Astro.props;
+
+const { t } = useI18n(Astro);
+
+if (!document) {
+  return null;
+}
+
+---
+<div class="map-view">
+  <h2 class="map-title">{t("nav.map")}</h2>
+  <MapView class='map' document={document} config={config} />
+</div>

@@ -62,17 +62,27 @@ export function astroSpaceship(
 
         injectRoute({
           pattern: '_spaceship/graph/index.json',
-          entrypoint: 'node_modules/astro-spaceship/pages/graph-index.ts',
+          entrypoint: 'node_modules/astro-spaceship/pages/graphs/index.ts',
         });
 
         injectRoute({
           pattern: '_spaceship/graph/[...slug].json',
-          entrypoint: 'node_modules/astro-spaceship/pages/graph-slug.ts',
+          entrypoint: 'node_modules/astro-spaceship/pages/graphs/slug.ts',
+        });
+
+        injectRoute({
+          pattern: '_spaceship/map/index.json',
+          entrypoint: 'node_modules/astro-spaceship/pages/maps/index.ts',
         });
 
         injectRoute({
           pattern: '_spaceship/map/[...slug].json',
-          entrypoint: 'node_modules/astro-spaceship/pages/map-slug.ts',
+          entrypoint: 'node_modules/astro-spaceship/pages/maps/slug.ts',
+        });
+
+        injectRoute({
+          pattern: '_spaceship/map/linkedfrom/[...slug].json',
+          entrypoint: 'node_modules/astro-spaceship/pages/maps/linkedfrom.ts',
         });
       },
     },

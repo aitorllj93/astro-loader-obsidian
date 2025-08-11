@@ -14,6 +14,27 @@ class LeafletMap extends HTMLElement {
   private map: LMap | undefined;
 
   connectedCallback() {
+    const options = {
+      root: document,
+      rootMargin: "0px",
+      scrollMargin: "0px",
+      threshold: 1.0,
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
+          this.load();
+          observer.unobserve(this);
+          observer.disconnect();
+        }
+      }
+    }, options);
+
+    observer.observe(this);
+  }
+
+  private async load() {
     if (!this.mapElement) {
       this.mapElement = document.createElement("div");
       this.mapElement.setAttribute('id', 'map');

@@ -1,8 +1,8 @@
 import type { Element, Text } from "hast";
 import z from "zod";
 
-import { toUrl } from "../../utils/id";
-import { getConfig } from "../../utils/config";
+import { toUrl } from "../../../utils/id";
+import { getConfig } from "../../../utils/config";
 
 const mapViewSchema = z.object({ 
   name: z.string(), 
@@ -56,7 +56,7 @@ const getUrlFromQuery = (query: string, base?: string) => {
     return null;
   }
 
-  return `${toUrl(searchVal, `${base ?? '/'}_spaceship/map`)}.json`;
+  return `${toUrl(searchVal, `${base ?? '/'}_spaceship/map/linkedfrom`)}.json`;
 }
 
 export const mapview = async (node: Text) => {
@@ -77,8 +77,6 @@ export const mapview = async (node: Text) => {
 
   const href = getUrlFromQuery(data.query, config.base);
 
-  // const href = 'http://localhost:4321/trip-planner/_spaceship/map/agosto-2025/2025-08-23.json';
-
   return {
     before: [
       STYLES_NODE,
@@ -88,7 +86,7 @@ export const mapview = async (node: Text) => {
 				tagName: "map-view",
 				properties: {
   				"data-pagefind-weight": "0",
-					className: 'map',
+					class: 'embed-map',
 				},
         children: [
           {

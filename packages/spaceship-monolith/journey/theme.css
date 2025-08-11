@@ -113,14 +113,23 @@
   }
 }
 
-@utility map {
+@utility embed-map {
   @apply sticker h-[180px]! md:h-[396px]!;
   --rot: 0;
 }
 
+@utility map-view {
+  .leaflet-container {
+    @apply rounded-2xl;
+  }
+}
+
 @utility leaflet-container {
-  @apply rounded-2xl;
   @media (prefers-color-scheme: dark) {
     @apply filter-none;
+  }
+
+  a {
+    @apply text-[hsl(21,_61%,_26%)]! text-base;
   }
 }

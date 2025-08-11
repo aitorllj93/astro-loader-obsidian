@@ -1,0 +1,69 @@
+---
+import type { Document, SpaceshipConfig } from '../../types'
+
+export type Props = {
+  class?: string;
+  lat?: number;
+  lng?: number;
+  config: SpaceshipConfig;
+  document?: Document | undefined;
+}
+
+const { class: className = 'flex w-full h-full', lat = 0, lng = 0, config, document } = Astro.props;
+
+const id = document?.id ?? 'index';
+const centerLat = document?.data.location?.lat ?? lat;
+const centerLng = document?.data.location?.lng ?? lng;
+
+const url = `${config.base ?? '/'}_spaceship/map/${id}.json`;
+
+const mapConfig = {
+  "options": {
+    "attributionControl": false,
+    "center": [
+      centerLat,
+      centerLng,
+    ],
+    "zoom": document ? 17 : 15,
+    "zoomControl": false
+  },
+  "scaleOptions": {
+    "maxWidth": 200
+  },
+  "baseLayers": [
+    {
+      "name": "OpenStreetMaps",
+      "config": {
+        "kind": "TileLayer",
+        "urlTemplate": "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
+        "options": {
+          "attribution": "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors",
+          "subdomains": "abcd",
+          "maxZoom": 20
+        }
+      }
+    }
+  ],
+  "overlayLayers": [
+    {
+      "name": id,
+      "selected": true,
+      "config": {
+        "kind": "GeoJSON",
+        "id": id,
+        "href": url,
+        "options": {
+          "useSimpleStyle": true,
+          "useMakiMarkers": true
+        }
+      }
+    }
+  ]
+};
+
+---
+<link data-pagefind-weight="0" rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<map-view data-pagefind-weight="0" class={className}>
+  <script type="application/json" set:html={JSON.stringify(mapConfig, null, 2)}></script>
+  <script id={id} type="application/geo+json" src={url}></script>
+</map-view>

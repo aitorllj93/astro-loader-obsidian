@@ -1,4 +1,4 @@
-import { z } from "astro:content";
+import { z } from "zod";
 
 const arrayExclude = <S extends z.ZodTypeAny>(s: S) => {
   return z.preprocess((as) => {

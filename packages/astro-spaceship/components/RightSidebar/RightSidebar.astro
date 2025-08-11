@@ -1,6 +1,6 @@
 ---
-import { z } from "astro:content";
 import type { Document, SpaceshipConfig } from "../../types";
+import { isLegacyConfig } from "../../shell/utils/config";
 
 import Sidebar from "../Sidebar/Sidebar.astro";
 
@@ -13,12 +13,13 @@ export type Props = {
   backlinks?: Document[] | undefined;
   showToC?: boolean;
   showLinks?: boolean;
-  showRelations?: boolean;
+  showGraph?: boolean;
+  showMap?: boolean;
 };
 
-const Mode = z.union([z.literal('tabset'), z.literal('column')]).nullish().default('tabset');
+const config = Astro.props.config;
 
-const mode = Mode.parse(Astro.props.config.displayOptions?.rightSidebar?.mode);
+const mode = isLegacyConfig(config) ? (config.displayOptions?.rightSidebar?.mode as 'column') : config.features.rightSidebar.mode;
 ---
 
 <Sidebar class="hidden lg:flex" open position="right" id="right-sidebar-desktop">

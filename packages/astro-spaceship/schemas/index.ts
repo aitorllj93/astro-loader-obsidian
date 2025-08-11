@@ -1,5 +1,5 @@
 import { ObsidianDocumentSchema, ObsidianWikiLinkSchema } from "astro-loader-obsidian";
-import { z } from "astro/zod";
+import { z } from "zod";
 
 const AstroImageSchema = z.object({
   src: z.string(),
@@ -35,7 +35,7 @@ export const DocumentSchema = ObsidianDocumentSchema.extend({
   subtitle: z.string().optional(),
   'cover-x': z.number().optional(),
   'cover-y': z.number().optional(),
-  location: LocationSchema.nullish(),
+  location: LocationSchema.optional(),
 });
 
 export const AuthorSchema = z.object({
@@ -49,4 +49,43 @@ export const TagSchema = z.object({
   name: z.string(),
   description: z.string().optional(),
   permalink: z.string().optional(),
+})
+
+export const ConfigSchema = z.object({
+  author: z.string().optional(),
+  base: z.string().optional(),
+  defaultLocale: z.string().optional().default('en'),
+  locales: z.string().array().optional(),
+  description: z.string().optional(),
+  site: z.string().optional(),
+  title: z.string().optional(),
+  logo: z.string().optional(),
+  features: z.object({
+    article: z.object({
+      author: z.object({
+        enabled: z.boolean().default(true)
+      }).optional().default({}),
+      publishDate: z.object({
+        enabled: z.boolean().default(true)
+      }).optional().default({})
+    }).optional().default({}),
+    rightSidebar: z.object({
+      mode: z.union([z.literal('tabset'), z.literal('column')]).default('tabset'),
+      map: z.object({
+        enabled: z.boolean().default(true)
+      }).optional().default({}),
+      graph: z.object({
+        enabled: z.boolean().default(true)
+      }).optional().default({}),
+      toc: z.object({
+        enabled: z.boolean().default(true)
+      }).optional().default({}),
+      links: z.object({
+        enabled: z.boolean().default(true)
+      }).optional().default({}),
+      backlinks: z.object({
+        enabled: z.boolean().default(true)
+      }).optional().default({}),
+    }).optional().default({})
+  }).optional().default({})
 })

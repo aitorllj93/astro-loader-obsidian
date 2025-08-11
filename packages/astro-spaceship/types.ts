@@ -1,8 +1,8 @@
 import type z from "astro/zod";
 
-import type { AuthorSchema, DocumentSchema, TagSchema } from "./schemas";
+import type { AuthorSchema, ConfigSchema, DocumentSchema, TagSchema } from "./schemas";
 
-export type SpaceshipConfig = {
+export type LegacySpaceshipConfig = {
   author?: string;
   base?: string;
   defaultLocale: string;
@@ -12,14 +12,17 @@ export type SpaceshipConfig = {
   title: string;
   // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   logo?: any | undefined;
+  /** @deprecated use features instead */
   displayOptions?: {
     showAuthor?: boolean;
     showPublishDate?: boolean;
     rightSidebar?: {
       mode?: 'tabset' | 'column' | string;
     }
-  }
+  };
 };
+
+export type SpaceshipConfig = LegacySpaceshipConfig | z.infer<typeof ConfigSchema>;
 
 export type Seo = {
   title?: string | undefined;

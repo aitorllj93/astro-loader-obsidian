@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 
-import { getGraphView } from "../components/GraphView/utils/get-graph-view.ts";
+import { getGraphView } from "../../components/GraphView/utils/get-graph-view.ts";
 
 export const GET: APIRoute = async () => {
   const data = await getGraphView();

@@ -28,6 +28,8 @@ const footer = buildFooter(Astro, document);
     config={config}
     document={document} 
     backlinks={backlinks}
+    showMap={!!document.data.location}
+    showLinks={(document.data.links ?? []).length > 0 || backlinks.length > 0}
     showToC={(document?.rendered?.metadata?.headings as []).length > 0}
     />
 </Layout>

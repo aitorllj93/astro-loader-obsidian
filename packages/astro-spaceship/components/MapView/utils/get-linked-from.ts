@@ -20,7 +20,7 @@ const documentToFeature = (d: Document): Feature|null => d.data.location ? ({
     }
   }) : null;
 
-export const getMapView = async (slug?: string, collectionName = DOCUMENTS_COLLECTION_NAME): Promise<FeatureCollection> => {
+export const getLinkedFrom = async (slug?: string, collectionName = DOCUMENTS_COLLECTION_NAME): Promise<FeatureCollection> => {
   const document = (await getEntry({
     collection: collectionName,
     id: slug,

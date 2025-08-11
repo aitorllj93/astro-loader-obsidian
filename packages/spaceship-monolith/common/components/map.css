@@ -1,0 +1,13 @@
+
+
+@utility map-view {
+  @apply text-menu-foreground dark:text-menu-foreground-dark font-menu;
+}
+
+@utility map-title {
+  @apply text-ui-sm mb-2 font-bold;
+}
+
+@utility map {
+   @apply flex w-[95%] h-full aspect-square mx-auto rounded-lg bg-graph-background dark:bg-graph-background-dark z-1;
+}

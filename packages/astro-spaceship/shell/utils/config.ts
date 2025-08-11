@@ -1,9 +1,14 @@
-import type { SpaceshipConfig } from "../../../types";
-
 import { join } from "node:path";
 import { readFile } from 'node:fs/promises';
 
+import type { LegacySpaceshipConfig, SpaceshipConfig } from "../../types";
+import { ConfigSchema } from '../../schemas';
+
 let cache: SpaceshipConfig|null = null;
+
+export const isLegacyConfig = (config: SpaceshipConfig): config is LegacySpaceshipConfig => {
+  return 'displayOptions' in config;
+}
 
 export const getConfig = async (): Promise<SpaceshipConfig> => {
   if (cache) {
@@ -12,7 +17,7 @@ export const getConfig = async (): Promise<SpaceshipConfig> => {
 
   const content = await readFile(join(process.cwd(), 'website.config.json'), 'utf-8');
 
-  cache = JSON.parse(content) as SpaceshipConfig;
+  cache = ConfigSchema.parse(JSON.parse(content));
 
   return cache;
 }

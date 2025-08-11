@@ -17,19 +17,19 @@ export type Props = {
   backlinks?: Document[];
   showToC?: boolean;
   showLinks?: boolean;
-  showRelations?: boolean;
+  showGraph?: boolean;
 };
 
-const { config, id, document, backlinks, showToC = true, showLinks = true, showRelations = true } = Astro.props;
+const { config, id, document, backlinks, showToC = true, showLinks = true, showGraph = true } = Astro.props;
 
 const gridTemplates = {
-  "[grid-template-areas:'tab1_tab2_tab3''tabcontent_tabcontent_tabcontent'] grid-cols-3": showToC && showLinks && showRelations,
-  "[grid-template-areas:'tab2_tab3''tabcontent_tabcontent'] grid-cols-2": !showToC && showLinks && showRelations,
-  "[grid-template-areas:'tab3''tabcontent'] grid-cols-1": !showToC && !showLinks && showRelations,
-  "[grid-template-areas:'a_b_c''a_b_c']": !showToC && !showLinks && !showRelations,
-  "[grid-template-areas:'tab1_tab3''tabcontent_tabcontent'] grid-cols-2": showToC && !showLinks && showRelations,
-  "[grid-template-areas:'tab1''tabcontent'] grid-cols-1": showToC && !showLinks && !showRelations,
-  "[grid-template-areas:'tab1_tab2''tabcontent_tabcontent'] grid-cols-2": showToC && showLinks && !showRelations,
+  "[grid-template-areas:'tab1_tab2_tab3''tabcontent_tabcontent_tabcontent'] grid-cols-3": showToC && showLinks && showGraph,
+  "[grid-template-areas:'tab2_tab3''tabcontent_tabcontent'] grid-cols-2": !showToC && showLinks && showGraph,
+  "[grid-template-areas:'tab3''tabcontent'] grid-cols-1": !showToC && !showLinks && showGraph,
+  "[grid-template-areas:'a_b_c''a_b_c']": !showToC && !showLinks && !showGraph,
+  "[grid-template-areas:'tab1_tab3''tabcontent_tabcontent'] grid-cols-2": showToC && !showLinks && showGraph,
+  "[grid-template-areas:'tab1''tabcontent'] grid-cols-1": showToC && !showLinks && !showGraph,
+  "[grid-template-areas:'tab1_tab2''tabcontent_tabcontent'] grid-cols-2": showToC && showLinks && !showGraph,
 };
 
 const template = Object.entries(gridTemplates).find(([_, v]) => v === true)?.[0];
@@ -79,7 +79,7 @@ const template = Object.entries(gridTemplates).find(([_, v]) => v === true)?.[0]
   )}
 
 
-  {showRelations && (
+  {showGraph && (
     <input
       id={`${id}-tab-three`}
       type="radio"
@@ -113,7 +113,7 @@ const template = Object.entries(gridTemplates).find(([_, v]) => v === true)?.[0]
     </div>
   )}
   
-  {showRelations && (
+  {showGraph && (
     <div
       class="hidden peer-checked/tab-three:flex tabset-content [grid-area:tabcontent]"
     >

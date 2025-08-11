@@ -1,10 +1,13 @@
 ---
 import type { Document, SpaceshipConfig } from "../../types";
 
+import { isLegacyConfig } from "../../shell/utils/config";
+
 import TableOfContents from "../TableOfContents/TableOfContents.astro";
 
 import Links from "./Links.astro";
 import Graph from "./Graph.astro";
+import Map from "./Map.astro";
 
 export type Props = {
   id?: string;
@@ -13,15 +16,23 @@ export type Props = {
   backlinks?: Document[];
   showToC?: boolean;
   showLinks?: boolean;
-  showRelations?: boolean;
+  showGraph?: boolean;
+  showMap?: boolean;
 };
 
-const { config, id, document, backlinks, showToC = true, showLinks = true, showRelations = true } = Astro.props;
+const { config, id, document, backlinks, showToC = true, showLinks = true, showGraph = true, showMap = false } = Astro.props;
+
+const mapIsEnabled = isLegacyConfig(config) ? true : config.features.rightSidebar.map.enabled;
+const graphIsEnabled = isLegacyConfig(config) ? true : config.features.rightSidebar.graph.enabled;
+const tocIsEnabled = isLegacyConfig(config) ? true : config.features.rightSidebar.toc.enabled;
+const linksIsEnabled = isLegacyConfig(config) ? true : config.features.rightSidebar.links.enabled;
+
 ---
 <div class="column">
   <div class="column-content">
-    {showRelations && (<Graph config={config} document={document} /> )}
-    {showToC && (<TableOfContents document={document} />)}
-    {showLinks && (<Links document={document} backlinks={backlinks} />)}
+    {mapIsEnabled && showMap && (<Map config={config} document={document} /> )}
+    {graphIsEnabled && showGraph && (<Graph config={config} document={document} /> )}
+    {tocIsEnabled && showToC && (<TableOfContents document={document} />)}
+    {linksIsEnabled && showLinks && (<Links document={document} backlinks={backlinks} />)}
   </div>
 </div>
