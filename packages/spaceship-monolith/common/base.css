@@ -22,6 +22,7 @@
 @import './markdown/callouts';
 @import './markdown/code';
 @import './markdown/embeds';
+@import './markdown/map';
 @import './markdown/math';
 @import './markdown/tasks-list';
 @import './markdown/timeline';

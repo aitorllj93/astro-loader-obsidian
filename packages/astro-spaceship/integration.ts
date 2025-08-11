@@ -69,6 +69,11 @@ export function astroSpaceship(
           pattern: '_spaceship/graph/[...slug].json',
           entrypoint: 'node_modules/astro-spaceship/pages/graph-slug.ts',
         });
+
+        injectRoute({
+          pattern: '_spaceship/map/[...slug].json',
+          entrypoint: 'node_modules/astro-spaceship/pages/map-slug.ts',
+        });
       },
     },
   }

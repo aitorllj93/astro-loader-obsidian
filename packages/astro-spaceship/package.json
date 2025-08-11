@@ -30,6 +30,7 @@
 	"devDependencies": {
 		"@types/d3": "^7.4.3",
 		"@types/html-to-text": "^9.0.4",
+		"@types/leaflet": "^1.9.20",
 		"@types/node": "18.16.9",
 		"astro": "^5.12.8"
 	},
@@ -47,9 +48,12 @@
 		"astro-pagefind": "^1.8.3",
 		"d3": "^7.9.0",
 		"front-matter": "^4.0.2",
+		"geojson": "^0.5.0",
 		"hast": "^0.0.2",
 		"hast-util-to-html": "^9.0.5",
 		"html-to-text": "^9.0.5",
+		"leaflet": "^1.9.4",
+		"leaflet-simplestyle": "^1.2.4",
 		"playwright": "^1.54.2",
 		"reading-time": "^1.5.0",
 		"rehype-callouts": "^2.1.2",

@@ -112,3 +112,15 @@
     @apply rounded-xl;
   }
 }
+
+@utility map {
+  @apply sticker h-[180px]! md:h-[396px]!;
+  --rot: 0;
+}
+
+@utility leaflet-container {
+  @apply rounded-2xl;
+  @media (prefers-color-scheme: dark) {
+    @apply filter-none;
+  }
+}

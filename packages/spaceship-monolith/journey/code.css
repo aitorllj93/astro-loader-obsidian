@@ -50,18 +50,14 @@
     height: 44px;
     /* simulamos el reverso del papel con un gradiente más claro */
     background: linear-gradient(225deg,
-      #171B26 0%,
-      #252A38 100%);
+      var(--color-example-background) 0%,
+      var(--color-example-foreground) 100%);
     /* triángulo de pliegue */
     clip-path: polygon(100% 100%, 0 100%, 100% 0);
     /* sombra del pliegue sobre el papel */
     box-shadow: -2px -2px 4px rgba(0,0,0,0.12);
     /* que no tape el contenido */
     pointer-events: none;
-  }
-
-  @media (prefers-color-scheme: dark) {
-    background: #171B26;
   }
 }
 

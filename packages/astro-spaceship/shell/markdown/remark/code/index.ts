@@ -2,13 +2,15 @@
 
 import type { Text } from "hast";
 import { embed } from "./embed";
+import { mapview } from "./mapview";
 import { spoiler } from "./spoiler";
 import { timeline } from "./timeline";
 
 export const transformers = {
+  'embed': embed,
+  'mapview': mapview,
   'spoiler-markdown': spoiler,
   'timeline-labeled': timeline,
-  'embed': embed,
 } as const;
 
 
