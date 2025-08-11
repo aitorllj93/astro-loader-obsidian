@@ -77,7 +77,7 @@ const buildPage = (config: SpaceshipConfig, doc: Document, language?: string): P
     title,
     language: language ?? config.defaultLocale,
     seo: {
-      title,
+      title: `${doc.data.title} | ${config.title}`,
       description,
       keywords,
       image,
