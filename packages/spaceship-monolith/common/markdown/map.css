@@ -10,6 +10,10 @@
 @utility map-view {
   .leaflet-container {
     @apply rounded-2xl;
+
+    a {
+      @apply text-xs!;
+    }
   }
 }
 
@@ -20,6 +24,17 @@
         ) brightness(0.7);
   }
 }
+
+@utility map-label {
+  @apply font-heading text-xs;
+}
+
+@utility map-marker {
+  @apply bg-primary icon-[akar-icons--cross] w-5! h-5!;
+}
+
+@source inline("map-label");
+@source inline("map-marker");
 
 @source inline("embed-map");
 @source inline("leaflet-container");

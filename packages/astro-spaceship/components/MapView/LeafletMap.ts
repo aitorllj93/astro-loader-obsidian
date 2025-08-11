@@ -3,7 +3,11 @@ import L, { Control, ImageOverlay, GeoJSON, type Layer, Map as LMap, TileLayer, 
 import type { Feature, GeoJsonObject } from 'geojson';
 import type { Configuration, GeoJSONConfiguration, LayerConfiguration } from './LeafletMapConfig';
 
-import 'leaflet-simplestyle';
+// import 'leaflet-simplestyle';
+
+const LABEL_SHOW_FROM = 17;
+const BASE_ZOOM = 17; // a partir de aquí escalamos
+const SCALE_STEP = 1.18; // factor por nivel de zoom (ajústalo al gusto)
 
 class LeafletMap extends HTMLElement {
 
@@ -108,10 +112,12 @@ class LeafletMap extends HTMLElement {
         }
 
         config.options.pointToLayer = (feature, latlng) => {
-          const label = String(feature.properties.name ?? feature.properties.NAME) // Must convert to string, .bindTooltip can't use straight 'feature.properties.attribute'
-          return new L.CircleMarker(latlng, {
-            radius: 1,
-          }).bindTooltip(label, { permanent: true, opacity: 0 });
+          return this.zoomableMarker(feature, latlng, config);
+
+          // return new L.CircleMarker(latlng, {
+          //   radius: 1,
+          //   className: 'map-marker',
+          // }).bindTooltip(label, { permanent: true, opacity: 0 });
         };
         config.options.onEachFeature = (feature, layer) => this.onEachFeature(feature, layer, config);
         const layer = new GeoJSON(null, config.options);
@@ -134,7 +140,7 @@ class LeafletMap extends HTMLElement {
               const o = JSON.parse(json);
               layer.addData(o as GeoJsonObject);
               // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-              (layer as any).useSimpleStyle();
+              // (layer as any).useSimpleStyle();
             } catch (e) {
               console.error('leaflet-map', this.id, 'error loading GeoJSON', e);
             }
@@ -173,54 +179,99 @@ class LeafletMap extends HTMLElement {
   }
 
   private onEachFeature(feature: Feature, layer: Layer, config: GeoJSONConfiguration): void {
-    // if (feature.geometry.type === 'MultiPolygon') {
-    //   const label = L.marker(layer._bounds.getCenter(), {
-    //     icon: L.divIcon({
-    //       className: 'label',
-    //       html: feature.properties.NAME,
-    //       iconSize: [100, 40]
-    //     })
-    //   })
-    //   .addTo(this.map);
-    // }
+    this.zoomableLabel(feature, layer, config);
+  }
 
-    if (feature.geometry.type === 'Point') {
-      const isCity = !!feature.properties?.name;
+  private zoomableMarker(feature: Feature, latlng: L.LatLngExpression, config: GeoJSONConfiguration) {
+    const label = String(feature.properties?.name ?? feature.properties?.NAME) // Must convert to string, .bindTooltip can't use straight 'feature.properties.attribute'
 
-      const content = `<span style="${feature.properties?.stroke ? `color:${feature.properties.stroke}` : ''}">${feature.properties?.name ?? feature.properties?.NAME.toUpperCase()}</span>`;
+    const marker = new L.Marker(latlng, {
+      icon: this.makeMarker(feature, this.map?.getZoom() ?? BASE_ZOOM)
+    }).bindTooltip(label, { permanent: true, opacity: 0 });
 
+    const update = () => {
+      if (!this.map) {
+        return;
+      }
+      const z = this.map.getZoom();
+      if (z < LABEL_SHOW_FROM) {
 
-      // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-      const label = L.marker((layer as any)._latlng, {
-        icon: L.divIcon({
-          className: `label ${isCity ? 'label-city font-heading' : 'label-region font-title'}`,
-          html: config.href ? `<a href=${feature.properties?.href ?? config.href}>${content}</a>` : content,
-          iconSize: [100, 40],
-        })
-      })
-        .addTo(this.map as LMap);
-    }
+        if (!this.map.hasLayer(marker)) marker.addTo(this.map as L.Map);
 
-    // const tooltip = DomUtil.create('div');
-    // const table = DomUtil.create('table', undefined, tooltip);
-    // const thead = DomUtil.create('thead', undefined, table);
-    // const trHead = DomUtil.create('tr', undefined, thead);
-    // const thName = DomUtil.create('th', undefined, trHead);
-    // thName.innerHTML = 'Name';
-    // const thValue = DomUtil.create('th', undefined, trHead);
-    // thValue.innerHTML = 'Value';
-    // const tbody = DomUtil.create('tbody', undefined, table);
-    // if (feature.properties !== null) {
-    //   for (let key in feature.properties) {
-    //     const value = feature.properties[key];
-    //     const tr = DomUtil.create('tr', undefined, tbody);
-    //     const tdName = DomUtil.create('td', undefined, tr);
-    //     tdName.innerHTML = key;
-    //     const tdValue = DomUtil.create('td', undefined, tr);
-    //     tdValue.innerHTML = value;
-    //   }
-    // }
-    // layer.bindTooltip(tooltip);
+        marker.setIcon(this.makeMarker(feature, z));
+      } else if (this.map.hasLayer(marker)) {
+        this.map.removeLayer(marker);
+      }
+    };
+
+    setTimeout(() => update(), 100);
+    this.map?.on('zoomend', update);
+    return marker;
+  }
+
+  private zoomableLabel(feature: Feature, layer: Layer, config: GeoJSONConfiguration) {
+    if (feature.geometry.type !== 'Point' || !this.map) return;
+
+    // biome-ignore lint/suspicious/noExplicitAny: internal property
+    const label = L.marker((layer as any)._latlng, {
+      icon: this.makeLabel(feature, config, this.map.getZoom()),
+    });
+
+    const update = () => {
+      if (!this.map) {
+        return;
+      }
+      const z = this.map.getZoom();
+      if (z >= LABEL_SHOW_FROM) {
+
+        if (!this.map.hasLayer(label)) label.addTo(this.map as L.Map);
+        
+        label.setIcon(this.makeLabel(feature, config, z));
+      } else if (this.map.hasLayer(label)) {
+        this.map.removeLayer(label);
+      }
+    };
+
+    update();
+    this.map.on('zoomend', update);
+  }
+
+  private makeMarker(feature: Feature, zoom: number) {
+    const scale = SCALE_STEP ** (zoom - BASE_ZOOM);
+
+    const transform = `display: flex; transform: scale(${scale});`;
+    const color = feature.properties?.stroke ? `color:${feature.properties.stroke};` : '';
+    const style = [transform, color].join('');
+
+    const html = `<span class="map-marker" style="${style}"></span>`;
+
+    return L.divIcon({
+      className: '',
+      html,
+      iconSize: [10, 10],
+    });
+  }
+
+  private makeLabel(feature: Feature, config: GeoJSONConfiguration, zoom: number) {
+    const scale = SCALE_STEP ** (zoom - BASE_ZOOM);
+    const name = (feature.properties?.name ?? feature.properties?.NAME ?? '').toString();
+
+    const transform = `display: flex; transform: scale(${scale});`;
+    const color = feature.properties?.stroke ? `color:${feature.properties.stroke};` : '';
+    const style = [transform, color].join('');
+
+    const content = `<span style="${style}">${name}</span>`;
+    const html = feature.properties?.href ?? config.href
+      ? `<a href="${feature.properties?.href ?? config.href}">${content}</a>`
+      : content;
+
+    return L.divIcon({
+      className: 'map-label font-heading',
+      html,
+      iconSize: [100, 40],
+      // iconAnchor: [w / 2, h / 2], // centra el texto
+      // pane: 'labels',
+    });
   }
 
   private loadData(type: string, id?: string): Promise<string> {

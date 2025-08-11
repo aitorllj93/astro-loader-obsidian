@@ -116,6 +116,14 @@
 @utility embed-map {
   @apply sticker h-[180px]! md:h-[396px]!;
   --rot: 0;
+
+  .leaflet-container {
+    z-index: 0;
+  }
+
+  &::after {
+    z-index: 1;
+  }
 }
 
 @utility map-view {
@@ -132,4 +140,8 @@
   a {
     @apply text-[hsl(21,_61%,_26%)]! text-base;
   }
+}
+
+@utility map-marker {
+  @apply bg-[hsl(21,_61%,_26%)];
 }

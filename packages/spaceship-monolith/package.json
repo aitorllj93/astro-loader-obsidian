@@ -36,6 +36,8 @@
 		"astro": "^5.12.8"
 	},
 	"dependencies": {
+		"@iconify/json": "^2.2.371",
+		"@iconify/tailwind4": "^1.0.6",
 		"@tailwindcss/typography": "^0.5.16",
 		"tailwind-scrollbar": "^4.0.2",
 		"tailwindcss": "^4.1.11",

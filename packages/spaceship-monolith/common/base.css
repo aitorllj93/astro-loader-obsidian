@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "tailwindcss-animated";
 
+@import './icons';
 @import './colors';
 @import './fonts';
 @import './sizings';
