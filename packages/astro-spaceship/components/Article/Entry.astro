@@ -40,7 +40,7 @@ const showDescriptionSection = !!data.description || showMetaSection;
     <Subtitle document={document} />
     {
       showDescriptionSection && (
-        <div class="flex flex-col lg:flex-row justify-end">
+        <div class="article-description-section">
           <Description document={document} />
           {showMetaSection && (
             <div class="article-meta">
