@@ -1,5 +1,6 @@
 ---
 import { useI18n } from '../../i18n';
+import { isLegacyConfig } from '../../shell/utils/config';
 import type { SpaceshipConfig, Author as TAuthor } from '../../types';
 
 export type Props = {
@@ -10,16 +11,19 @@ export type Props = {
 const { t } = useI18n(Astro);
 
 const { author, config } = Astro.props;
+
+const showAuthor = isLegacyConfig(config) ? config.displayOptions?.showAuthor !== false : config.features.article.author.enabled;
+
 ---
 {
-  author && config.displayOptions?.showAuthor !== false && (
+  author && showAuthor && (
     <span data-pagefind-weight="0" class="article-author">
       {t("article.author.name", { name: author.data.name })}
     </span>
   )
 }
 {
-  author?.data.title && config.displayOptions?.showAuthor !== false && (
+  author?.data.title && showAuthor && (
     <span data-pagefind-weight="0" class="article-author">{author.data.title}</span>
   )
 }

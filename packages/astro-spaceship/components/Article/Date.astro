@@ -1,4 +1,5 @@
 ---
+import { isLegacyConfig } from '../../shell/utils/config';
 import type { Document, SpaceshipConfig } from '../../types';
 
 export type Props = {
@@ -7,11 +8,14 @@ export type Props = {
 };
 
 const { config, document } = Astro.props;
+
+const showPublishDate = isLegacyConfig(config) ? config.displayOptions?.showPublishDate !== false : config.features.article.publishDate.enabled;
+
 const { updated } = document.data;
 ---
 
 {
-  updated && config.displayOptions?.showPublishDate !== false && (
+  updated && showPublishDate && (
     <span data-pagefind-weight="0" class="article-date">
       {updated.toLocaleDateString("es-ES")}
     </span>

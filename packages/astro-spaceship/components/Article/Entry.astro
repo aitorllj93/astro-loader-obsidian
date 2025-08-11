@@ -10,6 +10,7 @@ import Author from "./Author.astro";
 import Title from "./Title.astro";
 import Subtitle from "./Subtitle.astro";
 import Description from "./Description.astro";
+import { isLegacyConfig } from "../../shell/utils/config";
 
 export type Props = {
   config: SpaceshipConfig,
@@ -24,10 +25,11 @@ const { data } = document;
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 const { Content } = await render(document as any);
 
-const showMetaSection =
-  config.displayOptions?.showAuthor !== false ||
-  config.displayOptions?.showPublishDate !== false ||
-  tags.length > 0;
+const showAuthor = isLegacyConfig(config) ? config.displayOptions?.showAuthor !== false : config.features.article.author.enabled;
+const showPublishDate = isLegacyConfig(config) ? config.displayOptions?.showPublishDate !== false : config.features.article.publishDate.enabled;
+const showTags = tags.length > 0;
+
+const showMetaSection = showAuthor || showPublishDate || showTags;
 
 const showDescriptionSection = !!data.description || showMetaSection;
 ---

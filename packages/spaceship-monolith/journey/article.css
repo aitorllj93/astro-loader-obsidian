@@ -27,11 +27,15 @@
 }
 
 @utility article-subtitle {
-  @apply !mt-2 text-center opacity-60 italic;
+  @apply text-center opacity-60 italic my-9!;
+}
+
+@utility article-description-section {
+  @apply flex flex-col lg:flex-row justify-end  my-9!;
 }
 
 @utility article-description {
-  @apply !m-0 !my-9 text-2xl lg:text-3xl xl:text-4xl text-balance;
+  @apply m-0! my-9! text-2xl lg:text-3xl xl:text-4xl text-balance;
 }
 
 @utility article-tags {

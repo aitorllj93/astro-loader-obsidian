@@ -85,6 +85,10 @@
   @apply text-h2 text-article-subtitle-foreground dark:text-article-subtitle-foreground-dark;
 }
 
+@utility article-description-section {
+  @apply flex flex-col lg:flex-row justify-end;
+}
+
 @utility article-description {
   @apply text-base !font-heading !m-0;
 }
