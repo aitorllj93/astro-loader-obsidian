@@ -7,8 +7,7 @@ import { ConfigSchema } from '../../schemas';
 const content = await readFile(join(process.cwd(), 'website.config.json'), 'utf-8');
 
 
-let cache: SpaceshipConfig|null = 
-  content ? ConfigSchema.parse(JSON.parse(content)) : null;
+let cache: SpaceshipConfig = ConfigSchema.parse(JSON.parse(content));
 
 export const isLegacyConfig = (config: SpaceshipConfig): config is LegacySpaceshipConfig => {
   return 'displayOptions' in config;
