@@ -39,6 +39,7 @@
 	},
 	"dependencies": {
 		"@astrojs/sitemap": "^3.4.2",
+		"@beoe/pan-zoom": "^0.0.4",
 		"@popperjs/core": "^2.11.8",
 		"@remark-embedder/core": "^3.0.3",
 		"@remark-embedder/transformer-oembed": "^5.0.1",

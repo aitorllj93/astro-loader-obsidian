@@ -1,0 +1,21 @@
+<script>
+  import "@beoe/pan-zoom/css/PanZoomUi.css";
+  import { PanZoomUi } from "@beoe/pan-zoom";
+
+  const contentImages = document
+    .querySelectorAll(
+      ".article-body svg, .article-body img"
+    );
+
+  for (let element of contentImages) {
+    if (element.parentElement?.tagName === "PICTURE") {
+      element = element.parentElement;
+    }
+    const container = document.createElement("figure");
+    container.classList.add("beoe", "not-content");
+    element.replaceWith(container);
+    container.append(element);
+    // @ts-expect-error
+    new PanZoomUi({ element, container }).on();
+  }
+</script>

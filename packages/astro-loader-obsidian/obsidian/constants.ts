@@ -11,7 +11,6 @@ export const ALLOWED_IMAGE_EXTENSIONS = [
   ".jpeg",
   ".png",
   ".gif",
-  ".svg",
   ".webp",
   ".avif",
   ".tiff",
@@ -25,7 +24,8 @@ export const ALLOWED_VIDEO_EXTENSIONS = ['.mkv', '.mov', '.mp4', '.ogv', '.webm'
 
 
 export const ALLOWED_FILE_EXTENSIONS = [
-  ".pdf"
+  ".pdf",
+  ".svg",
 ] as const;
 
 export const ALLOWED_ASSET_EXTENSIONS = [

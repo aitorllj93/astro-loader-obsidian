@@ -1,5 +1,5 @@
 import type { AstroIntegrationLogger } from "astro";
-import { dirname, relative } from "node:path";
+import { dirname, extname, relative } from "node:path";
 
 import { ALLOWED_AUDIO_EXTENSIONS, ALLOWED_VIDEO_EXTENSIONS, ALLOWED_FILE_EXTENSIONS, ALLOWED_IMAGE_EXTENSIONS } from "./constants";
 import type { ObsidianContext } from "../types";
@@ -11,6 +11,7 @@ import { getAssetPublicUrl } from "./assets";
 export type Wikilink = {
   /** @deprecated use Link.type instead */
   isImage: boolean;
+  extension?: string|undefined;
   text: string;
   file?: string|undefined;
   link: ObsidianLink;
@@ -126,12 +127,14 @@ export const parseWikilinks = (
     let href: string | null = null;
     let id: string | undefined;
     let file: string | undefined;
+    let extension: string | undefined;
 
     if (type === 'document') {
       const [idWithoutAnchor, anchorTag] = idHref.split('#');
       file = getDocumentFromLink(idWithoutAnchor ?? idHref, context.files);
 
       if (file) {
+        extension = extname(file);
         href = toUrl(
           file,
           context.baseUrl,
@@ -165,6 +168,7 @@ export const parseWikilinks = (
       file = getAssetFromLink(idHref, context.assets);
 
       if (file) {
+        extension = extname(file);
         const relativePath = relative(dirname(`/${context.entry}`), `/${file}`);
         href = type === 'image' ? 
           relativePath.startsWith('.') ? relativePath : `./${relativePath}` :
@@ -190,6 +194,7 @@ export const parseWikilinks = (
     links.push({
       text,
       file,
+      extension,
       link,
       isImage: link.type === 'image',
     });

@@ -3,6 +3,7 @@
 import type { FooterData, Page, SpaceshipConfig } from '../../types';
 
 import Footer from '../Footer/Footer.astro';
+import PanZoom from '../PanZoom/PanZoom.astro';
 import SEO from '../SEO/SEO.astro';
 
 export type Props = {
@@ -20,7 +21,7 @@ const { language } = page;
 <html class="html" lang={language}>
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 		<link rel="icon" type="image/svg+xml" href={`${config.base ?? '/'}favicon.svg`} />
     <SEO page={page} />
     <slot name="head" />
@@ -36,5 +37,6 @@ const { language } = page;
       window.addEventListener('DOMContentLoaded', initArticlePreviews);
     </script>
     <script src="../MapView/LeafletMap.ts"></script>
+    <PanZoom />
   </body>
 </html>

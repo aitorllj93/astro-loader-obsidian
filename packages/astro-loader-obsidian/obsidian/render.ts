@@ -131,7 +131,11 @@ export const renderObsidian = async (
       let replacement: string | null = null;
 
       if (hasTarget && wikilink.link.isEmbedded && wikilink.link.id) {
-        replacement = `<iframe class="iframe-embed" src="${wikilink.link.href}"></iframe>`;
+        if (wikilink.extension === '.svg') {
+          replacement = `<div class="svg-embed"><svg viewBox="0 0 100 100"><image x="0" y="0" width="100%" height="100%" href=${wikilink.link.href} preserveAspectRatio="xMidYMid meet" /></svg></div>`;
+        } else {
+          replacement = `<iframe class="iframe-embed" src="${wikilink.link.href}"></iframe>`;
+        }
       } else {
         replacement = `<a class="iframe-link" href=${wikilink.link.href}>${wikilink.link.title}</a>`
       }

@@ -60,7 +60,7 @@
 }
 
 @utility article-table {
-  @apply prose-thead:border-hr-border prose-tr:border-hr-border dark:prose-thead:border-hr-border-dark dark:prose-tr:border-hr-border-dark;
+  @apply prose-table:font-paragraph prose-thead:border-hr-border prose-tr:border-hr-border dark:prose-thead:border-hr-border-dark dark:prose-tr:border-hr-border-dark;
 }
 
 @utility article {
