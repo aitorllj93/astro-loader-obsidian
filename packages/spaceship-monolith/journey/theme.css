@@ -134,7 +134,7 @@
 
 @utility leaflet-container {
   @media (prefers-color-scheme: dark) {
-    @apply filter-none;
+    @apply filter-none!;
   }
 
   a {

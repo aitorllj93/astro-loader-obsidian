@@ -38,17 +38,4 @@
   .full {
     grid-column: full;
   }
-
-  &.wide-page {
-    @apply px-4 md:px-8;
-    > * {
-      grid-column: full;
-    }
-  }
-
-  &.wide-table {
-    > table {
-      grid-column: full;
-    }
-  }
 }

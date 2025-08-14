@@ -1,11 +1,4 @@
 
-iframe {
-  border-radius: 1.5rem;
-  height: 100%;
-  width: 100%;
-  aspect-ratio: 16 / 9;
-}
-
 
 @utility embed-figure {
   @apply flex flex-col sm:flex-row rounded-sm border-gray-400 dark:border-obsidian-400 border mb-4;
@@ -49,4 +42,12 @@ iframe {
 
 @utility file-embed-title {
   @apply font-semibold;
+}
+
+@utility audio-embed {
+  @apply w-full;
+}
+
+@utility iframe-embed {
+  @apply w-full h-[90dvh];
 }

@@ -19,15 +19,22 @@ export type Props = {
 
 const config = Astro.props.config;
 
-const mode = isLegacyConfig(config) ? (config.displayOptions?.rightSidebar?.mode as 'column') : config.features.rightSidebar.mode;
+const mode = isLegacyConfig(config) ? (config.displayOptions?.rightSidebar?.mode as 'column' ?? 'tabset') : config.features.rightSidebar.mode;
+
+const mapIsEnabled = Astro.props.showMap && (isLegacyConfig(config) ? true : config.features.rightSidebar.map.enabled);
+const graphIsEnabled = Astro.props.showGraph && (isLegacyConfig(config) ? true : config.features.rightSidebar.graph.enabled);
+const tocIsEnabled = Astro.props.showToC && (isLegacyConfig(config) ? true : config.features.rightSidebar.toc.enabled);
+const linksIsEnabled = Astro.props.showLinks && (isLegacyConfig(config) ? true : config.features.rightSidebar.links.enabled);
+
+const showSidebar = mapIsEnabled || graphIsEnabled || tocIsEnabled || linksIsEnabled;
 ---
 
-<Sidebar class="hidden lg:flex" open position="right" id="right-sidebar-desktop">
+{showSidebar && <Sidebar class="hidden lg:flex" open position="right" id="right-sidebar-desktop">
   { mode === 'column' && <Column id="right-sidebar-desktop-column" {...Astro.props} />}
   { mode === 'tabset' && <Tabset id="right-sidebar-desktop-tabset" {...Astro.props} />}
-</Sidebar>
+</Sidebar>}
 
-<Sidebar class="flex lg:hidden" position="right" id="right-sidebar-touch">
+{showSidebar && <Sidebar class="flex lg:hidden" position="right" id="right-sidebar-touch">
   { mode === 'column' && <Column id="right-sidebar-touch-column" {...Astro.props} />}
   { mode === 'tabset' && <Tabset  id="right-sidebar-touch-tabset" {...Astro.props} />}
-</Sidebar>
+</Sidebar>}
