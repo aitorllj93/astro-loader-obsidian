@@ -64,7 +64,7 @@
 }
 
 @utility article {
-  @apply text-base p-8 grow-1 max-w-full article-background article-blockquote article-code article-heading article-image article-link article-list article-paragraph article-prose article-separator article-scroll article-strong article-table;
+  @apply text-base py-8 grow-1 max-w-full article-background article-blockquote article-code article-heading article-image article-link article-list article-paragraph article-prose article-separator article-scroll article-strong article-table;
 
   ::selection {
     @apply bg-primary/20 dark:bg-primary/25;
@@ -73,7 +73,7 @@
 
 
 @utility article-content {
-  @apply max-w-[700px] mx-auto;
+  @apply grid-layout;
 }
 
 @utility article-title {

@@ -37,6 +37,7 @@ export const ObsidianWikiLinkSchema = z.object({
 export const ObsidianCoreSchema = z.object({
   tags: arrayExclude(z.string()).nullish(),
   aliases: commaSeparatedStringArray.nullish(),
+  cssClass: commaSeparatedStringArray.nullish(),
   cssclasses: commaSeparatedStringArray.nullish(),
   links: ObsidianWikiLinkSchema.array().optional(),
   images: z

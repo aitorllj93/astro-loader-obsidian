@@ -5,6 +5,7 @@
 @import './colors';
 @import './fonts';
 @import './sizings';
+@import './grid';
 
 @import './components/article';
 @import './components/article-preview';

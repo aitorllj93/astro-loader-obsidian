@@ -35,7 +35,7 @@ const showDescriptionSection = !!data.description || showMetaSection;
 ---
 
 <article class="article" data-pagefind-body>
-  <section class="article-content">
+  <section class:list={["article-content", ...(data.cssClass ?? []), ...(data.cssclasses ?? [])]}>
     <Title document={document} />
     <Subtitle document={document} />
     {
