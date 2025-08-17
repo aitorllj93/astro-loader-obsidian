@@ -1,0 +1,41 @@
+{
+	"name": "obsidian-hal-9000-api",
+	"version": "0.0.1",
+	"description": "API Server for Obsidian",
+	"main": "src/main.ts",
+	"scripts": {
+		"start": "npm run dev",
+		"dev-setup": "npm link astro-spaceship astro-loader-obsidian spaceship-monolith obsidian-hal-9000",
+		"dev": "npx tsx src/main.ts"
+	},
+	"type": "module",
+	"keywords": [
+		"obsidian"
+	],
+	"author": "Aitor Llamas Jiménez <aitorllj93@gmail.com>",
+	"homepage": "https://github.com/aitorllj93/astro-loader-obsidian",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/aitorllj93/astro-loader-obsidian.git",
+		"directory": "packages/obsidian-hal-9000"
+	},
+	"bugs": "https://github.com/aitorllj93/astro-loader-obsidian/issues",
+	"license": "MIT",
+	"devDependencies": {
+		"@types/node": "^16.11.6",
+		"typescript": "4.7.4"
+	},
+	"dependencies": {
+		"@modelcontextprotocol/sdk": "^1.17.3",
+		"astro": "^5.12.8",
+		"astro-loader-obsidian": "^0.7.0",
+		"astro-spaceship": "^0.7.0",
+		"front-matter": "^4.0.2",
+		"googleapis": "^156.0.0",
+		"mime": "^4.0.7",
+		"openai": "^5.12.2",
+		"sharp": "^0.34.3",
+		"varlock": "^0.0.8",
+		"zod": "^3.25.76"
+	}
+}
