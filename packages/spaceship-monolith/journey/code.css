@@ -19,6 +19,10 @@
     @apply [font-size-adjust:0.6] py-4.5! leading-9!;
   }
 
+  figure {
+    @apply mb-0!;
+  }
+
   &::before {
     content: "";
     position: absolute;
