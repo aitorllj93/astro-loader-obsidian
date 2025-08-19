@@ -80,7 +80,7 @@ export const mapview = async (node: Text) => {
   return {
     before: [
       STYLES_NODE,
-      JS_NODE,
+      // JS_NODE,
 			{
 				type: "element",
 				tagName: "map-view",

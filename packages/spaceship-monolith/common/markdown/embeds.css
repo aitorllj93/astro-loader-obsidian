@@ -38,6 +38,9 @@
 
 @utility file-embed-link {
   @apply float-right;
+  > span {
+    @apply icon-[solar--link-line-duotone] text-2xl;
+  }
 }
 
 @utility file-embed-title {

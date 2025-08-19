@@ -1,4 +1,5 @@
 // src/scripts/article-preview.ts
+import memoize from 'memoize';
 
 import { createPopper, type Instance } from '@popperjs/core';
 
@@ -24,12 +25,13 @@ const fetchData = async (href: string, qs = 'article') => {
   return article;
 }
 
-function attachPreview(link: HTMLAnchorElement) {
+const AnchorPreview = memoize((link: HTMLAnchorElement) => {
+
   let popperInstance: Instance|null;
   let previewEl: HTMLDivElement | null = null;
   let showTimeout: number | null = null;
   let hideTimeout: number | null = null;
-  let checkInterval: ReturnType<typeof window.setInterval> | null = null;
+  let checkInterval: ReturnType<typeof window.setInterval | typeof setInterval> | null = null;
 
   const href = link.getAttribute('href');
 
@@ -46,7 +48,7 @@ function attachPreview(link: HTMLAnchorElement) {
     popperInstance = null;
 
     if (checkInterval) {
-      clearInterval(checkInterval);
+      clearInterval(checkInterval as unknown as number);
       checkInterval = null;
     }
   };
@@ -108,7 +110,7 @@ function attachPreview(link: HTMLAnchorElement) {
     if (showTimeout) clearTimeout(showTimeout);
   };
 
-  link.addEventListener('pointerenter', async () => {
+  const pointerEnter = async () => {
     cancelHide();
     fetchData(href).then(article => {
       if (!showTimeout && link.matches(':hover') && !previewEl && article) {
@@ -121,12 +123,39 @@ function attachPreview(link: HTMLAnchorElement) {
         showPreview(cache.get(href) as HTMLElement);
       }
     }, SHOW_DELAY);
-  });
+  };
 
-  link.addEventListener('pointerleave', () => {
+  const pointerLeave = () => {
     cancelShow();
     scheduleHide();
-  });
+  };
+
+  const contextmenu = (event: MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+    return false;
+  };
+
+  return {
+    pointerEnter,
+    pointerLeave,
+    contextmenu
+  }
+});
+
+function attachPreview(link: HTMLAnchorElement) {
+  const anchorPreview = AnchorPreview(link);
+
+  if (!anchorPreview) {
+    return;
+  }
+
+  link.removeEventListener('pointerenter', anchorPreview.pointerEnter);
+  link.addEventListener('pointerleave', anchorPreview.pointerLeave);
+
+  link.addEventListener('pointerenter', anchorPreview.pointerEnter);
+  link.addEventListener('pointerleave', anchorPreview.pointerLeave);
+  link.oncontextmenu = anchorPreview.contextmenu;
 }
 
 

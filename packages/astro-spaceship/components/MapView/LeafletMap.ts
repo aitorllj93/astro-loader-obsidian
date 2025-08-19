@@ -6,8 +6,10 @@ import type { Configuration, GeoJSONConfiguration, LayerConfiguration } from './
 // import 'leaflet-simplestyle';
 
 const LABEL_SHOW_FROM = 17;
-const BASE_ZOOM = 17; // a partir de aquí escalamos
-const SCALE_STEP = 1.18; // factor por nivel de zoom (ajústalo al gusto)
+const MARKER_BASE_ZOOM = 15; // a partir de aquí escalamos
+const LABEL_BASE_ZOOM = 17; // a partir de aquí escalamos
+const MARKER_SCALE_STEP = 1.18; // factor por nivel de zoom (ajústalo al gusto)
+const LABEL_SCALE_STEP = 1.18; // factor por nivel de zoom (ajústalo al gusto)
 
 class LeafletMap extends HTMLElement {
 
@@ -63,6 +65,17 @@ class LeafletMap extends HTMLElement {
       const map = new LMap(this.mapElement, config.options);
       this.map = map;
 
+      this.map.on('layeradd', () => {
+        setTimeout(() =>  
+          window.dispatchEvent(new CustomEvent('MapRendered'))
+        , 100)
+      });
+      this.map.on('zoomend', () => {
+        setTimeout(() =>  
+          window.dispatchEvent(new CustomEvent('MapRendered'))
+        , 100)
+      });
+
       let layerCount = 0;
       const layersControl = new Control.Layers();
 
@@ -95,6 +108,8 @@ class LeafletMap extends HTMLElement {
         // const scaleControl = new Control.Scale(config.scaleOptions);
         // scaleControl.addTo(map);
       }
+      this.map?.locate({watch: true });
+      this.locationMarker({ lat: 0, lng: 0 })
     } catch (e) {
       console.error('leaflet-map', this.id, 'error loading map', e);
     }
@@ -182,11 +197,42 @@ class LeafletMap extends HTMLElement {
     this.zoomableLabel(feature, layer, config);
   }
 
+  private locationMarker(latlng: L.LatLngExpression) {
+    const marker = L.marker(latlng);
+    const circle = new L.Circle(latlng, 2, {
+      radius: 2,
+      weight: 1,
+      color: 'blue',
+      fillColor: '#cacaca',
+      fillOpacity: 0.2
+    });
+    this.map?.addLayer(marker);
+    this.map?.addLayer(circle);
+
+    const update = (evt: L.LocationEvent) => {
+      if (!this.map) {
+        return;
+      }
+
+      circle.setRadius(evt.accuracy/2);
+      circle.setLatLng(evt.latlng);
+      marker.setLatLng(evt.latlng);
+
+      if (!this.map?.hasLayer(marker)) marker.addTo(this.map as L.Map);
+      if (!this.map?.hasLayer(circle)) circle.addTo(this.map as L.Map);
+    };
+  
+    this.map?.on('locationfound', update)
+    .on('locationerror', (e) => {
+      console.log(e);
+    });
+  }
+
   private zoomableMarker(feature: Feature, latlng: L.LatLngExpression, config: GeoJSONConfiguration) {
     const label = String(feature.properties?.name ?? feature.properties?.NAME) // Must convert to string, .bindTooltip can't use straight 'feature.properties.attribute'
 
     const marker = new L.Marker(latlng, {
-      icon: this.makeMarker(feature, this.map?.getZoom() ?? BASE_ZOOM)
+      icon: this.makeMarker(feature, this.map?.getZoom() ?? LABEL_BASE_ZOOM)
     }).bindTooltip(label, { permanent: true, opacity: 0 });
 
     const update = () => {
@@ -237,13 +283,19 @@ class LeafletMap extends HTMLElement {
   }
 
   private makeMarker(feature: Feature, zoom: number) {
-    const scale = SCALE_STEP ** (zoom - BASE_ZOOM);
+    const scale = MARKER_SCALE_STEP ** (zoom - MARKER_BASE_ZOOM);
 
+    const href = feature.properties?.href;
     const transform = `display: flex; transform: scale(${scale});`;
     const color = feature.properties?.stroke ? `color:${feature.properties.stroke};` : '';
     const style = [transform, color].join('');
+    const className = ['map-marker', feature.properties?.additionalType].filter(Boolean).join(' ');
 
-    const html = `<span class="map-marker" style="${style}"></span>`;
+    const html = `
+      <a href=${href} class="article-wikilink">
+        <span class="${className}" style="${style}"></span>
+      </a>
+    `;
 
     return L.divIcon({
       className: '',
@@ -253,20 +305,21 @@ class LeafletMap extends HTMLElement {
   }
 
   private makeLabel(feature: Feature, config: GeoJSONConfiguration, zoom: number) {
-    const scale = SCALE_STEP ** (zoom - BASE_ZOOM);
+    const scale = LABEL_SCALE_STEP ** (zoom - LABEL_BASE_ZOOM);
     const name = (feature.properties?.name ?? feature.properties?.NAME ?? '').toString();
 
     const transform = `display: flex; transform: scale(${scale});`;
     const color = feature.properties?.stroke ? `color:${feature.properties.stroke};` : '';
     const style = [transform, color].join('');
+    const className = ['map-label', feature.properties?.additionalType].filter(Boolean).join(' ');
 
     const content = `<span style="${style}">${name}</span>`;
     const html = feature.properties?.href ?? config.href
-      ? `<a href="${feature.properties?.href ?? config.href}">${content}</a>`
+      ? `<a class="article-wikilink" href="${feature.properties?.href ?? config.href}">${content}</a>`
       : content;
 
     return L.divIcon({
-      className: 'map-label font-heading',
+      className,
       html,
       iconSize: [100, 40],
       // iconAnchor: [w / 2, h / 2], // centra el texto

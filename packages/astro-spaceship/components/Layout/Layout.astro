@@ -34,6 +34,9 @@ const { language } = page;
     <Footer data={footer}  />
     <script>
       import { initArticlePreviews } from '../../scripts/article-preview';
+
+      window.addEventListener('MapRendered', initArticlePreviews);
+
       window.addEventListener('DOMContentLoaded', initArticlePreviews);
     </script>
     <script src="../MapView/LeafletMap.ts"></script>

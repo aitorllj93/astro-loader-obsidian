@@ -12,11 +12,11 @@
 }
 
 @utility tree-leaf-folder {
-  @apply py-1 px-2 hover:bg-menu-active-background dark:hover:bg-menu-active-background-dark;
+  @apply py-1 px-2 hover:bg-menu-active-background hover:text-menu-active-foreground dark:hover:bg-menu-active-background-dark dark:hover:text-menu-active-foreground-dark;
 }
 
 @utility tree-leaf-active {
-  @apply bg-menu-active-background dark:bg-menu-active-background-dark;
+  @apply bg-menu-active-background text-menu-active-foreground dark:bg-menu-active-background-dark dark:text-menu-active-foreground-dark;
 }
 
 @utility tree-leaf-folder-summary {

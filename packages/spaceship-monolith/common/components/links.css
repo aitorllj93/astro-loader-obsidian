@@ -8,7 +8,7 @@
 }
 
 @utility link {
-  @apply w-full rounded-lg py-1 px-2 hover:bg-menu-active-background dark:hover:bg-menu-active-background-dark;
+  @apply w-full rounded-lg py-1 px-2 hover:bg-menu-active-background hover:text-menu-active-foreground dark:hover:bg-menu-active-background-dark dark:hover:text-menu-active-foreground-dark;
 
   svg {
     @apply w-4 h-4 min-w-4;

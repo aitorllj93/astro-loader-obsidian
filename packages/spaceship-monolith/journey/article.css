@@ -37,7 +37,7 @@
 }
 
 @utility article-description {
-  @apply mb-0! leading-9! text-base md:text-lg text-balance;
+  @apply mb-0! leading-9! text-xxs md:text-lg text-balance;
 }
 
 @utility article-tags {
@@ -99,3 +99,11 @@
 }
 
 @source inline("svg-embed");
+
+@utility article-preview {
+  @apply rounded-2xl;
+
+  > article {
+    @apply px-1!;
+  }
+}

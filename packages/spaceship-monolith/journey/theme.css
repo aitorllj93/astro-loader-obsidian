@@ -32,6 +32,16 @@
   unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
 }
 
+/* gloria-hallelujah-latin-400-normal */
+@font-face {
+  font-family: 'Gloria Hallelujah';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(https://cdn.jsdelivr.net/fontsource/fonts/gloria-hallelujah@latest/latin-400-normal.woff2) format('woff2'), url(https://cdn.jsdelivr.net/fontsource/fonts/gloria-hallelujah@latest/latin-400-normal.woff) format('woff');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
 @theme {
   /** Accent Colors **/
   --color-primary: oklch(.83 .058 83.6);
@@ -51,7 +61,8 @@
   --color-tab-active-foreground: var(--color-text-dark);
   --color-tab-active-border: var(--color-text);
   --color-menu-active-background: hsl(21, 61%, 36%);
-  --color-menu-foreground: var(--color-text-dark);
+  --color-menu-foreground: #523823;
+  --color-menu-active-foreground: oklch(.83 .058 83.6);
   --color-badge-background: #e3d5c0;
   --color-badge-foreground: var(--color-obsidian-500);
   --color-badge-border: oklch(.83 .058 83.6);
@@ -60,8 +71,8 @@
   --color-footer-background: oklch(0.91 0.048 83.6);
   --color-footer-foreground: var(--color-text);
   --color-footer-border: oklch(.83 .058 83.6);
-  --color-search-border: var(--color-text-dark);
-  --color-search-text: var(--color-text-dark);
+  --color-search-border: #523823;
+  --color-search-text: #523823;
   --color-search-text-mark: hsl(21, 61%, 36%);
   --color-graph-background: hsl(21, 61%, 26%);
   --color-graph-link: var(--color-primary);
@@ -81,8 +92,8 @@
 
   --font-title: "Dancing Script Variable", "sans-serif";
   --font-heading: "Dancing Script Variable",  "sans-serif";
-  --font-paragraph: "Patrick Hand",  "sans-serif";
-  --font-menu: "Patrick Hand",  "sans-serif";
+  --font-paragraph: "Gloria Hallelujah",  "sans-serif";
+  --font-menu: "Gloria Hallelujah",  "sans-serif";
   --font-code: "Recursive", "ui-monospace";
 
   --left-sidebar-content-height: calc(100vh - 80px);
@@ -99,7 +110,7 @@
 }
 
 @utility html {
-  @apply scrollbar-thumb-[hsl(24,57%,50%)];
+  @apply scrollbar-thumb-[#FDCDAE];
 }
 
 @utility main {
@@ -127,6 +138,10 @@
 }
 
 @utility map-view {
+  .map {
+    @apply rounded-2xl;
+  }  
+
   .leaflet-container {
     @apply rounded-2xl;
   }
@@ -142,6 +157,94 @@
   }
 }
 
+@utility map-label {
+  &.pub, &.dessert_shop, &.cafe, &.coffee_shop, &.restaurant, &.food_store, &.supermarket {
+    a {
+      @apply text-[hsl(21,_61%,_26%,_60%)]!;
+    }
+  }
+}
+
+
 @utility map-marker {
-  @apply bg-[hsl(21,_61%,_26%)];
+  @apply bg-[hsl(21,_61%,_26%)]!;
+  &.pub, &.dessert_shop, &.cafe, &.coffee_shop, &.restaurant, &.food_store, &.supermarket {
+      @apply bg-[hsl(21,_61%,_26%,_40%)]!;
+  }
+
+  &.pub {
+    @apply icon-[icon-park-twotone--beer];
+  }
+
+  &.city_hall {
+    @apply icon-[streamline--city-hall-remix];
+  }
+
+  &.dessert_shop, &.cafe, &.coffee_shop {
+    @apply icon-[ic--twotone-coffee];
+  }
+
+  &.historical_landmark, &.historical_place {
+    @apply icon-[icon-park-twotone--castle];
+  }
+
+  &.library {
+    @apply icon-[mdi--library];
+  }
+
+  &.market {
+    @apply icon-[healthicons--market-stall];
+  }
+
+  &.monument, &.sculpture {
+    @apply icon-[icon-park-twotone--monument-one];
+  }
+
+  &.museum {
+    @apply icon-[icon-park-twotone--museum-one];
+  }
+
+  &.park {
+    @apply icon-[ph--park-duotone];
+  }
+
+  &.performing_arts_theater, &.concert_hall {
+    @apply icon-[ic--twotone-theater-comedy];
+  }
+
+  &.restaurant, &.food_store {
+    @apply icon-[material-symbols-light--restaurant-rounded];
+  }
+
+  &.route {
+    @apply icon-[streamline-plump--street-sign-solid];
+  }
+
+  &.church, &.place_of_worship {
+    @apply icon-[ic--twotone-church];
+  }
+
+  &.bridge {
+    @apply icon-[tabler--building-bridge];
+  }
+
+  &.supermarket {
+    @apply icon-[ic--twotone-local-grocery-store];
+  }
+
+  &.synagogue {
+    @apply icon-[ic--twotone-synagogue];
+  }
+
+  &.cemetery {
+    @apply icon-[mdi--cemetery];
+  }
+
+  &.tower, &.landmark, &.tourist_attraction, &.observation_deck {
+    @apply icon-[icon-park-twotone--tower];
+  }
+
+  &.public_bath {
+    @apply icon-[ix--water-bathing];
+  }
 }

@@ -36,6 +36,7 @@ export const DocumentSchema = ObsidianDocumentSchema.extend({
   'cover-x': z.number().optional(),
   'cover-y': z.number().optional(),
   location: LocationSchema.optional(),
+  additionalType: z.string().optional(),
 });
 
 export const AuthorSchema = z.object({
@@ -89,3 +90,15 @@ export const ConfigSchema = z.object({
     }).optional().default({})
   }).optional().default({})
 })
+
+/** Custom Types **/
+
+const PlaceProps = z.object({
+  '@type': z.literal('Place'),
+  additionalType: z.string().optional(),
+  address: z.string().optional(),
+  identifier: z.string().optional(),
+  url: z.string().url().optional(),
+})
+
+export const PlaceSchema = DocumentSchema.merge(PlaceProps)

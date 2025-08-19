@@ -4,21 +4,7 @@ import type { Feature, FeatureCollection } from "geojson";
 
 import { DOCUMENTS_COLLECTION_NAME } from "../../../constants";
 import type { Document } from "../../../types";
-
-const documentToFeature = (d: Document): Feature|null => d.data.location ? ({
-    type: 'Feature',
-    properties: {
-      name: d.data.title,
-      href: d.data.permalink,
-    },
-    geometry: {
-      type: 'Point',
-      coordinates: [
-        d.data.location.lng,
-        d.data.location.lat,
-      ]
-    }
-  }) : null;
+import { documentToFeature } from "./document-to-feature";
 
 export const getBySlug = async (slug?: string, collectionName = DOCUMENTS_COLLECTION_NAME): Promise<FeatureCollection> => {
   const document = (await getEntry({

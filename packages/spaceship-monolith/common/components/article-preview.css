@@ -1,9 +1,10 @@
 
 
 @utility article-preview {
-  @apply z-20;
-
+  @apply z-20 w-[70vw] md:w-[50vw] overflow-auto! max-h-[50vh]! scrollbar-none  shadow-2xl rounded-lg;
+  
   > article {
-    @apply flex max-h-60 shadow-xl rounded-lg;
+    @apply flex m-0;
   }
+
 }

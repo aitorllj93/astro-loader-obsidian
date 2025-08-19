@@ -1,6 +1,6 @@
 import type z from "astro/zod";
 
-import type { AuthorSchema, ConfigSchema, DocumentSchema, TagSchema } from "./schemas";
+import type { AuthorSchema, ConfigSchema, DocumentSchema, PlaceSchema, TagSchema } from "./schemas";
 
 export type LegacySpaceshipConfig = {
   author?: string;
@@ -112,3 +112,7 @@ export type FooterData = {
   words: string;
   characters: string;
 }
+
+/** Custom Types */
+
+export type Place = CollectionEntry<z.infer<typeof PlaceSchema>>;

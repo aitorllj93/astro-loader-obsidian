@@ -77,6 +77,7 @@
   --color-tab-active-border: var(--color-text);
   --color-tab-active-foreground: var(--color-text);
   --color-menu-active-background: var(--color-gray-300);
+  --color-menu-active-foreground:  var(--color-text);
   --color-menu-foreground: var(--color-text);
   --color-badge-background: color-mix(in oklab, var(--color-primary) 10%, transparent);
   --color-badge-foreground: var(--color-primary);
@@ -120,6 +121,7 @@
   --color-tab-active-foreground-dark: var(--color-text-dark);
   --color-tab-active-border-dark: var(--color-text-dark);
   --color-menu-active-background-dark: var(--color-obsidian-300);
+  --color-menu-active-foreground-dark:  var(--color-text-dark);
   --color-menu-foreground-dark: var(--color-text-dark);
   --color-badge-background-dark: color-mix(in oklab, var(--color-purple-500) 10%, transparent);
   --color-badge-foreground-dark: hsl(233, 64%, 68%);

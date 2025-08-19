@@ -55,6 +55,7 @@
 		"html-to-text": "^9.0.5",
 		"leaflet": "^1.9.4",
 		"leaflet-simplestyle": "^1.2.4",
+		"memoize": "^10.1.0",
 		"playwright": "^1.54.2",
 		"reading-time": "^1.5.0",
 		"rehype-callouts": "^2.1.2",
