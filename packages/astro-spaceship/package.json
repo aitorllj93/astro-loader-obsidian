@@ -8,7 +8,7 @@
 		"withastro",
 		"astro-integration"
 	],
-	"version": "0.8.0",
+	"version": "0.8.1",
 	"author": "Aitor Llamas Jiménez <aitorllj93@gmail.com>",
 	"homepage": "https://github.com/aitorllj93/astro-loader-obsidian",
 	"repository": {
@@ -46,7 +46,7 @@
 		"@remark-embedder/transformer-oembed": "^5.0.1",
 		"@tailwindcss/vite": "^4.1.11",
 		"astro-expressive-code": "^0.41.3",
-		"astro-loader-obsidian": "^0.8.0",
+		"astro-loader-obsidian": "^0.8.1",
 		"astro-pagefind": "^1.8.3",
 		"d3": "^7.9.0",
 		"front-matter": "^4.0.2",
