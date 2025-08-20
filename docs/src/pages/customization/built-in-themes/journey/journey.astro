@@ -12,6 +12,7 @@ import Author from "astro-spaceship/components/Article/Author.astro";
 import Title from "astro-spaceship/components/Article/Title.astro";
 import Subtitle from "astro-spaceship/components/Article/Subtitle.astro";
 import Description from "astro-spaceship/components/Article/Description.astro";
+import TextReader from "astro-spaceship/components/Article/TextReader/TextReader.astro";
 
 import "@/styles/themes/journey.css";
 import config from "@/config";
@@ -54,10 +55,14 @@ const angleFromKey = (key: string, min = -3, max = 3) => {
   const t = h / 0xffffffff; // 0..1
   return min + t * (max - min);
 };
+
+const { data } = document;
 ---
 
 <Page {...staticPath.props} config={{
   ...config,
+  title: 'Journey',
+  logo: "<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><g fill='none' stroke='currentColor' stroke-width='1.5'><path d='M17 22h5V4.5L19.5 2L17 4.5zm0-5h5M14 2H2v20h12'/><path d='M6 6h7.5v4H6z'/></g></svg>",
   displayOptions: {
     ...config.displayOptions,
     rightSidebar: {
@@ -77,49 +82,46 @@ const angleFromKey = (key: string, min = -3, max = 3) => {
       rel="preload"
       as="font"
       type="font/woff2"
-      href="https://cdn.jsdelivr.net/fontsource/fonts/patrick-hand@latest/latin-400-normal.woff2"
-      crossorigin="anonymous"
-    />
-    <link
-      rel="preload"
-      as="font"
-      type="font/woff2"
-      href="https://cdn.jsdelivr.net/fontsource/fonts/karla:vf@latest/latin-wght-normal.woff2"
-      crossorigin="anonymous"
-    />
-    <link
-      rel="preload"
-      as="font"
-      type="font/woff2"
-      href="https://cdn.jsdelivr.net/fontsource/fonts/quicksand:vf@latest/latin-wght-normal.woff2"
+      href="https://cdn.jsdelivr.net/fontsource/fonts/gloria-hallelujah@latest/latin-400-normal.woff2"
       crossorigin="anonymous"
     />
   </Fragment>
   <article slot="entry" class="article" data-pagefind-body>
-    <section class="article-content">
+    <section class:list={["article-content", ...(data.cssClass ?? []), ...(data.cssclasses ?? [])]}>
       <Title document={document} />
       <Subtitle document={document} />
       {
         showDescriptionSection && (
-          <Description document={document} />
+          <div class="article-description-section">
+            <Description document={document} />
+          </div>
         )
       }
-      {document.data.cover && (
-        <CoverImage {...document.data} style={`--rot:${angleFromKey(document.data.cover.src).toFixed(2)}deg;`}>
+      {data.cover && (
+        <CoverImage {...data} style={`--rot:${angleFromKey(data.cover.src).toFixed(2)}deg;`}>
           <span slot="figcaption" class="gloss" aria-hidden="true"></span>
         </CoverImage>
       )}
+      <div class="article-reader">
+        <TextReader />
+      </div>
       <div data-pagefind-weight="0.1" class="article-body">
         <Content />
-        {showMetaSection && (<hr>)}
+        {showDescriptionSection && (<hr>)}
       </div>
-      {showMetaSection && (
-        <div class="article-meta">
-          <Author config={config} author={author} />
-          <ArticleDate config={config} document={document} />     
-          <Tags tags={tags} />
-        </div>
-      )}
+      {
+        showDescriptionSection && (
+          <div class="article-description-section">
+            {showMetaSection && (
+              <div class="article-meta">
+                <Author config={config} author={author} />
+                <ArticleDate config={config} document={document} />     
+                <Tags tags={tags} />
+              </div>
+            )}
+          </div>
+        )
+      }
     </section>
   </article>
 </Page>
