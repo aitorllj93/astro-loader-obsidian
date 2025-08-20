@@ -23,6 +23,22 @@
             0.3
         ) brightness(0.7);
   }
+
+  .leaflet-control-fullscreen {
+      @apply bg-primary rounded-2xl shadow-md! border-none!;
+    .leaflet-control-fullscreen-button {
+      @apply icon-[mingcute--fullscreen-fill] bg-text!;
+    }
+  }
+
+  &.leaflet-fullscreen-on {
+    .leaflet-control-fullscreen {
+      .leaflet-control-fullscreen-button {
+        @apply icon-[mingcute--fullscreen-exit-fill];
+      }
+    }
+  }
+
 }
 
 @utility map-label {
@@ -33,7 +49,12 @@
   @apply bg-primary icon-[akar-icons--cross] w-5! h-5!;
 }
 
+@utility map-location {
+  @apply bg-primary icon-[iconamoon--location-duotone] w-5! h-5!;
+}
+
 @source inline("map-label");
+@source inline("map-location");
 @source inline("map-marker");
 
 @source inline("embed-map");

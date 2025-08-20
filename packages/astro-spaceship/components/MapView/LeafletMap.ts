@@ -3,9 +3,11 @@ import L, { Control, ImageOverlay, GeoJSON, type Layer, Map as LMap, TileLayer, 
 import type { Feature, GeoJsonObject } from 'geojson';
 import type { Configuration, GeoJSONConfiguration, LayerConfiguration } from './LeafletMapConfig';
 
+import 'leaflet-fullscreen';
 // import 'leaflet-simplestyle';
 
 const LABEL_SHOW_FROM = 17;
+const LOCATION_RADIUS_SHOW_FROM = 17;
 const MARKER_BASE_ZOOM = 15; // a partir de aquí escalamos
 const LABEL_BASE_ZOOM = 17; // a partir de aquí escalamos
 const MARKER_SCALE_STEP = 1.18; // factor por nivel de zoom (ajústalo al gusto)
@@ -61,6 +63,8 @@ class LeafletMap extends HTMLElement {
     try {
       const jsonString = await this.loadData('application/json')
       const config = JSON.parse(jsonString) as Configuration;
+      // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+      (config as any).fullscreenControl = true;
 
       const map = new LMap(this.mapElement, config.options);
       this.map = map;
@@ -109,7 +113,13 @@ class LeafletMap extends HTMLElement {
         // scaleControl.addTo(map);
       }
       this.map?.locate({watch: true });
-      this.locationMarker({ lat: 0, lng: 0 })
+      this.locationMarker({ lat: 0, lng: 0 });
+      this.map.addControl(new L.Control.Fullscreen({
+        title: {
+          'false': 'View Fullscreen',
+          'true': 'Exit Fullscreen'
+        }
+      }));
     } catch (e) {
       console.error('leaflet-map', this.id, 'error loading map', e);
     }
@@ -198,12 +208,18 @@ class LeafletMap extends HTMLElement {
   }
 
   private locationMarker(latlng: L.LatLngExpression) {
-    const marker = L.marker(latlng);
+    const marker = L.marker(latlng, {
+      icon: L.divIcon({
+        className: '',
+        html: '<span class="map-location"></span>',
+        iconSize: [10, 10],
+      })
+    });
     const circle = new L.Circle(latlng, 2, {
       radius: 2,
       weight: 1,
-      color: 'blue',
-      fillColor: '#cacaca',
+      color: 'hsl(258, 88%, 66%)',
+      fillColor: 'hsl(257, 88.88%, 70.95%)',
       fillOpacity: 0.2
     });
     this.map?.addLayer(marker);
@@ -218,11 +234,30 @@ class LeafletMap extends HTMLElement {
       circle.setLatLng(evt.latlng);
       marker.setLatLng(evt.latlng);
 
-      if (!this.map?.hasLayer(marker)) marker.addTo(this.map as L.Map);
-      if (!this.map?.hasLayer(circle)) circle.addTo(this.map as L.Map);
+      if (!this.map?.hasLayer(marker)) marker.addTo(this.map);
+
+      const z = this.map.getZoom();
+      if (z >= LOCATION_RADIUS_SHOW_FROM) {
+        if (!this.map?.hasLayer(circle)) circle.addTo(this.map);
+      } else {
+        if (this.map.hasLayer(circle)) circle.removeFrom(this.map);
+      }
     };
   
     this.map?.on('locationfound', update)
+    this.map?.on('zoomend', () => {
+      if (!this.map) {
+        return;
+      }
+
+      const z = this.map.getZoom();
+      if (z >= LOCATION_RADIUS_SHOW_FROM) {
+        if (!this.map?.hasLayer(circle)) circle.addTo(this.map);
+      } else {
+        if (this.map.hasLayer(circle)) circle.removeFrom(this.map);
+      }
+
+    })
     .on('locationerror', (e) => {
       console.log(e);
     });
