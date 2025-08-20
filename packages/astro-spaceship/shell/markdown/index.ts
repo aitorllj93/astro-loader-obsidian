@@ -1,7 +1,5 @@
 
 
-import remarkEmbedder from '@remark-embedder/core';
-import remarkEmbedderOembed from '@remark-embedder/transformer-oembed';
 import rehypeRewrite from "rehype-rewrite";
 import remarkCodeExtra from "remark-code-extra";
 import remarkMath from "remark-math";
@@ -12,6 +10,7 @@ import rehypeMermaid from 'rehype-mermaid';
 
 import rehypeRewriteConfig from "./rehype";
 import remarkCodeExtraConfig from "./remark/code";
+import remarkEmbedder from "./remark/embedder";
 import remarkComments from './remark/comments';
 
 import type { AstroUserConfig } from 'astro';
@@ -27,13 +26,7 @@ export default (
   }: MarkdownConfig = {}, 
 ) => ({
   remarkPlugins: [
-    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-    [(remarkEmbedder as any).default, {
-      transformers: [
-        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-        [(remarkEmbedderOembed as any).default]
-      ],
-    }],
+    remarkEmbedder,
     [
       remarkCodeExtra,
       remarkCodeExtraConfig,

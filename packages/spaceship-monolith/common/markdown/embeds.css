@@ -1,4 +1,10 @@
+@utility embed-youtube {
+  @apply w-full h-auto aspect-video;
 
+  iframe {
+    @apply w-full h-full;
+  }
+}
 
 @utility embed-figure {
   @apply flex flex-col sm:flex-row rounded-sm border-gray-400 dark:border-obsidian-400 border mb-4;
