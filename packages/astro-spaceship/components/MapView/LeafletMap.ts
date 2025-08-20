@@ -4,7 +4,6 @@ import type { Feature, GeoJsonObject } from 'geojson';
 import type { Configuration, GeoJSONConfiguration, LayerConfiguration } from './LeafletMapConfig';
 
 import 'leaflet-fullscreen';
-// import 'leaflet-simplestyle';
 
 const LABEL_SHOW_FROM = 17;
 const LOCATION_RADIUS_SHOW_FROM = 17;
