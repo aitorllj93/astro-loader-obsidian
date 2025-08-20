@@ -16,13 +16,13 @@ const { tree, documents, tag, page, config } = Astro.props;
   <LeftSidebar website={config} tree={tree} />
   <article class="article">
     <section class="article-content">
-      <h1 class="article-title">#{tag.data.name}</h1>
+      <h1 class="article-title">{tag.data.name ? tag.data.name : `#${tag.id}`}</h1>
 
       <div class="article-body">
         <ul>
           {documents?.map(d => (
             <li>
-              <a href={d.data.permalink}>
+              <a class="article-wikilink" href={d.data.permalink}>
                 {d.data.title}
               </a>
             </li>

@@ -1,0 +1,33 @@
+
+
+@utility text-reader {
+  @apply inline-flex items-center gap-2 h-9;
+
+  &[data-state="reading"] {
+    .text-reader-play > .icon {
+      @apply icon-[fluent--pause-24-filled];
+    }
+  }
+
+  .text-reader-play {
+    @apply inline-flex items-center gap-2 px-3 py-1.5 rounded-xl cursor-pointer font-code bg-primary text-text hover:opacity-80 focus:outline-none focus:ring;
+
+    .icon {
+      @apply icon-[fluent--play-24-filled];
+    }
+  }
+
+  .text-reader-stop {
+    @apply inline-flex items-center gap-2 px-3 py-1.5 rounded-xl cursor-pointer font-code bg-primary text-text hover:opacity-80 focus:outline-none focus:ring;
+
+    .icon {
+      @apply icon-[fluent--stop-24-filled];
+    }
+  }
+
+  .text-reader-state {
+    @apply hidden;
+  }
+}
+
+@source inline("text-reader");

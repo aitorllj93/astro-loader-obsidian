@@ -1,27 +1,62 @@
 
 
 @utility sidebar {
-	@apply flex h-[var(--left-sidebar-content-height)] top-3 lg:top-6 rounded-xl;
+	@apply flex h-[100vh] md:h-[var(--left-sidebar-content-height)] top-0! lg:top-6! rounded-xl;
 }
 
 @utility sidebar-content {
-  @apply rounded-xl shadow-lg py-8 px-2;
+  @apply md:rounded-xl shadow-lg py-8 px-2;
+}
+
+@utility sidebar-content-left {
+  @apply rounded-r-xl;
+}
+
+@utility sidebar-content-right {
+  @apply rounded-l-xl;
+}
+
+@utility sidebar-right-arrow {
+  > svg {
+    @apply icon-[iconamoon--discover-duotone] w-5 h-5;
+  }
+}
+
+@utility sidebar-left-arrow {
+  > svg {
+    @apply rotate-180 icon-[fluent--notebook-subsection-20-filled] w-5 h-5;
+  }
 }
 
 @utility sidebar-arrow {
-	@apply bg-button-background dark:bg-button-background-dark rounded-full;
+	@apply bg-button-background dark:bg-button-background-dark rounded peer-checked:rotate-0;
 }
 
+
 @utility header {
-  @apply h-11 px-2;
+  @apply h-11 px-2 text-4xl font-bold mb-4!; 
+  .header-link {
+    @apply text-primary!;
+    svg {
+      @apply h-10 w-10;
+    }
+  }
 }
 
 @utility font-menu {
-  font-size-adjust: 0.7;
-  line-height: 2;
+  font-size-adjust: 0.9;
+  line-height: 2.3;
 }
 
 @utility pagefind-ui-sidebar-search {
+  .pagefind-ui__message {
+    @apply mt-2!;
+  }
+
+  .pagefind-ui__result-excerpt {
+    @apply pt-9!;
+  }
+
   .pagefind-ui__drawer {
     @apply py-2!;
   }
@@ -30,5 +65,69 @@
 @utility column {
   .column-content {
     @apply max-h-[calc(var(--left-sidebar-content-height)_-_50px)];
+  }
+}
+
+@utility map {
+  @apply mb-4!;
+}
+
+@utility graph-title {
+  @apply font-heading text-primary mb-4!;
+}
+
+@utility map-title {
+  @apply font-heading text-primary mb-4!;
+}
+
+
+
+@utility tree-leaf {
+  a {
+    @apply text-xxs!;
+  }
+}
+
+@utility tree-leaf-folder {
+  a {
+    @apply text-xxs!;
+  }
+}
+
+@utility tree-leaf-folder-summary {
+  @apply text-xxs!;
+}
+
+@utility table-of-contents {
+  @apply mb-4!;
+}
+
+@utility table-of-contents-title {
+  @apply font-heading text-primary mb-4!;
+}
+
+@utility table-of-contents-link {
+  @apply text-xxs!;
+}
+
+@utility links {
+  @apply mb-4!;
+}
+
+@utility link {
+  @apply text-xxs!;
+}
+
+@utility links-title {
+  @apply font-heading text-primary mb-4!;
+}
+
+@utility pagefind-ui-sidebar-search {
+  .pagefind-ui__search-input, .pagefind-ui__search-clear {
+    @apply bg-transparent!;
+  }
+
+  .pagefind-ui__drawer {
+    @apply bg-transparent!;
   }
 }

@@ -1,0 +1,428 @@
+---
+export type Props = {
+  target?: string;
+  lang?: string;
+  rate?: number;
+  pitch?: number;
+  pause?: number;
+  prettify?: 'on' | 'off';
+  volume?: number;
+}
+
+const {
+  target = '.article-body',
+  lang = 'es-ES',
+  rate = 0.95,
+  pitch = 1.05,
+  pause = 160,
+  prettify = 'on',
+  volume = 1,
+} = Astro.props;
+---
+<text-reader class="text-reader" target={target} lang={lang} rate={`${rate}`} pitch={`${pitch}`} volume={`${volume}`} pause={`${pause}`} prettify={prettify}>
+  <slot name="play">
+    <button id="defaultPlay"
+      class="text-reader-play"
+      type="button" aria-pressed="false">
+      <span class="icon"></span><span class="label">Leer</span>
+    </button>
+  </slot>
+
+  <slot name="stop">
+    <button id="defaultStop"
+      class="text-reader-stop"
+      type="button" aria-label="Detener">
+      <span class="icon"></span>
+      <span class="label">Detener</span>
+    </button>
+  </slot>
+
+  <slot name="state">
+    <span id="defaultState" class="text-reader-state"></span>
+  </slot>
+</text-reader>
+<script>
+// Web Component con slots y compatibilidad Tailwind.
+// - Slots: play, stop, state
+// - Atributos: target, lang, rate, pitch, volume
+// - Eventos: readerstart, readerpause, readerresume, readerstop, readerend
+class TextReader extends HTMLElement {
+  static get observedAttributes() { return ["target", "lang", "rate", "pitch", "volume"]; }
+
+  private playSlot!: HTMLSlotElement;
+  private stopSlot!: HTMLSlotElement;
+  private stateSlot!: HTMLSlotElement;
+
+  private playEl!: HTMLElement;   // elemento actual para play/pause
+  private stopEl!: HTMLElement;   // elemento actual para stop
+  private stateEl!: HTMLElement;  // elemento actual para estado (span)
+
+  private targetSelector = ".article-body";
+  private speaking = false;
+  private paused = false;
+  private queued: SpeechSynthesisUtterance[] = [];
+  private voice: SpeechSynthesisVoice | null = null;
+
+  constructor() {
+    super();
+    // Minimal CSS: sólo layout del host. Tus clases Tailwind se aplican a contenido sloteado.
+    this.className = 'text-reader';
+    this.innerHTML = `
+      <!-- Slot PLAY con fallback Tailwind por defecto -->
+      <slot name="play">
+        <button id="defaultPlay"
+          class="text-reader-play"
+          type="button" aria-pressed="false">
+          <span class="icon"></span><span class="label">Leer</span>
+        </button>
+      </slot>
+
+      <!-- Slot STOP con fallback -->
+      <slot name="stop">
+        <button id="defaultStop"
+          class="text-reader-stop"
+          type="button" aria-label="Detener">
+          <span class="icon"></span>
+          <span class="label">Detener</span>
+        </button>
+      </slot>
+
+      <!-- Slot STATE con fallback -->
+      <slot name="state">
+        <span id="defaultState" class="text-reader-state"></span>
+      </slot>
+    `;
+
+    this.onVoicesChanged = this.onVoicesChanged.bind(this);
+    this.handleEnd = this.handleEnd.bind(this);
+    this.handleError = this.handleError.bind(this);
+    this.bindSlots = this.bindSlots.bind(this);
+
+    this.playSlot = this.querySelector('slot[name="play"]') as HTMLSlotElement;
+    this.stopSlot = this.querySelector('slot[name="stop"]') as HTMLSlotElement;
+    this.stateSlot = this.querySelector('slot[name="state"]') as HTMLSlotElement;
+  }
+
+  connectedCallback() {
+    // vincula elementos sloteados o fallbacks
+    this.playSlot.addEventListener("slotchange", this.bindSlots);
+    this.stopSlot.addEventListener("slotchange", this.bindSlots);
+    this.stateSlot.addEventListener("slotchange", this.bindSlots);
+    this.bindSlots();
+
+    speechSynthesis.addEventListener("voiceschanged", this.onVoicesChanged);
+    this.pickVoice(); // inicial
+    this.updateUI();
+  }
+
+  disconnectedCallback() {
+    this.playSlot.removeEventListener("slotchange", this.bindSlots);
+    this.stopSlot.removeEventListener("slotchange", this.bindSlots);
+    this.stateSlot.removeEventListener("slotchange", this.bindSlots);
+    speechSynthesis.removeEventListener("voiceschanged", this.onVoicesChanged);
+    this.detachHandlers();
+  }
+
+  attributeChangedCallback(name: string, _o: string | null, v: string | null) {
+    if (name === "target" && v) this.targetSelector = v;
+  }
+
+  /** === API pública === */
+  async start() {
+    const text = this.getPreferredText();
+    if (!text) { this.setState("No encontré texto"); return; }
+
+    this.stop(true);
+    await this.ensureVoicesReady();
+    this.pickVoice();
+
+    const chunks = this.splitIntoChunks(text, 220);
+    const { rate, pitch, volume, lang } = this.params();
+
+    this.queued = chunks.map(c => {
+      const u = new SpeechSynthesisUtterance(c);
+      if (this.voice) u.voice = this.voice;
+      if (lang) u.lang = lang;
+      u.rate = rate; u.pitch = pitch; u.volume = volume;
+      u.onend = this.handleEnd; u.onerror = this.handleError;
+      return u;
+    });
+
+    this.speaking = true; this.paused = false;
+    this.setAttribute("data-state", "reading");
+    this.setAriaPressed(true);
+    this.playQueue();
+    this.updateUI();
+    this.dispatchEvent(new CustomEvent("readerstart"));
+  }
+
+  pause() {
+    if (this.speaking && !this.paused) {
+      speechSynthesis.pause();
+      this.paused = true;
+      this.setAttribute("data-state", "paused");
+      this.updateUI();
+      this.dispatchEvent(new CustomEvent("readerpause"));
+    }
+  }
+
+  resume() {
+    if (this.speaking && this.paused) {
+      speechSynthesis.resume();
+      this.paused = false;
+      this.setAttribute("data-state", "reading");
+      this.updateUI();
+      this.dispatchEvent(new CustomEvent("readerresume"));
+    }
+  }
+
+  stop(silent = false) {
+    speechSynthesis.cancel();
+    this.queued = [];
+    this.speaking = false;
+    this.paused = false;
+    this.setAttribute("data-state", "idle");
+    this.setAriaPressed(false);
+    this.updateUI();
+    if (!silent) this.dispatchEvent(new CustomEvent("readerstop"));
+  }
+
+  override async toggle() {
+    if (!this.speaking) return this.start();
+    if (this.paused) return this.resume();
+    return this.pause();
+  }
+
+  /** === Slots & UI === */
+  private bindSlots() {
+    // Desvincula handlers previos si los hubiera
+    this.detachHandlers();
+
+    this.playEl = (this.playSlot.assignedElements()[0] as HTMLElement) ||
+                  (this.querySelector("#defaultPlay") as HTMLElement);
+    this.stopEl = (this.stopSlot.assignedElements()[0] as HTMLElement) ||
+                  (this.querySelector("#defaultStop") as HTMLElement);
+    this.stateEl = (this.stateSlot.assignedElements()[0] as HTMLElement) ||
+                   (this.querySelector("#defaultState") as HTMLElement);
+
+    // Vincula handlers
+    this.playEl.addEventListener("click", this.toggle.bind(this));
+    this.stopEl.addEventListener("click", () => this.stop());
+    this.updateUI();
+  }
+
+  private detachHandlers() {
+    if (this.playEl) this.playEl.replaceWith(this.playEl); // truco para limpiar listeners del nodo previo
+    if (this.stopEl) this.stopEl.replaceWith(this.stopEl);
+  }
+
+  private setAriaPressed(val: boolean) {
+    if (this.playEl) this.playEl.setAttribute("aria-pressed", String(val));
+  }
+
+  private updateUI() {
+    const state = !this.speaking ? "idle" : (this.paused ? "paused" : "reading");
+    this.setAttribute("data-state", state);
+
+    // Si usas los fallbacks, también actualizamos sus labels
+    const isFallbackPlay = this.playEl?.id === "defaultPlay";
+    const isFallbackState = this.stateEl?.id === "defaultState";
+
+    if (isFallbackPlay) {
+      const label = this.playEl.querySelector(".label");
+      if (label) {
+        label.textContent = !this.speaking ? "Leer" : (this.paused ? "Reanudar" : "Pausar");
+      } else {
+        this.playEl.textContent = !this.speaking ? "🔊 Leer" : (this.paused ? "▶️ Reanudar" : "⏸️ Pausar");
+      }
+    }
+    if (isFallbackState) {
+      if (!this.speaking) this.stateEl.textContent = "";
+      else if (this.paused) this.stateEl.textContent = "En pausa";
+      else this.stateEl.textContent = "Leyendo…";
+    }
+  }
+
+  private setState(text: string) {
+    if (this.stateEl) this.stateEl.textContent = text;
+  }
+
+  /** === Lectura === */
+  private getPreferredText(): string {
+    const target = document.querySelector(this.targetSelector) as HTMLElement | null;
+    if (!target) return "";
+    const sel = this.getSelectedTextWithin(target);
+    const raw = (sel && sel.length >= 5) ? sel : (target.innerText || "");
+    const { prettify } = this.params();
+    return prettify ? this.prettifyForTTS(raw) : this.normalizeText(raw);
+  }
+
+  private getSelectedTextWithin(scopeEl: HTMLElement): string {
+    const sel = window.getSelection?.();
+    if (!sel || sel.rangeCount === 0) return "";
+    const range = sel.getRangeAt(0);
+    const intersects = range.intersectsNode ? range.intersectsNode(scopeEl) : this.rangeIntersects(range, scopeEl);
+    if (!intersects) return "";
+    return this.normalizeText(sel.toString());
+  }
+
+  private rangeIntersects(r: Range, el: HTMLElement): boolean {
+    const test = document.createRange();
+    test.selectNodeContents(el);
+    return !(r.compareBoundaryPoints(Range.START_TO_END, test) <= 0 ||
+             r.compareBoundaryPoints(Range.END_TO_START, test) >= 0);
+  }
+
+  private normalizeText(t: string): string {
+    return t.trim().replace(/\s+\n/g, "\n").replace(/\s+/g, " ");
+  }
+
+  private splitIntoChunks(text: string, maxLen = 220): string[] {
+    const sentences = text
+      .replace(/\s+/g, " ")
+      .split(/([.!?…]+)\s+/)
+      .reduce<string[]>((acc, cur, i, arr) => {
+        if (i % 2 === 0) {
+          const end = arr[i + 1] || "";
+          const s = (cur + " " + end).trim();
+          if (s) acc.push(s);
+        }
+        return acc;
+      }, []);
+    const chunks: string[] = [];
+    for (const s of sentences) {
+      if (s.length <= maxLen) { chunks.push(s); continue; }
+      let start = 0;
+      while (start < s.length) {
+        let end = Math.min(start + maxLen, s.length);
+        const space = s.lastIndexOf(" ", end);
+        if (space > start + 40) end = space;
+        chunks.push(s.slice(start, end).trim());
+        start = end;
+      }
+    }
+    return chunks;
+  }
+
+  private playQueue() {
+    if (this.queued.length === 0) {
+      this.stop(true); this.setState("Leído"); this.dispatchEvent(new CustomEvent("readerend")); return;
+    }
+    this.setState("Leyendo…");
+    const u = this.queued.shift()!;
+    const { pause } = this.params();
+
+    // Cuando termina un chunk, esperamos unos ms antes del siguiente
+    u.onend = () => {
+      if (this.paused) return; // reanuda con resume()
+      setTimeout(() => this.playQueue(), pause);
+    };
+    u.onerror = this.handleError;
+    speechSynthesis.speak(u);
+  }
+
+  private handleEnd = () => { if (!this.paused) this.playQueue(); };
+  private handleError = (e: SpeechSynthesisErrorEvent) => {
+    console.error("Speech error", e.error);
+    this.setState(`Error de voz: ${e.error}`);
+    this.stop(true);
+  };
+
+  private async ensureVoicesReady(): Promise<void> {
+    if (speechSynthesis.getVoices().length) return;
+    await new Promise<void>((res) => {
+      const t = setInterval(() => {
+        if (speechSynthesis.getVoices().length) { clearInterval(t as unknown as number); res(); }
+      }, 50);
+      setTimeout(() => { clearInterval(t as unknown as number); res(); }, 1500);
+    });
+  }
+  private onVoicesChanged() { this.pickVoice(); }
+
+  private pickVoice() {
+    const pref = (this.getAttribute("lang") || "").toLowerCase();
+    const vs = speechSynthesis.getVoices();
+
+    // 1. Si el usuario fijó lang="xx-YY", busca coincidencia exacta
+    let candidates = pref
+      ? vs.filter(v => v.lang.toLowerCase() === pref)
+      : [];
+
+    // 2. Si no hay exacta, busca por prefijo de idioma (xx)
+    if (!candidates.length && pref) {
+      const langRoot = pref.split("-")[0];
+      candidates = vs.filter(v => v.lang.toLowerCase().startsWith(langRoot as string));
+    }
+
+    // 3. Si sigue vacío, usa todas
+    if (!candidates.length) candidates = vs;
+
+    // 4. Ranking por “calidad” en nombre (neural, google, apple, enhanced…)
+    const rank = (v: SpeechSynthesisVoice) => {
+      const n = (v.name || "").toLowerCase();
+      let score = 0;
+      if (/google|apple|neural|enhanced/.test(n)) score += 2;
+      if (pref && v.lang.toLowerCase().startsWith(pref.split("-")?.[0] as string)) score += 1;
+      return score;
+    };
+
+    candidates.sort((a, b) => rank(b) - rank(a));
+    this.voice = candidates[0] || null;
+  }
+
+  private params() {
+    const clamp = (n: number, min: number, max: number) => isNaN(n) ? min : Math.max(min, Math.min(max, n));
+    // defaults "menos robóticos"
+    const rate  = clamp(parseFloat(this.getAttribute("rate")  || "0.95"), 0.5, 1.5);
+    const pitch = clamp(parseFloat(this.getAttribute("pitch") || "1.05"), 0.8, 1.4);
+    const volume= clamp(parseFloat(this.getAttribute("volume")|| "1"),    0,   1);
+    const lang  = this.getAttribute("lang") || "";
+    const pause = Math.max(0, parseInt(this.getAttribute("pause") || "140", 10)); // ms
+    const prettify = (this.getAttribute("prettify") || "on").toLowerCase() !== "off";
+    return { rate, pitch, volume, lang, pause, prettify };
+  }
+
+  private prettifyForTTS(input: string): string {
+    let t = input;
+
+    // 1) Quita cosas que suenan mal al leer en voz alta
+    t = t.replace(/\bhttps?:\/\/\S+|\bwww\.\S+/gi, "");    // URLs
+    t = t.replace(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi, ""); // emails
+    t = t.replace(/[#_*`~\[\]<>|]/g, " ");                 // restos markdown/código
+
+
+    // 2) Expansiones simples
+    t = t.replace(/&/g, " y ");
+    t = t.replace(/%/g, " por ciento");
+    t = t.replace(/\bNº\b|\bNo\.\b/gi, " número ");
+    t = t.replace(/\be\.g\.\b/gi, " por ejemplo ");
+    t = t.replace(/\bi\.e\.\b/gi, " es decir ");
+
+    // 3) Abreviaturas frecuentes (español)
+    const abbr: Record<string,string> = {
+      "Sr.": "señor", "Sra.": "señora", "Sres.": "señores",
+      "Dr.": "doctor", "Dra.": "doctora", "Dept.": "departamento",
+      "p. ej.": "por ejemplo", "aprox.": "aproximadamente",
+    };
+    for (const [k,v] of Object.entries(abbr)) {
+      t = t.replace(new RegExp(`\\b${k.replace(".","\\.")}\\b`, "g"), ` ${v} `);
+    }
+
+    // 4) Pausas tipográficas: mejor guion largo que dos puntos
+    t = t.replace(/:\s/g, " — ");
+    // bullets → pausas
+    t = t.replace(/^[\s•\-–—]\s*/gm, "… "); // inicio de línea con viñeta
+    // paréntesis → comas (pausa ligera)
+    t = t.replace(/\(([^)]+)\)/g, ", $1 ,");
+
+    // 5) Espacios limpios
+    t = t.replace(/\s+/g, " ").replace(/\s+\n/g, "\n").trim();
+    return t;
+  }
+}
+
+declare global { interface HTMLElementTagNameMap { "text-reader": TextReader; } }
+if (!customElements.get("text-reader")) customElements.define("text-reader", TextReader);
+
+
+</script>

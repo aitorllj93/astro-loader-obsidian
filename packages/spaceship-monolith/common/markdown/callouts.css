@@ -21,8 +21,7 @@
 
 
 @utility callout-title {
-  @apply text-base flex items-center gap-2 font-semibold;
-  color: var(--color-callout-foreground);
+  @apply text-base flex items-center gap-2 font-semibold text-[var(--color-callout-foreground)];
 }
 
 @utility callout-title-icon {
@@ -36,6 +35,10 @@
 
   p {
     @apply my-4;
+  }
+
+  strong {
+    @apply text-[var(--color-callout-foreground)];
   }
 }
 

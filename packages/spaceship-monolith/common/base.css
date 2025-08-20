@@ -21,6 +21,7 @@
 @import './components/pagefind';
 @import './components/graph';
 @import './components/map';
+@import './components/text-reader';
 
 @import './markdown/callouts';
 @import './markdown/code';

@@ -1,0 +1,129 @@
+
+
+@utility embed-map {
+  @apply sticker h-[180px]! md:h-[396px]!;
+  --rot: 0;
+
+  .leaflet-container {
+    z-index: 0;
+  }
+
+  &::after {
+    z-index: 1;
+  }
+}
+
+@utility map-view {
+  .map {
+    @apply rounded-2xl;
+  }  
+
+  .leaflet-container {
+    @apply rounded-2xl;
+  }
+}
+
+@utility leaflet-container {
+  @media (prefers-color-scheme: dark) {
+    @apply filter-none!;
+  }
+
+  a {
+    @apply text-[hsl(21,_61%,_26%)]! text-base;
+  }
+}
+
+@utility map-label {
+  &.pub, &.dessert_shop, &.cafe, &.coffee_shop, &.restaurant, &.food_store, &.supermarket {
+    a {
+      @apply text-[hsl(21,_61%,_26%,_60%)]!;
+    }
+  }
+}
+
+@utility map-location {
+  @apply bg-purple-500;
+}
+
+@utility map-marker {
+  @apply bg-[hsl(21,_61%,_26%)]!;
+  &.pub, &.dessert_shop, &.cafe, &.coffee_shop, &.restaurant, &.food_store, &.supermarket {
+      @apply bg-[hsl(21,_61%,_26%,_40%)]!;
+  }
+
+  &.pub {
+    @apply icon-[icon-park-twotone--beer];
+  }
+
+  &.city_hall {
+    @apply icon-[streamline--city-hall-remix];
+  }
+
+  &.dessert_shop, &.cafe, &.coffee_shop {
+    @apply icon-[ic--twotone-coffee];
+  }
+
+  &.historical_landmark, &.historical_place {
+    @apply icon-[icon-park-twotone--castle];
+  }
+
+  &.library {
+    @apply icon-[mdi--library];
+  }
+
+  &.market {
+    @apply icon-[healthicons--market-stall];
+  }
+
+  &.monument, &.sculpture {
+    @apply icon-[icon-park-twotone--monument-one];
+  }
+
+  &.museum {
+    @apply icon-[icon-park-twotone--museum-one];
+  }
+
+  &.park {
+    @apply icon-[ph--park-duotone];
+  }
+
+  &.performing_arts_theater, &.concert_hall {
+    @apply icon-[ic--twotone-theater-comedy];
+  }
+
+  &.restaurant, &.food_store {
+    @apply icon-[material-symbols-light--restaurant-rounded];
+  }
+
+  &.route {
+    @apply icon-[streamline-plump--street-sign-solid];
+  }
+
+  &.church, &.place_of_worship {
+    @apply icon-[ic--twotone-church];
+  }
+
+  &.bridge {
+    @apply icon-[tabler--building-bridge];
+  }
+
+  &.supermarket {
+    @apply icon-[ic--twotone-local-grocery-store];
+  }
+
+  &.synagogue {
+    @apply icon-[ic--twotone-synagogue];
+  }
+
+  &.cemetery {
+    @apply icon-[mdi--cemetery];
+  }
+
+  &.tower, &.landmark, &.tourist_attraction, &.observation_deck {
+    @apply icon-[icon-park-twotone--tower];
+  }
+
+  &.public_bath {
+    @apply icon-[ix--water-bathing];
+  }
+}
