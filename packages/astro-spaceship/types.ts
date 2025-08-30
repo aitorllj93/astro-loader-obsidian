@@ -12,6 +12,7 @@ export type LegacySpaceshipConfig = {
   title: string;
   // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   logo?: any | undefined;
+  vaultDir?: string;
   /** @deprecated use features instead */
   displayOptions?: {
     showAuthor?: boolean;

@@ -1,6 +1,8 @@
 import { ObsidianDocumentSchema, ObsidianWikiLinkSchema } from "astro-loader-obsidian";
 import { z } from "zod";
 
+import { DEFAULT_ARTICLE_AUTHOR_ENABLED, DEFAULT_ARTICLE_DATE_ENABLED, DEFAULT_LOCALE, DEFAULT_RIGHT_SIDEBAR_BACKLINKS_ENABLED, DEFAULT_RIGHT_SIDEBAR_GRAPH_ENABLED, DEFAULT_RIGHT_SIDEBAR_LINKS_ENABLED, DEFAULT_RIGHT_SIDEBAR_MAP_ENABLED, DEFAULT_RIGHT_SIDEBAR_MODE, DEFAULT_RIGHT_SIDEBAR_TOC_ENABLED, DEFAULT_VAULT_DIR } from "../constants";
+
 const AstroImageSchema = z.object({
   src: z.string(),
   width: z.number(),
@@ -55,37 +57,38 @@ export const TagSchema = z.object({
 export const ConfigSchema = z.object({
   author: z.string().optional(),
   base: z.string().optional(),
-  defaultLocale: z.string().optional().default('en'),
+  defaultLocale: z.string().optional().default(DEFAULT_LOCALE),
   locales: z.string().array().optional(),
   description: z.string().optional(),
   site: z.string().optional(),
   title: z.string().optional(),
   logo: z.string().optional(),
+  vaultDir: z.string().optional().default(DEFAULT_VAULT_DIR),
   features: z.object({
     article: z.object({
       author: z.object({
-        enabled: z.boolean().default(true)
+        enabled: z.boolean().default(DEFAULT_ARTICLE_AUTHOR_ENABLED)
       }).optional().default({}),
       publishDate: z.object({
-        enabled: z.boolean().default(true)
+        enabled: z.boolean().default(DEFAULT_ARTICLE_DATE_ENABLED)
       }).optional().default({})
     }).optional().default({}),
     rightSidebar: z.object({
-      mode: z.union([z.literal('tabset'), z.literal('column')]).default('tabset'),
+      mode: z.union([z.literal('tabset'), z.literal('column')]).default(DEFAULT_RIGHT_SIDEBAR_MODE),
       map: z.object({
-        enabled: z.boolean().default(true)
+        enabled: z.boolean().default(DEFAULT_RIGHT_SIDEBAR_MAP_ENABLED)
       }).optional().default({}),
       graph: z.object({
-        enabled: z.boolean().default(true)
+        enabled: z.boolean().default(DEFAULT_RIGHT_SIDEBAR_GRAPH_ENABLED)
       }).optional().default({}),
       toc: z.object({
-        enabled: z.boolean().default(true)
+        enabled: z.boolean().default(DEFAULT_RIGHT_SIDEBAR_TOC_ENABLED)
       }).optional().default({}),
       links: z.object({
-        enabled: z.boolean().default(true)
+        enabled: z.boolean().default(DEFAULT_RIGHT_SIDEBAR_LINKS_ENABLED)
       }).optional().default({}),
       backlinks: z.object({
-        enabled: z.boolean().default(true)
+        enabled: z.boolean().default(DEFAULT_RIGHT_SIDEBAR_BACKLINKS_ENABLED)
       }).optional().default({}),
     }).optional().default({})
   }).optional().default({})

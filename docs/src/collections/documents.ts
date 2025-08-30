@@ -12,7 +12,7 @@ export default {
   [DOCUMENTS_COLLECTION_NAME]: defineCollection({
     loader: ObsidianMdLoader({
       author: config.author,
-      base: 'src/content/vault',
+      base: config.vaultDir,
       url: '',
       wikilinkFields: ['relateds']
     }),
