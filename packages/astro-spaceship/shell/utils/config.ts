@@ -44,7 +44,6 @@ const fromEnv = (): SpaceshipConfig => ({
   title: ENV.SPACESHIP_TITLE,
   description: ENV.SPACESHIP_DESCRIPTION,
   logo: ENV.SPACESHIP_LOGO,
-  vaultDir: ENV.OBSIDIAN_VAULT_DIR ?? DEFAULT_VAULT_DIR,
   features: {
     article: {
       author: {

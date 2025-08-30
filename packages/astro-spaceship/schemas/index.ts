@@ -63,7 +63,6 @@ export const ConfigSchema = z.object({
   site: z.string().optional(),
   title: z.string().optional(),
   logo: z.string().optional(),
-  vaultDir: z.string().optional().default(DEFAULT_VAULT_DIR),
   features: z.object({
     article: z.object({
       author: z.object({
