@@ -1,4 +1,4 @@
-import websiteConfig from "@/config";
+import websiteConfig from "../shell/utils/config";
 
 export const languages = {
   en: 'English',

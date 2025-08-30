@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/). For a sty
  
 ## [Unreleased] - yyyy-mm-dd
 
+## 0.9.0 - 2025-08-30
+
+### Added
+
+- `astro-spaceship`: Config load from env vars with varlock
+
 ## 0.8.0 - 2025-08-20
 
 ### Added

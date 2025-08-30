@@ -8,7 +8,7 @@
 		"withastro",
 		"astro-integration"
 	],
-	"version": "0.8.1",
+	"version": "0.9.0",
 	"author": "Aitor Llamas Jiménez <aitorllj93@gmail.com>",
 	"homepage": "https://github.com/aitorllj93/astro-loader-obsidian",
 	"repository": {
@@ -21,6 +21,7 @@
 	"type": "module",
 	"exports": {
 		".": "./index.ts",
+		"./config": "./shell/utils/config.ts",
 		"./constants": "./constants.ts",
 		"./schemas": "./schemas/index.ts",
 		"./types": "./types.ts",
@@ -45,8 +46,9 @@
 		"@remark-embedder/core": "^3.0.3",
 		"@remark-embedder/transformer-oembed": "^5.0.1",
 		"@tailwindcss/vite": "^4.1.11",
+		"@varlock/astro-integration": "^0.0.6",
 		"astro-expressive-code": "^0.41.3",
-		"astro-loader-obsidian": "^0.8.1",
+		"astro-loader-obsidian": "^0.9.0",
 		"astro-pagefind": "^1.8.3",
 		"d3": "^7.9.0",
 		"front-matter": "^4.0.2",
@@ -66,6 +68,7 @@
 		"remark-code-extra": "^1.0.1",
 		"remark-math": "^6.0.0",
 		"unist-util-visit": "^5.0.0",
+		"varlock": "^0.0.11",
 		"zod": "^3.25.76"
 	}
 }

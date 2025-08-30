@@ -3,6 +3,7 @@ import type { AstroIntegration } from 'astro';
 import expressiveCode from "astro-expressive-code";
 import pagefind from "astro-pagefind";
 import sitemap from '@astrojs/sitemap';
+import varlock from '@varlock/astro-integration';
 import tailwindcss from '@tailwindcss/vite';
 
 import type { SpaceshipConfig } from './types';
@@ -44,6 +45,7 @@ export function astroSpaceship(
             config.markdown as MarkdownConfig
           ),
           integrations: [
+            varlock(),
             ...config.integrations.filter(i => i.name !== INTEGRATION_NAME),
             pagefind(),
             sitemap(),

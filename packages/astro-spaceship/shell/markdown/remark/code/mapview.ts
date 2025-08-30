@@ -2,7 +2,7 @@ import type { Element, Text } from "hast";
 import z from "zod";
 
 import { toUrl } from "../../../utils/id";
-import { getConfig } from "../../../utils/config";
+import config from "../../../utils/config";
 
 const mapViewSchema = z.object({ 
   name: z.string(), 
@@ -72,8 +72,6 @@ export const mapview = async (node: Text) => {
     console.warn(error);
     return {};
   }
-
-  const config = await getConfig();
 
   const href = getUrlFromQuery(data.query, config.base);
 
