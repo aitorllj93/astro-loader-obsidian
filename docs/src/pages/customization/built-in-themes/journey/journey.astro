@@ -13,9 +13,9 @@ import Title from "astro-spaceship/components/Article/Title.astro";
 import Subtitle from "astro-spaceship/components/Article/Subtitle.astro";
 import Description from "astro-spaceship/components/Article/Description.astro";
 import TextReader from "astro-spaceship/components/Article/TextReader/TextReader.astro";
+import config from "astro-spaceship/config";
 
 import "@/styles/themes/journey.css";
-import config from "@/config";
 import { render } from "astro:content";
 
 const getStaticPathsForThemePage = getStaticPathsForThemeFactory({ config });

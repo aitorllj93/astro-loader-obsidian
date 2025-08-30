@@ -7,7 +7,7 @@
     "allowJs": true,
     "baseUrl": ".",
     "paths": {
-      "@/config": ["./website.config.json"],
+      "@/config": ["./node_modules/astro-spaceship/shell/utils/config.ts"],
       "@/*": [
         "./src/*"
       ]

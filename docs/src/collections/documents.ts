@@ -5,7 +5,7 @@ import { ObsidianMdLoader, ObsidianWikiLinkSchema } from "astro-loader-obsidian"
 import { DOCUMENTS_COLLECTION_NAME } from 'astro-spaceship/constants';
 import { DocumentSchema } from 'astro-spaceship/schemas';
 
-import config from '@/config';
+import config from 'astro-spaceship/config';
 
 
 export default {

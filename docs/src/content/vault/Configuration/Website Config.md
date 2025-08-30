@@ -2,7 +2,7 @@
 order: 1
 ---
 
-There's a special json file in the root of your Astro project that defines how your website is configured. This file is called `website.config.json` and it contains various settings that control the behavior and appearance of your site. This file can be imported in your Astro components with the alias `@/config`.
+There's a special json file in the root of your Astro project that defines how your website is configured. This file is called `website.config.json` and it contains various settings that control the behavior and appearance of your site. This file can be imported in your Astro components with the alias `astro-spaceship/config`.
 
 ## Properties
 
