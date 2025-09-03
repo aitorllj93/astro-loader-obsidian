@@ -18,7 +18,7 @@ export const getLinkedFrom = async (slug?: string, collectionName = DOCUMENTS_CO
       collection: collectionName,
       id: l.id,
     })
-  )) as Document[]).filter(d => d.data.location).map(documentToFeature)
+  )) as Document[]).filter(d => d.data.publish !== false && d.data.location).map(documentToFeature)
 
   return {
     type: 'FeatureCollection',

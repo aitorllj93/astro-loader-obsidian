@@ -7,7 +7,7 @@ import type { Document } from "../../../types";
 import { documentToFeature } from "./document-to-feature";
 
 export const getIndex = async (collectionName = DOCUMENTS_COLLECTION_NAME): Promise<FeatureCollection> => {
-  const allDocuments = await getCollection(collectionName, (d: Document) => !!d.data.location);
+  const allDocuments = await getCollection(collectionName, (d: Document) => d.data.publish !== false && !!d.data.location);
 
   const features = allDocuments.map(documentToFeature).filter(Boolean) as Feature[];
 

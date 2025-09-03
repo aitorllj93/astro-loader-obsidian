@@ -5,7 +5,7 @@ import type { Document, GraphViewNode, GraphViewLink } from "../../../types";
 import { DOCUMENTS_COLLECTION_NAME } from "../../../constants";
 
 export const getGraphView = async (slug?: string, collectionName = DOCUMENTS_COLLECTION_NAME) => {
-  const allDocuments = await getCollection(collectionName) as Document[];
+  const allDocuments = await getCollection(collectionName, (d: Document) => d.data.publish !== false) as Document[]
   const nodes = new Map<string, GraphViewNode>();
   const links: GraphViewLink[] = [];
 
@@ -49,8 +49,13 @@ export const getGraphView = async (slug?: string, collectionName = DOCUMENTS_COL
       const isSlugLink = !slug || doc.id === slug || link.id === slug;
 
       if (link.id && link.href && isSlugLink) {
-        addToLinks(doc.id, link.id, 1);
         const linkedNode = allDocuments.find(d => d.id === link.id);
+
+        if (!linkedNode) {
+          continue;
+        }
+
+        addToLinks(doc.id, link.id, 1);
         addToNodes(link.id, linkedNode?.data.title ?? link.title, link.href, link.id.split('/')[0]);
       }
     }
