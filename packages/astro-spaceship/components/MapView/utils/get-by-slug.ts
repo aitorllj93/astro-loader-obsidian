@@ -18,7 +18,7 @@ export const getBySlug = async (slug?: string, collectionName = DOCUMENTS_COLLEC
       collection: collectionName,
       id: l.id,
     })
-  )) as Document[]).filter(d => d.data.publish !== false && d.data.location).map(documentToFeature)
+  )) as Document[]).filter(d => d && d.data.publish !== false && d.data.location).map(documentToFeature)
 
   return {
     type: 'FeatureCollection',
