@@ -28,18 +28,8 @@ const { t } = useI18n(Astro);
       <ul class="table-of-contents-list">
         {headings.map(({ depth, slug, text }) => (
           <li class="table-of-contents-link">
-            <a
-              class:list={[
-                "flex",
-                depth === 2 && "ml-2",
-                depth === 3 && "ml-4",
-                depth === 4 && "ml-6",
-                depth === 5 && "ml-8",
-                depth === 6 && "ml-10",
-              ]}
-              href={`#${slug}`}
-            >
-              <span class="truncate">{text}</span>
+            <a data-depth={depth} href={`#${slug}`}>
+              <span>{text}</span>
             </a>
           </li>
         ))}

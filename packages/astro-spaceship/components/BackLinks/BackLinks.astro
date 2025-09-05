@@ -17,16 +17,15 @@ const { t } = useI18n(Astro);
   shouldRender && (
     <nav class="links">
       <h2 class="links-title">{t('nav.linkedMentions')}</h2>
-      <ul class="flex flex-col gap-0.5">
+      <ul class="links-list">
         {links.map((link) => (
           <li class="link">
             <a
-              class="flex gap-2"
               href={link.data.permalink}
               title={link.data.title}
             >
               <BackLinkIcon />
-              <span class="truncate">{link.data.title}</span>
+              <span>{link.data.title}</span>
             </a>
           </li>
         ))}

@@ -30,20 +30,20 @@ const imageLinks = await Promise.all(images.map(async i => ({
   shouldRender && (
     <nav class="links">
       <h2 class="links-title">{t('nav.links')}</h2>
-      <ul class="flex flex-col gap-0.5">
+      <ul class="links-list">
         {links.map((link) => (
           <li class="link">
-            <a class="flex gap-2" href={link.href} title={link.title}>
+            <a href={link.href} title={link.title}>
               <LinkIcon />
-              <span class="truncate">{link.title}</span>
+              <span>{link.title}</span>
             </a>
           </li>
         ))}
         {imageLinks.map((image) => (
           <li class="link">
-            <a class="flex gap-2" href={image.href?.src} title={image.title}>
+            <a href={image.href?.src} title={image.title}>
               <ImageIcon />
-              <span class="truncate">{image.title}</span>
+              <span>{image.title}</span>
             </a>
           </li>
         ))}

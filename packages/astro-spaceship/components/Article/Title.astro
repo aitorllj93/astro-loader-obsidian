@@ -5,7 +5,7 @@ export type Props = {
   document: Document;
 };
 
-const { title, subtitle } = Astro.props.document.data;
+const { title } = Astro.props.document.data;
 ---
 
-<h1 data-pagefind-weight="10" class:list={["article-title", subtitle && "!mb-2"]}>{title}</h1>
+<h1 data-pagefind-weight="10" class="article-title">{title}</h1>

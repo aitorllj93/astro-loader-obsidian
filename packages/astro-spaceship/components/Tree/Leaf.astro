@@ -50,14 +50,14 @@ const isIndexActive =
 >
   {
     !isFolder ? (
-      <a href={node.permalink} title={node.name} class="truncate block">
+      <a href={node.permalink} title={node.name}>
         {node.name}
       </a>
     ) : null
   }
   {
     isFolder ? (
-      <details class="marker:content-none" open={expanded ?? isActive}>
+      <details class="tree-leaf-folder-details" open={expanded ?? isActive}>
         <summary
           class:list={[
             "tree-leaf-folder-summary",
@@ -69,7 +69,6 @@ const isIndexActive =
             <a
               href={childIndex.permalink}
               title={childIndex.name}
-              class="truncate block"
             >
               {childIndex.name}
             </a>
@@ -77,7 +76,7 @@ const isIndexActive =
             <span>{node.name}</span>
           )}
         </summary>
-        <ul class="flex flex-col gap-0.5 ms-2">
+        <ul>
           {node.children
             ?.filter((c) => c.permalink !== childIndex?.permalink)
             .map((c) => (

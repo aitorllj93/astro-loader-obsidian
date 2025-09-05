@@ -9,7 +9,7 @@ export type Props = {
   document?: Document | undefined;
 }
 
-const { class: className = 'flex w-full h-full', lat = 0, lng = 0, config, document } = Astro.props;
+const { class: className = 'map-full', lat = 0, lng = 0, config, document } = Astro.props;
 
 const id = document?.id ?? 'index';
 const centerLat = document?.data.location?.lat ?? lat;

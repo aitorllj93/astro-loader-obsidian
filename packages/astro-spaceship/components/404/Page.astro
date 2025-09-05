@@ -22,12 +22,14 @@ const page = buildPage(Astro, config.defaultLocale);
     tree={tree}
   />
 
-  <article class="p-8 bg-gray-50 rounded-xl grow-1">
-    <h1 class="text-4xl mb-4">
-      {page.title}
-    </h1>
-    <p class="text-lg">
-      {page.seo.description}
-    </p>
+  <article class="article">
+    <section class="article-content">
+      <h1 class="article-title">
+        {page.title}
+      </h1>
+      <p class="article-description">
+        {page.seo.description}
+      </p>
+    </section>
   </article>
 </Layout>

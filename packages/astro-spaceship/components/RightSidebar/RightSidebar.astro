@@ -29,12 +29,12 @@ const linksIsEnabled = Astro.props.showLinks && (isLegacyConfig(config) ? true :
 const showSidebar = mapIsEnabled || graphIsEnabled || tocIsEnabled || linksIsEnabled;
 ---
 
-{showSidebar && <Sidebar class="hidden lg:flex" open position="right" id="right-sidebar-desktop">
+{showSidebar && <Sidebar class="sidebar-desktop" open position="right" id="right-sidebar-desktop">
   { mode === 'column' && <Column id="right-sidebar-desktop-column" {...Astro.props} />}
   { mode === 'tabset' && <Tabset id="right-sidebar-desktop-tabset" {...Astro.props} />}
 </Sidebar>}
 
-{showSidebar && <Sidebar class="flex lg:hidden" position="right" id="right-sidebar-touch">
+{showSidebar && <Sidebar class="sidebar-touch" position="right" id="right-sidebar-touch">
   { mode === 'column' && <Column id="right-sidebar-touch-column" {...Astro.props} />}
   { mode === 'tabset' && <Tabset  id="right-sidebar-touch-tabset" {...Astro.props} />}
 </Sidebar>}

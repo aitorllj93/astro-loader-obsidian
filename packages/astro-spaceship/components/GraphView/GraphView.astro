@@ -7,7 +7,7 @@ export type Props = {
   slug?: string | undefined;
 };
 
-const { config, slug, class: className = "flex w-full h-full" } = Astro.props;
+const { config, slug, class: className = "graph-full" } = Astro.props;
 ---
 
 <graph-view base={config.base} slug={slug} class={className}></graph-view>

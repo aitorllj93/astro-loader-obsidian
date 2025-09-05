@@ -27,7 +27,7 @@ const coverImage = cover ? (await getImage({
         height={coverImage.attributes.height}
         width={coverImage.attributes.width}
         alt=""
-        class:list={["article-cover-image", coverX || coverY ? `` : "object-center"]}
+        class:list={["article-cover-image", coverX || coverY ? `` : "article-cover-center"]}
         style={
           coverX || coverY ? `object-position: ${coverX}% ${coverY}%;` : ""
         }
