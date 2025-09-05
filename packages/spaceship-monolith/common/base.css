@@ -45,3 +45,6 @@ body {
 @utility html {
   @apply scroll-smooth scrollbar-track-transparent scrollbar-thumb-menu-active-background dark:scrollbar-thumb-menu-active-background-dark scrollbar-thin;
 }
+
+@source inline("marker");
+@source inline("html");

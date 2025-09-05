@@ -2,3 +2,5 @@
 @utility body {
   @apply w-full h-full bg-background dark:bg-background-dark overflow-x-hidden;
 }
+
+@source inline("body");

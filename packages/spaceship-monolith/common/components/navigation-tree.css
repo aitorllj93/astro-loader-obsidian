@@ -9,6 +9,10 @@
 
 @utility tree-leaf {
   @apply text-ui-sm w-full rounded-lg font-menu text-menu-foreground dark:text-menu-foreground-dark;
+
+  a {
+    @apply truncate block;
+  }
 }
 
 @utility tree-leaf-folder {
@@ -19,10 +23,32 @@
   @apply bg-menu-active-background text-menu-active-foreground dark:bg-menu-active-background-dark dark:text-menu-active-foreground-dark;
 }
 
+@utility tree-leaf-folder-details {
+  @apply marker:content-none;
+
+  ul {
+    @apply flex flex-col gap-0.5 ms-2;
+  }
+}
+
 @utility tree-leaf-folder-summary {
   @apply capitalize mb-0.5 rounded-lg py-1 px-2 cursor-pointer hover:bg-menu-active-background dark:hover:bg-menu-active-background-dark;
+
+  a {
+    @apply truncate block;
+  }
 }
 
 @utility tree-leaf-folder-summary-active {
   @apply bg-menu-active-background dark:bg-menu-active-background-dark;
 }
+
+
+@source inline("navigation-tree");
+@source inline("navigation-tree-list");
+@source inline("tree-leaf");
+@source inline("tree-leaf-folder");
+@source inline("tree-leaf-active");
+@source inline("tree-leaf-folder-details");
+@source inline("tree-leaf-folder-summary");
+@source inline("tree-leaf-folder-summary-active");

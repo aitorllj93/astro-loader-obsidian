@@ -2,6 +2,10 @@
 	@apply flex h-[100vh] sticky top-0 z-20 bg-sidebar-background dark:bg-sidebar-background-dark;
 }
 
+@utility sidebar-checkbox {
+	@apply relative sr-only;
+}
+
 @utility sidebar-arrow {
 	@apply absolute top-[22px]  z-30 cursor-pointer inline-block p-3 transition-all duration-500 peer-checked:rotate-180;
 
@@ -33,3 +37,25 @@
 @utility sidebar-content-right {
 	@apply right-0 z-20 translate-x-full;
 }
+
+@utility sidebar-touch {
+	@apply flex lg:hidden;
+}
+
+@utility sidebar-desktop {
+	@apply hidden lg:flex;
+}
+
+
+@source inline("peer");
+@source inline("sidebar");
+@source inline("sidebar-checkbox");
+@source inline("sidebar-arrow");
+@source inline("sidebar-left-arrow");
+@source inline("sidebar-right-arrow");
+@source inline("sidebar-content");
+@source inline("sidebar-content-left");
+@source inline("sidebar-content-right");
+
+@source inline("sidebar-touch");
+@source inline("sidebar-desktop");

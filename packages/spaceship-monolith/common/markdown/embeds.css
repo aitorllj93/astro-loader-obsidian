@@ -60,3 +60,15 @@
 @utility iframe-embed {
   @apply w-full h-[90dvh];
 }
+
+@source inline("embed-youtube");
+@source inline("embed-figure");
+@source inline("embed-picture");
+@source inline("embed-caption");
+@source inline("embed-url");
+
+@source inline("file-embed");
+@source inline("file-embed-link");
+@source inline("file-embed-title");
+@source inline("audio-embed");
+@source inline("iframe-embed");

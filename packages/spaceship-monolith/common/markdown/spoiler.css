@@ -25,3 +25,5 @@
     @apply -z-10 flex flex-col w-full h-full font-paragraph peer-checked:z-0 cursor-pointer;
   }
 }
+
+@source inline("spoiler");

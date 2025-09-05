@@ -1,4 +1,13 @@
 
+
+@utility column {
+  @apply p-2 w-full border-t border-gray-400 dark:border-obsidian-400;
+  .column-content {
+    @apply flex flex-col gap-4 max-h-[var(--left-sidebar-content-height)] scrollbar-thin overflow-auto;
+  }
+}
+
+
 @utility tabset-bg {
   @apply block! z-0 absolute inset-0 h-[42px] bg-tabset-background dark:bg-tabset-background-dark;
 }
@@ -9,6 +18,10 @@
   svg {
     @apply m-1 w-4.5 h-4.5;
   }
+}
+
+@utility tabset-tab-checkbox {
+  @apply opacity-0 absolute;
 }
 
 @utility tabset-bg {
@@ -39,9 +52,33 @@
   }
 }
 
-@utility column {
-  @apply p-2 w-full border-t border-gray-400 dark:border-obsidian-400;
-  .column-content {
-    @apply flex flex-col gap-4 max-h-[var(--left-sidebar-content-height)] scrollbar-thin overflow-auto;
-  }
-}
+@source inline("column");
+@source inline("tabset-bg");
+@source inline("tabset-tab");
+@source inline("tabset-tab-checkbox");
+@source inline("tabset-tab-active");
+@source inline("tabset-tab-one");
+@source inline("tabset-tab-two");
+@source inline("tabset-tab-three");
+@source inline("tabset-content");
+
+@source inline("peer/tab-one");
+@source inline("[grid-area:tab1]");
+@source inline("peer/tab-two");
+@source inline("[grid-area:tab2]");
+@source inline("peer/tab-three");
+@source inline("[grid-area:tab3]");
+
+@source inline("hidden");
+@source inline("peer-checked/tab-one:flex");
+@source inline("peer-checked/tab-two:flex");
+@source inline("peer-checked/tab-three:flex");
+
+@source inline("grid")
+@source inline("[grid-template-areas:'tab1_tab2_tab3''tabcontent_tabcontent_tabcontent'] grid-cols-3");
+@source inline("[grid-template-areas:'tab2_tab3''tabcontent_tabcontent'] grid-cols-2");
+@source inline("[grid-template-areas:'tab3''tabcontent'] grid-cols-1");
+@source inline("[grid-template-areas:'a_b_c''a_b_c']");
+@source inline("[grid-template-areas:'tab1_tab3''tabcontent_tabcontent'] grid-cols-2");
+@source inline("[grid-template-areas:'tab1''tabcontent'] grid-cols-1");
+@source inline("[grid-template-areas:'tab1_tab2''tabcontent_tabcontent'] grid-cols-2");

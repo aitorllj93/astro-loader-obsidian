@@ -11,3 +11,12 @@
 @utility map {
    @apply flex w-[95%] h-full aspect-square mx-auto rounded-lg bg-graph-background dark:bg-graph-background-dark z-1;
 }
+
+@utility map-full {
+  @apply flex w-full h-full;
+}
+
+@source inline("map-view");
+@source inline("map-title");
+@source inline("map");
+@source inline("map-full");

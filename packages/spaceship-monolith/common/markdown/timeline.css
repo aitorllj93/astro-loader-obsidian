@@ -77,3 +77,15 @@
   @apply font-paragraph leading-6;
   
 }
+
+@source inline("timeline");
+@source inline("timeline-item");
+@source inline("timeline-item__card");
+@source inline("timeline-item__card--start");
+@source inline("timeline-item__card--end");
+@source inline("timeline-item__indicator");
+@source inline("timeline-item__line--start");
+@source inline("timeline-item__line--end");
+@source inline("timeline-item__card--date");
+@source inline("timeline-item__card--title");
+@source inline("timeline-item__card--content");

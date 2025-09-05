@@ -11,3 +11,12 @@
 @utility graph {
    @apply flex w-[95%] h-full aspect-square mx-auto rounded-lg bg-graph-background dark:bg-graph-background-dark z-1;
 }
+
+@utility graph-full {
+  @apply flex w-full h-full;
+}
+
+@source inline("graph-view");
+@source inline("graph-title");
+@source inline("graph");
+@source inline("graph-full");

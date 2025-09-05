@@ -7,10 +7,27 @@
   @apply text-ui-sm mb-2 font-bold;
 }
 
+@utility links-list {
+  @apply flex flex-col gap-0.5;
+}
+
 @utility link {
   @apply w-full rounded-lg py-1 px-2 hover:bg-menu-active-background hover:text-menu-active-foreground dark:hover:bg-menu-active-background-dark dark:hover:text-menu-active-foreground-dark;
+
+  a {
+    @apply flex gap-2;
+  }
 
   svg {
     @apply w-4 h-4 min-w-4;
   }
+
+  span {
+    @apply truncate;
+  }
 }
+
+@source inline("links");
+@source inline("links-title");
+@source inline("links-list");
+@source inline("link");

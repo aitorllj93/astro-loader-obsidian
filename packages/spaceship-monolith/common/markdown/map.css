@@ -53,9 +53,11 @@
   @apply bg-primary icon-[iconamoon--location-duotone] w-5! h-5!;
 }
 
-@source inline("map-label");
-@source inline("map-location");
-@source inline("map-marker");
 
 @source inline("embed-map");
 @source inline("leaflet-container");
+
+@source inline("map-view");
+@source inline("map-label");
+@source inline("map-marker");
+@source inline("map-location");

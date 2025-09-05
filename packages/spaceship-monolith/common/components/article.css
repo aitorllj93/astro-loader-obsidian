@@ -115,9 +115,8 @@
   @apply text-h1 font-bold;
 }
 
-
 @utility article-subtitle {
-  @apply text-h2 text-article-subtitle-foreground dark:text-article-subtitle-foreground-dark;
+  @apply mb-2 text-h2 text-article-subtitle-foreground dark:text-article-subtitle-foreground-dark;
 }
 
 @utility article-description-section {
@@ -156,3 +155,38 @@
     @apply w-full h-full object-cover;
   }
 }
+
+@utility article-cover-center {
+  @apply object-center;
+}
+
+@source inline("prose");
+@source inline("not-prose");
+@source inline("article-background");
+@source inline("article-blockquote");
+@source inline("article-code");
+@source inline("article-heading");
+@source inline("article-image");
+@source inline("article-link");
+@source inline("article-wikilink");
+@source inline("article-list");
+@source inline("article-paragraph");
+@source inline("article-prose");
+@source inline("article-scroll");
+@source inline("article-separator");
+@source inline("article-strong");
+@source inline("article-table");
+@source inline("article");
+@source inline("article-content");
+@source inline("article-body");
+@source inline("article-title");
+@source inline("article-subtitle");
+@source inline("article-description-section");
+@source inline("article-description");
+@source inline("article-meta");
+@source inline("article-author");
+@source inline("article-date");
+@source inline("article-tags");
+@source inline("article-tag");
+@source inline("article-cover");
+@source inline("article-cover-center"); /** cover without position **/

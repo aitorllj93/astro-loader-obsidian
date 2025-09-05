@@ -2,3 +2,5 @@
 @utility header-link {
   @apply p-2 border-b border-b-gray-400 dark:border-obsidian-400 bg-header-background dark:bg-header-background-dark font-title text-menu-foreground dark:text-menu-foreground-dark flex gap-2;
 }
+
+@source inline("header-link");

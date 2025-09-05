@@ -39,3 +39,5 @@
     grid-column: full;
   }
 }
+
+@source inline("grid-layout");
