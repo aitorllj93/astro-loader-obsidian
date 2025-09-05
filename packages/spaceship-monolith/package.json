@@ -26,7 +26,8 @@
 		"./galaxy": "./galaxy/theme.css",
 		"./journey": "./journey/theme.css",
 		"./temple": "./temple/theme.css",
-		"./themes/*": "./*"
+		"./themes/*": "./*",
+		"./landings/*": "./landings/*"
 	},
 	"devDependencies": {
 		"@types/node": "18.16.9",
