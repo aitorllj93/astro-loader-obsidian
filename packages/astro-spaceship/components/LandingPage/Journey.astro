@@ -1,26 +1,29 @@
 ---
 import { Image } from "astro:assets";
 
-import Logo from "./Spaceship.png";
+import Logo from "./Journey.png";
 
 import config from "astro-spaceship/config";
 
-import GraphView from "astro-spaceship/components/GraphView/GraphView.astro";
+import MapView from "astro-spaceship/components/MapView/MapView.astro";
 import Layout from "astro-spaceship/components/Layout/Layout.astro";
-import type { ImageMetadata } from "astro";
 
 export type Props = {
   initialPage?: string;
   logo?: ImageMetadata;
   title?: string;
   subtitle?: string;
+  lat: number;
+  lng: number;
 };
 
 const {
-  initialPage = `${config.base}welcome`,
+  initialPage,
   logo = Logo,
   title = config.title,
   subtitle = config.description,
+  lat,
+  lng,
 } = Astro.props;
 ---
 
@@ -35,15 +38,12 @@ const {
   }}
   footer={null}
 >
-  <div class="stars"></div>
-  <div class="twinkling"></div>
-  <div class="clouds"></div>
-  <div class="graph-container">
-    <GraphView config={config} />
+  <div class="map-container">
+    <MapView config={config} lat={lat} lng={lng} />
   </div>
   <a href={initialPage}>
     <section
-      class="perspective group logo-container"
+      class="logo-container perspective group"
     >
       <Image
         src={logo}

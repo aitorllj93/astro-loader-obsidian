@@ -1,0 +1,45 @@
+@import "spaceship-monolith/journey";
+
+:root {
+  touch-action: pan-x pan-y;
+  height: 100% 
+}
+
+@utility main {
+	@apply p-0;
+	&::before {
+		@apply content-none;
+	}
+}
+
+@utility map-container {
+	@apply z-0 absolute w-full h-full;
+}
+
+@utility logo-container {
+	@apply hidden md:flex absolute left-[50%] top-[75%] -translate-x-[50%] -translate-y-[50%];
+}
+
+@utility logo {
+	@apply mx-auto h-[33vh] w-auto transition-all group-hover:scale-110;
+}
+
+@utility title-container {
+	@apply absolute bottom-[20px] left-[50%] -translate-x-[50%] flex flex-col gap-3 md:gap-6 items-center transition-all group-hover:-rotate-x-25;
+}
+
+@utility title {
+	@apply text-shadow-lg text-6xl lg:text-8xl font-title bg-gradient-to-r from-primary via-[oklch(.83_.058_83.6)] to-[oklch(.41_.077_78.9)] inline-block text-transparent bg-clip-text;
+}
+
+@utility subtitle {
+	@apply text-shadow-lg text-xl lg:text-3xl text-balance text-center font-heading text-[hsl(21,_61%,_26%)];
+}
+
+
+@source inline("map-container");
+@source inline("logo-container");
+@source inline("logo");
+@source inline("title-container");
+@source inline("title");
+@source inline("subtitle");

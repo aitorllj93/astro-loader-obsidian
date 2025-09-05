@@ -52,3 +52,34 @@
 	opacity: 0.4;
 	animation: move-clouds-back 200s linear infinite;
 }
+
+@utility graph-container {
+	@apply absolute w-full h-full;
+}
+
+@utility logo-container {
+	@apply absolute left-[50%] top-[50%] -translate-x-[50%] -translate-y-[50%];
+}
+
+@utility logo {
+	@apply mx-auto h-[33vh] w-auto transition-all group-hover:rotate-x-25;
+}
+
+@utility title-container {
+	@apply absolute bottom-[20px] md:bottom-[100px] left-[50%] -translate-x-[50%] flex flex-col gap-3 md:gap-6 items-center transition-all group-hover:-rotate-x-25;
+}
+
+@utility title {
+	@apply text-6xl lg:text-8xl font-title bg-gradient-to-r from-obsidian-500 via-purple-400 to-pink-500 inline-block text-transparent bg-clip-text;
+}
+
+@utility subtitle {
+	@apply text-xl lg:text-3xl text-balance text-center font-heading text-white;
+}
+
+@source inline("graph-container");
+@source inline("logo-container");
+@source inline("logo");
+@source inline("title-container");
+@source inline("title");
+@source inline("subtitle");

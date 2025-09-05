@@ -152,9 +152,6 @@
   }
 }
 
-
-
-
 /* Sticker base */
 @utility sticker{
   --gloss-opacity: .18;   /* fuerza del brillo */
@@ -234,3 +231,11 @@
 
   &[data-matte] .gloss{ display:none; }
 }
+
+@source inline("texture");
+@source inline("leather");
+@source inline("paper");
+@source inline("paper-dark");
+@source inline("shadow-outline-double");
+@source inline("tag");
+@source inline("sticker");
