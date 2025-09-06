@@ -10,7 +10,19 @@ const AstroImageSchema = z.object({
   format: z.union([z.literal('png'), z.literal('jpeg'), z.literal('tiff'), z.literal('webp'), z.literal('gif'), z.literal('svg'), z.literal('avif'),]),
 });
 
-export const LocationSchema = z.string().array().transform((val) => {
+const LeafletLocationSchema = z.number().array().transform((val) => {
+  if (val.length < 2) {
+    return null;
+  }
+
+  const [lat, lng] = val;
+
+  return {
+    lat,
+    lng,
+  }
+});
+const MapViewLocationSchema = z.string().array().transform((val) => {
   if (!val[0]) {
     return null;
   }
@@ -23,7 +35,8 @@ export const LocationSchema = z.string().array().transform((val) => {
   };
 
 })
-.pipe(z.object({
+
+const LocationSchema = z.union([LeafletLocationSchema, MapViewLocationSchema]).pipe(z.object({
   lat: z.number(),
   lng: z.number(),
 }))
@@ -37,8 +50,8 @@ export const DocumentSchema = ObsidianDocumentSchema.extend({
   subtitle: z.string().optional(),
   'cover-x': z.number().optional(),
   'cover-y': z.number().optional(),
-  location: LocationSchema.optional(),
-  additionalType: z.string().optional(),
+  location: LocationSchema.nullish(),
+  additionalType: z.string().nullish(),
 });
 
 export const AuthorSchema = z.object({

@@ -7,6 +7,9 @@
   }
 }
 
+@utility tabset {
+  @apply grid;
+}
 
 @utility tabset-bg {
   @apply block! z-0 absolute inset-0 h-[42px] bg-tabset-background dark:bg-tabset-background-dark;
@@ -53,6 +56,7 @@
 }
 
 @source inline("column");
+@source inline("tabset")
 @source inline("tabset-bg");
 @source inline("tabset-tab");
 @source inline("tabset-tab-checkbox");
@@ -68,13 +72,13 @@
 @source inline("[grid-area:tab2]");
 @source inline("peer/tab-three");
 @source inline("[grid-area:tab3]");
+@source inline("[grid-area:tabcontent]");
 
 @source inline("hidden");
 @source inline("peer-checked/tab-one:flex");
 @source inline("peer-checked/tab-two:flex");
 @source inline("peer-checked/tab-three:flex");
 
-@source inline("grid")
 @source inline("[grid-template-areas:'tab1_tab2_tab3''tabcontent_tabcontent_tabcontent'] grid-cols-3");
 @source inline("[grid-template-areas:'tab2_tab3''tabcontent_tabcontent'] grid-cols-2");
 @source inline("[grid-template-areas:'tab3''tabcontent'] grid-cols-1");
