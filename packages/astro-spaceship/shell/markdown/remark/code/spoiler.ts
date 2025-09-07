@@ -23,7 +23,7 @@ export const spoiler = (node: Text) => {
             properties: {
               type: 'checkbox',
               id: 'spoilerToggle',
-              className: 'absolute sr-only peer'
+              className: 'spoiler-checkbox peer'
             }
           },
           {

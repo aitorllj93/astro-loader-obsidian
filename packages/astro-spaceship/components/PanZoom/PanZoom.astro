@@ -11,6 +11,15 @@
     if (element.parentElement?.tagName === "PICTURE") {
       element = element.parentElement;
     }
+
+    // This would avoid extra figure element, but doesn't work with Journey sticker effect
+    // if (element.parentElement?.tagName === "FIGURE") {
+    //   element.parentElement.classList.add("beoe", "not-content");
+    //   // @ts-expect-error
+    //   new PanZoomUi({ element, container: element.parentElement }).on();
+    //   continue;
+    // }
+
     const container = document.createElement("figure");
     container.classList.add("beoe", "not-content");
     element.replaceWith(container);

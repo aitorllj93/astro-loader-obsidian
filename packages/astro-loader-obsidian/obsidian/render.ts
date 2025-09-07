@@ -1,54 +1,15 @@
 import type { AstroIntegrationLogger } from "astro";
-import { parse, type HTMLElement, type TextNode, type Node } from 'node-html-parser';
-
-import type { Wikilink } from "./wikiLink";
 import type { DataStore } from "astro/loaders";
-import { renderEmbed } from "./obsidianEmbeds";
+
 import type { ObsidianDocument, ObsidianLink } from "../schemas";
+import type { Wikilink } from "./wikiLink";
 import type { Wikitag } from "./wikiTag";
 import type { StoreDocument } from "../types";
 
-const replaceOutsideDataCode = async (
-  root: HTMLElement,
-  wikilinkText: string,
-  replacementHTML: string
-) => {
-  const textNodes: TextNode[] = [];
+import { renderEmbed } from "./obsidianEmbeds";
+import { renderImage } from "./obsidianImages";
 
-  const walk = (node: Node) => {
-    if (node.nodeType === 3) {
-      // TextNode
-      if (!isInsideDataCode(node)) {
-        textNodes.push(node as TextNode);
-      }
-    } else {
-      const element = node as HTMLElement;
-      // Recorre hijos (no inspeccionamos atributos, porque queremos evitarlos)
-      element.childNodes.forEach(walk);
-    }
-  };
-
-  const isInsideDataCode = (node: Node): boolean => {
-    let current: HTMLElement | null = node.parentNode as HTMLElement;
-    while (current) {
-      const dataCode = current.getAttribute?.('data-code');
-      if (dataCode?.includes(wikilinkText)) {
-        return true;
-      }
-      current = current.parentNode as HTMLElement;
-    }
-    return false;
-  };
-
-  walk(root);
-
-  for (const textNode of textNodes) {
-    const replaced = textNode.rawText.replaceAll(wikilinkText, replacementHTML);
-    if (replaced !== textNode.rawText) {
-      textNode.rawText = replaced;
-    }
-  }
-};
+import { parse, replaceOutsideDataCode } from "./utils/html";
 
 
 export const renderObsidian = async (
@@ -79,16 +40,32 @@ export const renderObsidian = async (
 
     if (wikilink.link.type === 'image') {
       if (hasTarget) {
+        const href = wikilink.link.href as string;
         images.push(wikilink.link);
+        const isAdded = rendered.metadata.imagePaths.indexOf(href) !== -1;
+
+        if (!isAdded) {
+          rendered.metadata.localImagePaths.push(href);
+          rendered.metadata.imagePaths.push(href);
+        }
       }
 
-      // TODO: enable this if possible
-      // content = content.replace(
-      //   wikilink.text,
-      //   hasTarget
-      //     ? `![${wikilink.link.caption ?? wikilink.link.title}](${wikilink.link.href})` :
-      //     wikilink.link.title
-      // );
+      let replacement: string | null = null;
+        
+      // TODO: Update code to include picture wrapper
+      if (hasTarget && wikilink.link.isEmbedded && wikilink.link.id) {
+        replacement = await renderImage(rendered, wikilink, logger);
+      } else {
+        replacement = `<a class="image-link" href="${wikilink.link.href}">${wikilink.link.title}</a>`;
+      }
+
+      const shouldWrapWithNextItem = [
+        'figure-image-float-left',
+        'figure-image-float-right'
+      ].some(cls => replacement.includes(cls));
+
+      // si tiene float-left o float-right, wrappear con el siguiente elemento
+      await replaceOutsideDataCode(root, wikilink.text, replacement, shouldWrapWithNextItem);
     }
 
     if (wikilink.link.type === 'audio') {
@@ -101,7 +78,7 @@ export const renderObsidian = async (
       if (hasTarget && wikilink.link.isEmbedded && wikilink.link.id) {
         replacement = `<audio class="audio-embed" controls src="${wikilink.link.href}"></audio>`;
       } else {
-        replacement = `<a class="audio-link" href=${wikilink.link.href}>${wikilink.link.title}</a>`
+        replacement = `<a class="audio-link" href="${wikilink.link.href}">${wikilink.link.title}</a>`
       }
     
       await replaceOutsideDataCode(root, wikilink.text, replacement);
@@ -117,7 +94,7 @@ export const renderObsidian = async (
       if (hasTarget && wikilink.link.isEmbedded && wikilink.link.id) {
         replacement = `<video class="video-embed" controls src="${wikilink.link.href}"></video>`;
       } else {
-        replacement = `<a class="video-link" href=${wikilink.link.href}>${wikilink.link.title}</a>`
+        replacement = `<a class="video-link" href="${wikilink.link.href}">${wikilink.link.title}</a>`
       }
     
       await replaceOutsideDataCode(root, wikilink.text, replacement);
@@ -137,7 +114,7 @@ export const renderObsidian = async (
           replacement = `<iframe class="iframe-embed" src="${wikilink.link.href}"></iframe>`;
         }
       } else {
-        replacement = `<a class="iframe-link" href=${wikilink.link.href}>${wikilink.link.title}</a>`
+        replacement = `<a class="iframe-link" href="${wikilink.link.href}">${wikilink.link.title}</a>`
       }
     
       await replaceOutsideDataCode(root, wikilink.text, replacement);
@@ -163,7 +140,7 @@ export const renderObsidian = async (
           : `<span class="article-wikilink-embed">${wikilink.link.title}</span>`;
       } else {
         replacement = hasTarget ?
-          `<a class="article-wikilink" href=${wikilink.link.href}>${wikilink.link.title}</a>` :
+          `<a class="article-wikilink" href="${wikilink.link.href}">${wikilink.link.title}</a>` :
           `<span class="article-wikilink">${wikilink.link.title}</span>`
       }
 
@@ -182,7 +159,7 @@ export const renderObsidian = async (
     const hasTarget = typeof tag.link.href === "string";
 
     await replaceOutsideDataCode(root, tag.text, hasTarget ?
-      `<a class="article-tag" href=${tag.link.href}>${tag.text}</a>` :
+      `<a class="article-tag" href="${tag.link.href}">${tag.text}</a>` :
       `<span class="article-tag">${tag.text}</span>`);
   }
 

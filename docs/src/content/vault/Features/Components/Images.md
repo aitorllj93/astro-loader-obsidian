@@ -7,7 +7,6 @@ order: 10
 ![[BlogCover.avif|Image with Caption]]
 
 ```md
-
 ![[BlogCover.avif|Image with Caption]]
 ```
 
@@ -15,12 +14,20 @@ order: 10
 
 ![[BlogCover.avif|350x500]]
 
+```md
+![[BlogCover.avif|350x500]]
+```
+
 ### Float Right
 
 ![[BlogCover.avif|float-right|350]]
 
 It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. 
 It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+
+```md
+![[BlogCover.avif|float-right|350]]
+```
 
 
 
@@ -30,6 +37,10 @@ It has survived not only five centuries, but also the leap into electronic types
 
 It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. 
 It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+
+```md
+![[BlogCover.avif|float-left|350|With Captions]]
+```
 
 
 ### Obsidian Plugin

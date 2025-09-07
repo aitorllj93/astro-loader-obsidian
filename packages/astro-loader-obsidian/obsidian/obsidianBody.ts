@@ -34,13 +34,6 @@ export const parseBody = (
       if (hasTarget) {
         images.push(wikilink.link);
       }
-
-      content = content.replace(
-        wikilink.text,
-        hasTarget
-          ? `![${wikilink.link.caption ?? wikilink.link.title}](${wikilink.link.href})` :
-          wikilink.link.title
-      );
     }
 
     if (wikilink.link.type === 'audio') {

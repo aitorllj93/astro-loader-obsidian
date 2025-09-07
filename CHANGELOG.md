@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/). For a sty
  
 ## [Unreleased] - yyyy-mm-dd
 
+## 0.10.0 - 2025-09-07
+
+### Added
+
+- `astro-spaceship`: Landing Page components with Graph View and Map View.
+
+### Changed
+
+- `astro-loader-obsidian`: Rendering images is handled by the loader in the post-processing step. This brings back images alignment and solves other small rendering issues.
+- `spaceship-monolith`: themes do not rely on `source node_modules` anymore, making them easier to plug in any Astro page.
+
 ## 0.9.0 - 2025-08-30
 
 ### Added

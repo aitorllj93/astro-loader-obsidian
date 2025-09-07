@@ -14,6 +14,10 @@
 @utility spoiler {
   @apply relative;
 
+  .spoiler-checkbox {
+    @apply absolute sr-only;
+  }
+
   .spoiler-toggle {
     @apply absolute inset-0 w-full h-full opacity-100 z-10 peer-checked:animate-setZIndexWithDelay peer-checked:opacity-0 cursor-pointer bg-obsidian-900/50 dark:bg-obsidian-200/50 backdrop-blur-lg transition-all duration-500 animate-ease rounded-sm;
     

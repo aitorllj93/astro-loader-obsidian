@@ -1,6 +1,6 @@
 ---
 order: 20
-cover: Assets/BlogCover.avif
+cover: "[[Assets/BlogCover.avif]]"
 cover-x: 50
 cover-y: 25
 ---
@@ -8,7 +8,7 @@ cover-y: 25
 
 ```md
 ---
-cover: Assets/BlogCover.avif
+cover: "[[Assets/BlogCover.avif]]"
 cover-x: 50
 cover-y: 25
 ---

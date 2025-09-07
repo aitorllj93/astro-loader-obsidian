@@ -13,10 +13,11 @@
   },
   "dependencies": {
     "astro": "^5.12.8",
-    "astro-loader-obsidian": "^0.9.1",
-    "astro-spaceship": "^0.9.3",
+    "astro-loader-obsidian": "^0.10.0",
+    "astro-spaceship": "^0.10.0",
     "sharp": "^0.32.5",
-    "spaceship-monolith": "^0.9.1"
+    "spaceship-monolith": "^0.10.0",
+    "varlock": "^0.0.11"
   },
   "packageManager": "pnpm@8.15.9+sha512.499434c9d8fdd1a2794ebf4552b3b25c0a633abcee5bb15e7b5de90f32f47b513aca98cd5cfd001c31f0db454bc3804edccd578501e4ca293a6816166bbd9f81"
 }
