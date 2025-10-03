@@ -37,6 +37,8 @@
 		"fast-glob": "^3.3.2",
 		"github-slugger": "^2.0.0",
 		"gray-matter": "^4.0.3",
+		"hast-util-from-html": "^2.0.3",
+		"hast-util-to-html": "^9.0.5",
 		"he": "^1.2.0",
 		"js-yaml": "^4.1.0",
 		"kleur": "^4.1.5",

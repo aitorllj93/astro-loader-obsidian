@@ -98,7 +98,7 @@ const { data } = document;
         )
       }
       {data.cover && (
-        <CoverImage {...data} style={`--rot:${angleFromKey(data.cover.src).toFixed(2)}deg;`}>
+        <CoverImage {...data} style={`--rot:${angleFromKey(typeof data.cover === 'string' ? data.cover : data.cover.src).toFixed(2)}deg;`}>
           <span slot="figcaption" class="gloss" aria-hidden="true"></span>
         </CoverImage>
       )}

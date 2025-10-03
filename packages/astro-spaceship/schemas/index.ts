@@ -45,8 +45,8 @@ export const DocumentSchema = ObsidianDocumentSchema.extend({
   images: ObsidianWikiLinkSchema.extend({
     href: AstroImageSchema.optional(),
   }).array().optional(),
-  cover: AstroImageSchema.optional(),
-  image: AstroImageSchema.optional(),
+  cover: z.union([z.string(), AstroImageSchema]).optional(),
+  image: z.union([z.string(), AstroImageSchema]).optional(),
   subtitle: z.string().optional(),
   'cover-x': z.number().optional(),
   'cover-y': z.number().optional(),

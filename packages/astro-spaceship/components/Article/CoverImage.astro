@@ -4,34 +4,71 @@ import { getImage, Image } from 'astro:assets';
 export type Props = {
   class?: string;
   style?: string;
-  cover?: ImageMetadata | undefined;
+  cover?: ImageMetadata | string | { src: string; width?: number; height?: number; format?: string } | undefined;
   'cover-x'?: number | undefined;
   'cover-y'?: number | undefined;
 }
 
 const { class: className, style, cover, 'cover-x': coverX, 'cover-y': coverY } = Astro.props;
 
-const coverImage = cover ? (await getImage({
-  src: cover,
-  inferSize: true,
-  format: 'webp',
-  quality: 'high',
-})) : undefined;
+// Handle different cover types: string path, ImageMetadata, or schema object
+let coverImage: { src: string; attributes: { width?: number; height?: number } } | undefined;
+let useOptimizedImage = false;
+
+if (cover) {
+  if (typeof cover === 'string') {
+    // Direct string path - use regular img tag
+    coverImage = {
+      src: cover,
+      attributes: { width: undefined, height: undefined }
+    };
+    useOptimizedImage = false;
+  } else if ('src' in cover && typeof cover.src === 'string') {
+    // Schema object with src property - use regular img tag
+    coverImage = {
+      src: cover.src,
+      attributes: { width: cover.width, height: cover.height }
+    };
+    useOptimizedImage = false;
+  } else {
+    // ImageMetadata - use getImage for optimization
+    coverImage = await getImage({
+      src: cover as ImageMetadata,
+      inferSize: true,
+      format: 'webp',
+      quality: 'high',
+    });
+    useOptimizedImage = true;
+  }
+}
 
 ---
 {
   coverImage && (
     <figure class:list={["article-cover", className]} style={style}>
-      <Image
-        src={coverImage.src}
-        height={coverImage.attributes.height}
-        width={coverImage.attributes.width}
-        alt=""
-        class:list={["article-cover-image", coverX || coverY ? `` : "article-cover-center"]}
-        style={
-          coverX || coverY ? `object-position: ${coverX}% ${coverY}%;` : ""
-        }
-      />
+      {useOptimizedImage ? (
+        <Image
+          src={coverImage.src}
+          height={coverImage.attributes.height}
+          width={coverImage.attributes.width}
+          alt=""
+          class:list={["article-cover-image", coverX || coverY ? `` : "article-cover-center"]}
+          style={
+            coverX || coverY ? `object-position: ${coverX}% ${coverY}%;` : ""
+          }
+        />
+      ) : (
+        <img
+          src={coverImage.src}
+          width={coverImage.attributes.width}
+          height={coverImage.attributes.height}
+          alt=""
+          class:list={["article-cover-image", coverX || coverY ? `` : "article-cover-center"]}
+          style={
+            coverX || coverY ? `object-position: ${coverX}% ${coverY}%;` : ""
+          }
+        />
+      )}
       <slot name="figcaption"></slot>
     </figure>
   )

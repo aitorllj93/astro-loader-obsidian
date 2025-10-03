@@ -14,6 +14,8 @@ cover-y: 25
 ---
 ```
 
+The `cover` property accepts wikilink syntax to reference images. The `cover-x` and `cover-y` properties control the image position (0-100%).
+
 ### Obsidian Plugin
 
 ```embed

@@ -11,6 +11,20 @@ export type Wikitag = {
   link: ObsidianLink;
 };
 
+/**
+ * Check if a position in the content is inside an HTML tag
+ */
+const isInsideHtmlTag = (content: string, matchIndex: number): boolean => {
+  // Look backward to find the nearest < and >
+  const beforeMatch = content.substring(0, matchIndex);
+  const lastOpenTag = beforeMatch.lastIndexOf('<');
+  const lastCloseTag = beforeMatch.lastIndexOf('>');
+
+  // If we found an open tag and it's after the last close tag (or no close tag exists),
+  // then we're inside an HTML tag
+  return lastOpenTag > lastCloseTag;
+};
+
 export const parseWikitags = (
   content: string,
   source: string,
@@ -25,6 +39,12 @@ export const parseWikitags = (
 
   for (const match of matches) {
     const [text, tagId] = match;
+    const matchIndex = match.index ?? 0;
+
+    // Skip if the match is inside an HTML tag
+    if (isInsideHtmlTag(content, matchIndex)) {
+      continue;
+    }
 
     if (!tagId) {
       tags.push({
@@ -52,7 +72,7 @@ export const parseWikitags = (
       },
       text,
     }
-    
+
     tags.push(link);
   }
 

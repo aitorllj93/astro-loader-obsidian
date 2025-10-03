@@ -25,6 +25,33 @@ const { language } = page;
 		<link rel="icon" type="image/svg+xml" href={`${config.base ?? '/'}favicon.svg`} />
     <SEO page={page} />
     <slot name="head" />
+    <style is:global>
+      .anchor-link {
+        text-decoration: none;
+        margin-left: 0.5rem;
+        opacity: 0;
+        transition: opacity 0.2s ease-in-out;
+        color: inherit;
+        display: inline-flex;
+        align-items: center;
+        vertical-align: middle;
+      }
+
+      h1:hover .anchor-link,
+      h2:hover .anchor-link,
+      h3:hover .anchor-link,
+      h4:hover .anchor-link,
+      h5:hover .anchor-link,
+      h6:hover .anchor-link {
+        opacity: 1;
+      }
+
+      .anchor-icon {
+        display: inline-block;
+        vertical-align: middle;
+        user-select: none;
+      }
+    </style>
   </head>
   <body class="body">
     <div class="texture" />

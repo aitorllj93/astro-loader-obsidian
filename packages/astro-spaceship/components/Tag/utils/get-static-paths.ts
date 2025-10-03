@@ -90,7 +90,8 @@ export const getStaticPathsFactory = ({
 			collection: 'tags',
 			id: entry.id,
 			data: {
-				name: entry.name
+				name: entry.name,
+				permalink: `/about/tags/${entry.id}`
 			}
 		};
 

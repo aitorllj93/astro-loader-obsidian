@@ -1,4 +1,5 @@
 ---
+import { render } from "astro:content";
 
 import type { Props } from "./utils/get-static-paths";
 import Layout from '../Layout/Layout.astro';
@@ -7,6 +8,19 @@ import LeftSidebar from "../LeftSidebar/LeftSidebar.astro";
 export type { Props };
 
 const { tree, documents, tag, page, config } = Astro.props;
+
+// Check if tag has content to render (comes from a markdown file)
+let Content;
+try {
+  if (tag.collection) {
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    const rendered = await render(tag as any);
+    Content = rendered.Content;
+  }
+} catch (e) {
+  // Tag doesn't have renderable content, that's fine
+  Content = null;
+}
 ---
 
 <Layout config={config} page={page} footer={null}>
@@ -19,6 +33,13 @@ const { tree, documents, tag, page, config } = Astro.props;
       <h1 class="article-title">{tag.data.name ? tag.data.name : `#${tag.id}`}</h1>
 
       <div class="article-body">
+        {Content && (
+          <div class="tag-content">
+            <Content />
+          </div>
+        )}
+
+        <h4>Tagged Pages</h4>
         <ul>
           {documents?.map(d => (
             <li>
