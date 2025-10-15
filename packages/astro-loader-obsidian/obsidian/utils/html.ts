@@ -42,6 +42,12 @@ export const replaceOutsideDataCode = async (
       if (dataCode?.includes(wikilinkText)) {
         return true;
       }
+
+      const tagName = current.tagName;
+      if (tagName === 'code') {
+        return true;
+      }
+
       current = current.parentNode as HTMLElement;
     }
     return false;
